@@ -1,6 +1,8 @@
 <template>
   <div>
-    Home
+    <router-link to="/login">
+      <el-button type="primary">{{$t('login.logIn')}}</el-button>
+    </router-link>
   </div>
 </template>
 

@@ -11,4 +11,37 @@ export default {
     about: 'About',
     userRecords: 'User Records',
   },
+  login: {
+    title: 'Login Form',
+    logIn: 'Log in',
+    username: 'Username',
+    password: 'Password',
+  },
+  navbar: {
+    logOut: 'Log Out',
+  },
+  btn: {
+    comfirm: 'Comfirm',
+    cancel: 'Cancel',
+    search: 'Search',
+    loading: 'Loading',
+  },
+  table: {
+    id: 'ID',
+  },
+  user: {
+    username: 'Username',
+    password: 'Password',
+    comfirmPassword: 'Comfirm Password',
+    realName: 'Real Name',
+    email: 'Email',
+    tel: 'Tel',
+    avatar: 'Avatar',
+    role: 'Role',
+    registerDate: 'Register Date',
+    operation: 'Operation',
+    project: 'Project',
+    systom: 'System',
+    title: 'Title',
+  },
 };

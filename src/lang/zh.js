@@ -11,4 +11,37 @@ export default {
     about: '关于我们',
     userRecords: '用户记录',
   },
+  login: {
+    title: '系统登录',
+    logIn: '登录',
+    username: '账号',
+    password: '密码',
+  },
+  navbar: {
+    logOut: '退出登录',
+  },
+  btn: {
+    comfirm: '确定',
+    cancel: '取消',
+    search: '搜索',
+    loading: '加载中',
+  },
+  table: {
+    id: '序号',
+  },
+  user: {
+    username: '用户名',
+    password: '密码',
+    comfirmPassword: '确认密码',
+    realName: '真实姓名',
+    email: '邮箱地址',
+    tel: '手机号码',
+    avatar: '头像',
+    role: '用户角色',
+    registerDate: '注册日期',
+    operation: '操作',
+    project: '所属项目',
+    systom: '所属系统',
+    title: '用户职称',
+  },
 };
