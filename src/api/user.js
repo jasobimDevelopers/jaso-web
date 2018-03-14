@@ -8,3 +8,7 @@ export function login(username, password) {
     password: pwdStr,
   });
 }
+
+export function getUserInfo() {
+  return request.get('api/user/common/getUserInfo');
+}

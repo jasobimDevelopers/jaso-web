@@ -5,7 +5,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" src="@/assets/images/avatar.jpg">
+          <img class="user-avatar" :src="userInfo.userIconUrl | setFileRoot">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -33,6 +33,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
+      'userInfo',
     ]),
   },
   methods: {

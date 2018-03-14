@@ -1,9 +1,9 @@
-import { login } from '@/api/user';
-import { getToken, setToken } from '@/utils/auth';
+import { login, getUserInfo } from '@/api/user';
+import { getToken, setToken, removeToken } from '@/utils/auth';
 
 const user = {
   state: {
-    user: '',
+    userInfo: null,
     roles: [],
     token: getToken(),
   },
@@ -15,26 +15,59 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token;
     },
+    SET_USER: (state, userInfo) => {
+      state.userInfo = userInfo;
+    },
   },
 
   actions: {
     // login
     Login({ commit }, userInfo) {
       const { username, password } = userInfo;
-      return new Promise((resolve) => {
-        login(username, password).then((response) => {
-          const { token } = response;
+      return new Promise((resolve, reject) => {
+        login(username, password).then((res) => {
+          const { token, data } = res;
           setToken(token);
           commit('SET_TOKEN', token);
 
-          resolve();
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
         });
+      });
+    },
+
+    // 登出
+    LogOut({ commit }) {
+      return new Promise((resolve) => {
+        commit('SET_TOKEN', '');
+        commit('SET_ROLES', []);
+        commit('SET_USER', null);
+        removeToken();
+        resolve();
       });
     },
 
     // 获取用户信息
     GetUserInfo({ commit }) {
-      commit('SET_ROLES', ['admin']);
+      return new Promise((resolve, reject) => {
+        getUserInfo().then((res) => {
+          const { data } = res;
+          const { userType } = data;
+
+          if (userType === 0) {
+            commit('SET_ROLES', ['admin']);
+          } else {
+            commit('SET_ROLES', ['user']);
+          }
+
+          commit('SET_USER', data);
+
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
+      });
     },
   },
 };

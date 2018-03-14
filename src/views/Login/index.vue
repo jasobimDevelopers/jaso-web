@@ -45,7 +45,7 @@ export default {
     };
     return {
       loginForm: {
-        username: 'prince',
+        username: 'admin',
         password: '123456',
       },
       loginRules: {
@@ -68,9 +68,15 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then((userInfo) => {
+            const { userType } = userInfo;
             this.loading = false;
-            this.$router.push({ path: '/' });
+
+            if (userType === 0) {
+              this.$router.push({ path: '/userManage' });
+            } else {
+              this.$router.push({ path: '/projectManage' });
+            }
           }).catch(() => {
             this.loading = false;
           });

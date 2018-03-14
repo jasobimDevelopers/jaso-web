@@ -22,10 +22,21 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // access token
-    const { data } = config;
+    console.log('config', config);
+    const { method } = config;
     const token = getToken();
 
-    data.token = token;
+    if (method === 'get') {
+      config.params = {
+        ...config.params,
+        token,
+      };
+    } else {
+      config.data = {
+        ...config.data,
+        token,
+      };
+    }
 
     return config;
   },
@@ -50,6 +61,6 @@ request.interceptors.response.use(
   },
 );
 
-request.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+request.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 export default request;

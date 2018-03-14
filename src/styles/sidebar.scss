@@ -1,13 +1,9 @@
 #app {
   // 主体区域
   .main-container {
-    position: absolute;
-    top: 0;
-    left: 180px;
-    right: 0;
-    bottom: 0;
-    transition: all 0.28s;
-    background-color: #ffffff;
+    min-height: 100%;
+    transition: margin-left 0.28s;
+    margin-left: 180px;
   } // 侧边栏
   .sidebar-container {
     transition: width 0.28s;
@@ -35,7 +31,7 @@
       // overflow: inherit;
     }
     .main-container {
-      left: 64px;
+      margin-left: 64px;
     }
   }
   .hideSidebar {

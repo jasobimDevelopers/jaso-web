@@ -15,16 +15,18 @@ function hasPermission(roles, permissionRoles) {
   return roles.some(role => permissionRoles.indexOf(role) >= 0);
 }
 
-const whiteList = ['/login']; // no redirect whitelist
+const whiteList = ['/', '/login']; // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start(); // start progress bar
   if (getToken()) { // determine if there has token
     // has token
     if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
-      store.dispatch('GetUserInfo').then(() => { // 拉取user_info
+      store.dispatch('GetUserInfo').then((res) => { // 拉取user_info
         // note: roles must be a array! such as: ['editor','develop']
-        const roles = ['admin'];
+        const { userType } = res;
+
+        const roles = userType === 0 ? ['admin'] : ['user'];
         store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
           router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
           // hack方法 确保addRoutes已完成
@@ -32,10 +34,8 @@ router.beforeEach((to, from, next) => {
           next({ ...to, replace: true });
         });
       }).catch(() => {
-        store.dispatch('FedLogOut').then(() => {
-          Message.error('Verification failed, please login again');
-          next({ path: '/login' });
-        });
+        Message.error('Verification failed, please login again');
+        next({ path: '/login' });
       });
     } else {
       // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
