@@ -34,8 +34,10 @@ router.beforeEach((to, from, next) => {
           next({ ...to, replace: true });
         });
       }).catch(() => {
-        Message.error('Verification failed, please login again');
-        next({ path: '/login' });
+        store.dispatch('LogOut').then(() => {
+          Message.error('Verification failed, please login again');
+          next({ path: '/login' });
+        });
       });
     } else {
       // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓

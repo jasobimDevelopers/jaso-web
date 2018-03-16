@@ -27,8 +27,11 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, password).then((res) => {
           const { token, data } = res;
-          setToken(token);
-          commit('SET_TOKEN', token);
+
+          if (token && token !== null) {
+            setToken(token);
+            commit('SET_TOKEN', token);
+          }
 
           resolve(data);
         }).catch((error) => {

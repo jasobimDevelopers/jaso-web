@@ -76,7 +76,17 @@ export const asyncRouterMap = [
       meta: {
         title: 'projectManage',
         icon: 'project',
-        roles: ['admin', 'user'],
+        roles: ['admin'],
+      },
+    }, {
+      path: 'project/:id',
+      component: asyncImport('ProjectManage/Project'),
+      name: 'project',
+      hidden: true,
+      meta: {
+        title: 'project',
+        icon: 'project',
+        roles: ['admin'],
       },
     }],
   },

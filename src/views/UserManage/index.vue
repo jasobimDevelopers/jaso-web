@@ -12,12 +12,24 @@
       </el-input>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAddUser">{{$t('btn.add')}}</el-button>
+      <el-button class="filter-item" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length === 0" @click="handleDeleteSelects">{{$t('btn.delete')}}</el-button>
     </div>
     <!-- /filter -->
 
     <!-- table -->
-    <el-table :data="list" v-loading="listLoading" border fit highlight-current-row
-      style="width: 100%">
+    <el-table
+      :data="list"
+      v-loading="listLoading"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column align="center" :label="$t('table.id')" prop="id">
       </el-table-column>
       <el-table-column align="center" :label="$t('user.userName')" prop="userName">
@@ -40,10 +52,10 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('user.registerDate')" prop="registerDate">
       </el-table-column>
-      <el-table-column align="center" :label="$t('user.operation')" width="200">
+      <el-table-column align="center" :label="$t('table.operation')" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('btn.edit')}}</el-button>
-          <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">{{$t('btn.delete')}}</el-button>
+          <el-button type="danger" size="mini" @click="handleDelete({ userId: scope.row.id })">{{$t('btn.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -65,7 +77,7 @@
 
     <!-- user dialog -->
     <el-dialog
-      :title="$t('user.updateUser')"
+      :title="this.dialogStatus === 'add' ? $t('user.addUser') : $t('user.updateUser')"
       :visible.sync="dialogFormVisible"
       @close="resetForm"
       width="640px"
@@ -138,7 +150,14 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('user.file')" prop="file">
-          <input type="file" ref="fileInput" />
+          <div class="file-wrapper flex-column">
+            <el-button type="primary" style="width: 100px">
+              <input type="file" ref="fileInput" @change="handleFileChange" />
+              <span>上传</span>
+            </el-button>
+            <img v-if="user.userIconUrl" class="file" :src="user.userIconUrl | setFileRoot" />
+            <img v-else-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -226,17 +245,21 @@ export default {
         teamInformation: '',
         workName: '',
         userIconUrl: '',
+        file: null,
       },
       // upload file
-      uploadFile: null,
+      uploadFileSrc: null,
       list: null,
       listLoading: false,
       projectList: [],
       roleList,
       systemTypeList,
       workNameList,
+      // page
       totalNumber: 0,
       totalPage: 1,
+      // multi select
+      multipleSelection: [],
       // dialog
       dialogFormVisible: false,
       // dialog status
@@ -253,6 +276,7 @@ export default {
         userType: [{ required: true, message: `${this.$t('user.userType')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
         systemType: [{ required: true, message: `${this.$t('user.systemType')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
         workName: [{ required: true, message: `${this.$t('user.workName')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        file: [{ required: true, message: `${this.$t('user.file')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
       },
     };
   },
@@ -296,13 +320,36 @@ export default {
       this.listQuery.pageIndex = val;
       this.getList();
     },
+    handleFileChange(e) {
+      const files = e.target.files;
+      const file = files[0];
+      const self = this;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        self.uploadFileSrc = this.result;
+        self.user.file = file;
+      };
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    handleDeleteSelects() {
+      const list = [];
+      this.multipleSelection.forEach((user) => {
+        list.push(user.id);
+      });
+
+      this.handleDelete({
+        userIdList: list.join(','),
+      });
+    },
     handleUpdate(user) {
-      console.log('user', user);
       const {
         id,
         userName,
         password,
-        comfirmPassword,
         realName,
         email,
         tel,
@@ -318,32 +365,29 @@ export default {
         id,
         userName,
         password,
-        comfirmPassword,
         realName,
         email,
         tel,
-        projectList,
         userType,
         systemType,
         teamInformation,
         workName,
         userIconUrl,
+        file: userIconUrl,
         comfirmPassword: user.password,
-        projectList: user.projectList ? user.projectList.split(',') : [],
+        projectList: projectList ? projectList.split(',') : [],
       };
       this.dialogStatus = 'edit';
       this.dialogFormVisible = true;
     },
-    handleDelete(userId) {
+    handleDelete(params) {
       this.$confirm(this.$t('message.deleteUser'), this.$t('message.prompt'), {
         confirmButtonText: this.$t('btn.comfirm'),
         cancelButtonText: this.$t('btn.cancel'),
         type: 'warning',
       }).then(() => {
         // delete user
-        deleteUser({
-          userId,
-        }).then(() => {
+        deleteUser(params).then(() => {
           this.$message({
             type: 'success',
             message: this.$t('message.deleteOk'),
@@ -360,10 +404,10 @@ export default {
     },
     handleSave() {
       console.log('user', this.user);
-      this.$refs['userForm'].validate((valid) => {
+      this.$refs.userForm.validate((valid) => {
         if (valid) {
-          const files = this.$refs['fileInput'].files;
-          const params = {...this.user};
+          const files = this.$refs.fileInput.files;
+          const params = { ...this.user };
           if (files.length > 0) {
             params.file = files[0];
           }
@@ -371,12 +415,12 @@ export default {
           params.projectList = params.projectList.join(',');
 
           if (this.dialogStatus === 'add') {
-            addUser(params).then((res) => {
+            addUser(params).then(() => {
               this.dialogFormVisible = false;
               this.getList();
             });
           } else {
-            updateUser(params).then((res) => {
+            updateUser(params).then(() => {
               this.dialogFormVisible = false;
               this.getList();
             });
@@ -399,8 +443,14 @@ export default {
         teamInformation: '',
         workName: '',
         userIconUrl: '',
+        file: null,
       };
-      this.$refs['userForm'].resetFields();
+      // reset file src
+      this.uploadFileSrc = null;
+      this.$refs.fileInput.value = null;
+
+      console.log('reset...');
+      this.$refs.userForm.resetFields();
     },
   },
 };
@@ -409,6 +459,23 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .filter-item {
-  margin-right: 24px;
+  margin-right: 15px;
+}
+
+.file-wrapper {
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+  }
+  .file {
+    margin-top: 8px;
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+  }
 }
 </style>

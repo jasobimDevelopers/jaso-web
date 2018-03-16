@@ -1,4 +1,6 @@
-import request from './request';
+import axios from 'axios';
+import { getToken } from '@/utils/auth';
+import request, { apiRoot, config } from './request';
 
 export function getProjectList(params) {
   return request.get('api/project/admin/getProjectList', {
@@ -7,7 +9,17 @@ export function getProjectList(params) {
 }
 
 export function addProject(params) {
-  return request.post('api/project/admin/addProject', params);
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/project/admin/addProject`, formData, config);
 }
 
 export function updateProject(params) {

@@ -51,6 +51,7 @@ module.exports = {
     'no-param-reassign': 0,
     // max-len
     'max-len': 0,
+    'no-restricted-syntax': 0,
     // no-lonely-if
     'no-lonely-if': 0,
     // allow not code default export

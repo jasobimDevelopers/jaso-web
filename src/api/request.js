@@ -2,13 +2,14 @@ import axios from 'axios';
 import https from 'https';
 import querystring from 'querystring';
 import { getToken } from '@/utils/auth';
+import { Message } from 'element-ui';
 
 // session id name
 // const sessionId = 'access_token';
 
 // api root
 // const apiRoot = 'http://localhost:8080/jasobim/';
-const apiRoot = '/apis';
+export const apiRoot = '/apis';
 
 const request = axios.create({
   baseURL: apiRoot,
@@ -22,7 +23,6 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // access token
-    console.log('config', config);
     const { method } = config;
     const token = getToken();
 
@@ -51,7 +51,12 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response) => {
     const res = response.data;
-    console.log('res', res);
+    const { callStatus, errorCode } = res;
+
+    if (callStatus !== 'SUCCEED') {
+      Message.error(errorCode);
+      return Promise.reject(res);
+    }
 
     return response.data;
   },
@@ -61,6 +66,10 @@ request.interceptors.response.use(
   },
 );
 
-request.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+request.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+export const config = {
+  headers: { 'Content-Type': 'multipart/form-data' },
+};
 
 export default request;

@@ -39,3 +39,27 @@ export const workNameList = [
     list: ['管理员', '普通用户', '投资方', '项目人员/项目负责人', '项目经理', '常务经理', '土建负责人', 'BIM工程师'],
   },
 ];
+
+// project stats list
+export const projectStateList = [
+  '未上线',
+  '已上线',
+];
+
+// item
+export const itemProfessionTypeList = ['全部', '电气', '暖通', '给排水', '消防'];
+export const householdNumList = ['全部', '公共部位', 'N户型', 'Q户型', 'Q户型反', 'N户型反'];
+
+// question
+export const questionOfTypeList = ['全部', '安全', '质量', '其他'];
+export const questionOfPriorityList = ['全部', '一般', '重要', '紧急'];
+export const questionStateList = ['全部', '待解决', '已解决'];
+
+// quantity
+export const quantityTypeList = ['模型工程量', '预算工程量'];
+
+// paper
+export const paperProfessionTypeList = ['全部', '电气', '暖通', '给排水', '消防', '建筑', '装饰', '结构'];
+
+// teach
+export const teachTypeList = ['全部', '质量', '安全', '技术'];
