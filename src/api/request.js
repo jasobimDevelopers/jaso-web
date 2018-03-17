@@ -53,7 +53,7 @@ request.interceptors.response.use(
     const res = response.data;
     const { callStatus, errorCode } = res;
 
-    if (callStatus !== 'SUCCEED') {
+    if (callStatus && callStatus !== 'SUCCEED') {
       Message.error(errorCode);
       return Promise.reject(res);
     }

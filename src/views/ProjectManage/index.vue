@@ -112,8 +112,8 @@
         <el-form-item :label="$t('project.phase')" prop="phase">
           <el-input v-model="project.phase"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('user.teamInformation')" prop="teamInformation">
-          <el-input v-model="project.teamInformation"></el-input>
+        <el-form-item :label="$t('project.teamList')" prop="teamList">
+          <el-input v-model="project.teamList"></el-input>
         </el-form-item>
         <el-form-item :label="$t('project.modelPart')" prop="modelPart">
           <el-input v-model="project.modelPart"></el-input>
@@ -135,7 +135,7 @@
           <el-input v-model="project.description" type="textarea"></el-input>
         </el-form-item>
         <el-form-item :label="$t('project.modelFile')" prop="modelFile">
-          <div class="file-wrapper flex-row">
+          <div class="upload-file-wrapper flex-row">
             <el-button type="primary" style="width: 100px">
               <input type="file" ref="modelInput" @change="handleModelChange" />
               <span>上传</span>
@@ -144,7 +144,7 @@
           </div>
         </el-form-item>
         <el-form-item :label="$t('project.picFile')" prop="picFile">
-          <div class="file-wrapper flex-column">
+          <div class="upload-file-wrapper flex-column">
             <el-button type="primary" style="width: 100px">
               <input type="file" ref="picInput" @change="handlePicChange" />
               <span>上传</span>
@@ -194,7 +194,7 @@ export default {
         designUnit: '',
         startDate: '',
         phase: '',
-        teamInformation: '',
+        teamList: '',
         modelPart: '',
         version: '',
         state: '',
@@ -255,7 +255,6 @@ export default {
     handleAddProject() {
       this.dialogStatus = 'add';
       this.dialogFormVisible = true;
-      console.log('do add');
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val;
@@ -307,7 +306,6 @@ export default {
       });
     },
     handleSave() {
-      console.log('project', this.project);
       this.$refs.projectForm.validate((valid) => {
         if (valid) {
           addProject(this.project).then(() => {
@@ -351,20 +349,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.file-wrapper {
-  input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-  }
-  .file {
-    margin-top: 8px;
-    height: 120px;
-    width: 120px;
-    object-fit: cover;
-  }
-}
 </style>

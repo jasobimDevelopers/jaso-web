@@ -29,10 +29,14 @@ export default {
     edit: 'Edit',
     delete: 'Delete',
     download: 'Download',
+    upload: 'Upload',
+    file: 'File',
+    template: 'Template',
   },
   table: {
     id: 'ID',
     operation: 'Operation',
+    all: 'All',
   },
   user: {
     userName: 'Username',
@@ -94,6 +98,20 @@ export default {
     buildingNum: 'Building Num',
     floorNum: 'Floor Num',
     householdNum: 'Household Num',
+    cableTray: 'Cable Tray',
+    cableBridgeFittings: 'Cable Bridge Fittings',
+    electricalEquipment: 'Electrical Equipment',
+    windPipe: 'Wind Pipe',
+    windPipeFittings: 'Wind Pipe Fittings',
+    windPipeAccessories: 'Wind Pipe Accessories',
+    endOfWindPipe: 'End Of Wind Pipe',
+    mechanicalEquipment: 'Mechanical Equipment',
+    pipe: 'pipe',
+    pipeFitting: 'Pipe Fitting',
+    pipeAccessories: 'Pipe Accessories',
+    bathroomEquipment: 'Bathroom Equipment',
+    fireHydrant: 'Fire Hydrant',
+    spray: 'Spray',
   },
   paper: {
     originName: 'Name',
@@ -113,10 +131,12 @@ export default {
     material: 'Material',
     quantityType: 'Quantity Type',
   },
-  vedio: {
+  video: {
     originName: 'Name',
     buildingNum: 'Building Num',
     professionType: 'Profession',
+    videoType: 'Type',
+    videoGrade: 'Video Grade',
   },
   question: {
     questionType: 'Question Type',
@@ -138,5 +158,6 @@ export default {
     notEmpty: ' Should not be empty',
     pleaseEnter: 'Please Enter',
     notCorrect: ' Not Correct',
+    operationSuccess: 'Operate Successfully',
   },
 };

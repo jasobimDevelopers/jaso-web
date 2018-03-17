@@ -150,7 +150,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('user.file')" prop="file">
-          <div class="file-wrapper flex-column">
+          <div class="upload-file-wrapper flex-column">
             <el-button type="primary" style="width: 100px">
               <input type="file" ref="fileInput" @change="handleFileChange" />
               <span>上传</span>
@@ -403,7 +403,6 @@ export default {
       });
     },
     handleSave() {
-      console.log('user', this.user);
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           const files = this.$refs.fileInput.files;
@@ -460,22 +459,5 @@ export default {
 <style lang="scss" scoped>
 .filter-item {
   margin-right: 15px;
-}
-
-.file-wrapper {
-  input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-  }
-  .file {
-    margin-top: 8px;
-    height: 120px;
-    width: 120px;
-    object-fit: cover;
-  }
 }
 </style>

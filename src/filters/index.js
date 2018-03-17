@@ -12,6 +12,38 @@ export function setFileRoot(url) {
   return `${fileRoot}${url}`;
 }
 
+// build parse
+export function parseBuildingArr(buildingNum, buildingNumBase) {
+  const perArrCount = 10;
+  buildingNum = Number(buildingNum);
+  buildingNumBase = Number(buildingNumBase);
+  const restBuilding = buildingNum - buildingNumBase;
+
+  const floorNumArr = [];
+  if (buildingNum > 0) {
+    if (buildingNumBase > 0) {
+      const firstArr = [];
+      for (let i = 1; i <= buildingNumBase; i += 1) {
+        firstArr.push(-i);
+      }
+
+      floorNumArr.push(firstArr);
+    }
+
+    const len = floorNumArr.length;
+    for (let i = 0; i < restBuilding; i += 1) {
+      const index = len + parseInt(i / perArrCount);
+      
+      if (!floorNumArr[index]) {
+        floorNumArr[index] = [];
+      }
+      floorNumArr[index].push(i + 1);
+    }
+  }
+
+  return floorNumArr;
+}
+
 // user role name map
 export const roleList = ['管理员', '普通用户', '投资方', '项目人员/项目负责人'];
 export function setUserRole(userType) {
@@ -59,7 +91,9 @@ export const questionStateList = ['全部', '待解决', '已解决'];
 export const quantityTypeList = ['模型工程量', '预算工程量'];
 
 // paper
-export const paperProfessionTypeList = ['全部', '电气', '暖通', '给排水', '消防', '建筑', '装饰', '结构'];
+export const paperProfessionTypeList = ['全部', '电气', '暖通', '给排水', '消防', '建筑', '装饰', '结构', '其他'];
 
 // teach
 export const teachTypeList = ['全部', '质量', '安全', '技术'];
+export const videoTypes = ['视频', 'PDF', 'Word'];
+export const videoGradeList = ['公司总交底', '项目交底', '留底资料', '通用交底'];

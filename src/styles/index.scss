@@ -17,6 +17,11 @@ a:hover {
   text-decoration: none;
 }
 
+fieldset {
+  border-width: 1px;
+  border-color: #ebeef5;
+}
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -50,5 +55,25 @@ html {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: 10px;
+  }
+  .el-select {
+    margin-left: 15px;
+  }
+}
+
+.upload-file-wrapper {
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+  }
+  .file {
+    margin-top: 8px;
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
   }
 }

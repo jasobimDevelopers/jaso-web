@@ -29,10 +29,14 @@ export default {
     edit: '编辑',
     delete: '删除',
     download: '下载',
+    upload: '上传',
+    file: '文件',
+    template: '模板',
   },
   table: {
     id: '序号',
     operation: '操作',
+    all: '全部',
   },
   user: {
     userName: '用户名',
@@ -94,6 +98,20 @@ export default {
     buildingNum: '栋号',
     floorNum: '楼层',
     householdNum: '户型',
+    cableTray: '电缆桥架',
+    cableBridgeFittings: '电缆桥架配件',
+    electricalEquipment: '电气设备',
+    windPipe: '风管',
+    windPipeFittings: '风管配件',
+    windPipeAccessories: '风管附件',
+    endOfWindPipe: '风管末端',
+    mechanicalEquipment: '机械设备',
+    pipe: '管道',
+    pipeFitting: '管件',
+    pipeAccessories: '管道附件',
+    bathroomEquipment: '卫浴装置',
+    fireHydrant: '消防栓',
+    spray: '喷淋',
   },
   paper: {
     originName: '图纸信息',
@@ -114,10 +132,12 @@ export default {
     quantityType: '来源',
     professionType: '专业',
   },
-  vedio: {
+  video: {
     originName: '交底地址',
     buildingNum: '楼栋号',
     professionType: '专业',
+    videoType: '文件类型',
+    videoGrade: '交底类型',
   },
   question: {
     questionType: '类型',
@@ -139,5 +159,6 @@ export default {
     notEmpty: '不能为空',
     pleaseEnter: '请输入',
     notCorrect: '不正确',
+    operationSuccess: '操作成功',
   },
 };

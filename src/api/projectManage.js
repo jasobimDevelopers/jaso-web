@@ -23,11 +23,33 @@ export function addProject(params) {
 }
 
 export function updateProject(params) {
-  return request.post('api/project/admin/updateProject', params);
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/project/admin/updateProject`, formData, config);
 }
 
 export function deleteProject(params) {
   return request.get('api/project/admin/deleteProject', {
+    params,
+  });
+}
+
+export function getProject(params) {
+  return request.get('api/project/admin/getProjectDetails', {
+    params,
+  });
+}
+
+export function getBuildingInfo(params) {
+  return request.get('api/building/admin/getBuildingByProjectId', {
     params,
   });
 }

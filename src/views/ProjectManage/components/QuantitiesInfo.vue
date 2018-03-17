@@ -13,6 +13,48 @@
               @change="handleFilter"
             >{{item}}</el-radio>
           </el-form-item>
+          <el-form-item :label="$t('item.buildingNum')">
+            <el-radio
+              v-model="listQuery.buildingNum"
+              :label="null"
+              @change="handleFilter"
+            >{{$t('table.all')}}</el-radio>
+            <el-select
+              v-model="listQuery.buildingNum"
+              v-if="building"
+              :placeholder="$t('item.buildingNum')"
+              @change="handleBuilding"
+            >
+              <el-option
+                v-for="(item, i) in building.buildingList"
+                :key="i"
+                :label="`#${item}`"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('item.floorNum')">
+            <el-radio
+              v-model="listQuery.floorNum"
+              :label="null"
+              @change="handleFilter"
+            >{{$t('table.all')}}</el-radio>
+            <el-select
+              v-if="building"
+              v-for="(floorList, index) in floorNumArr"
+              :value="floorList.indexOf(listQuery.floorNum) > -1 ? listQuery.floorNum : null"
+              :key="index"
+              :placeholder="$t('item.floorNum')"
+              @change="handleFloor"
+            >
+              <el-option
+                v-for="(item, i) in floorNumArr[index]"
+                :key="i"
+                :label="`#${item}`"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -72,16 +114,45 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="totalNumber">
         </el-pagination>
-        <el-button class="filter-item" type="primary" icon="el-icon-plus">{{$t('btn.add')}}</el-button>
+        <div>
+          <a :href="exportLink | setFileRoot" target="_blank">
+            <el-button class="filter-item" type="primary" icon="el-icon-download">{{$t('btn.download')}}</el-button>
+          </a>
+          <a :href="tempLink | setFileRoot" target="_blank">
+            <el-button class="filter-item" type="info" icon="el-icon-download">{{$t('btn.template')}}</el-button>
+          </a>
+          <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
+        </div>
       </div>
     </div>
     <!-- /pagination -->
+
+    <!-- dialog -->
+    <el-dialog
+      :title="$t('btn.upload')"
+      :visible.sync="dialogFormVisible"
+      @close="resetForm"
+      width="640px"
+    >
+      <el-form :rules="rules" ref="dialogForm" :model="quantity" label-position="left" label-width="120px" style='margin: 0 50px;'>
+        <el-form-item :label="$t('btn.file')" prop="file">
+          <input type="file" @change="handleUpload" multiple accept=".xls,.xlsx,.csv" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
+        <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+      </div>
+    </el-dialog>
+    <!-- /dialog -->
   </div>
 </template>
 
 <script>
-import { getQuantityList } from '@/api/quantity';
-import { itemProfessionTypeList, quantityTypeList } from '@/filters';
+import { mapGetters } from 'vuex';
+import { getItemByBuidlingInfo } from '@/api/item';
+import { getQuantityList, exportQuantity, addQuantity } from '@/api/quantity';
+import { itemProfessionTypeList, quantityTypeList, parseBuildingArr } from '@/filters';
 
 export default {
   name: 'QuantitiesInfo',
@@ -93,7 +164,15 @@ export default {
         pageSize: 10,
         projectId: id,
         professionType: null,
+        buildingNum: null,
+        floorNum: null,
       },
+      quantity: {
+        file: null,
+      },
+      floorNumArr: [],
+      exportLink: '',
+      tempLink: 'fileupload/quantitys/quantityModel.xls',
       listLoading: false,
       list: null,
       // page
@@ -102,10 +181,31 @@ export default {
       // filters
       itemProfessionTypeList,
       quantityTypeList,
+      // dialog
+      dialogFormVisible: false,
+      // file list
+      fileList: [],
+      // rules
+      rules: {
+        file: [{ required: true, message: `${this.$t('btn.file')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+      },
     };
   },
+  computed: {
+    ...mapGetters([
+      'building',
+    ]),
+  },
   created() {
+    const { params: { id } } = this.$route;
+
     this.getList();
+    exportQuantity({
+      projectId: id,
+    }).then((res) => {
+      const { data } = res;
+      this.exportLink = data;
+    });
   },
   methods: {
     getList() {
@@ -123,6 +223,26 @@ export default {
       this.listQuery.pageIndex = 1;
       this.getList();
     },
+    handleBuilding(val) {
+      const { projectId } = this.listQuery;
+      this.handleFilter();
+      // reset floor num
+      this.listQuery.floorNum = null;
+      getItemByBuidlingInfo({
+        projectId,
+        buildingId: val,
+      }).then((res) => {
+        let { buildingNum, buildingNumBase } = res;
+
+        const floorNumArr = parseBuildingArr(buildingNum, buildingNumBase);
+
+        this.floorNumArr = floorNumArr;
+      });
+    },
+    handleFloor(val) {
+      this.listQuery.floorNum = val;
+      this.handleFilter();
+    },
     handleSizeChange(val) {
       this.listQuery.pageSize = val;
       this.getList();
@@ -130,6 +250,34 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.pageIndex = val;
       this.getList();
+    },
+    handleAdd() {
+      this.dialogFormVisible = true;
+    },
+    handleUpload(e) {
+      const files = e.target.files;
+
+      this.fileList = files;
+      this.quantity.file = files;
+    },
+    handleSave() {
+      const { params: { id } } = this.$route;
+      this.$refs.dialogForm.validate((valid) => {
+        if (valid) {
+          addQuantity({
+            ...this.paper,
+            fileList: this.fileList,
+            projectId: id,
+          }).then(() => {
+            this.dialogFormVisible = false;
+            this.getList();
+          });
+        }
+      });
+    },
+    resetForm() {
+      this.$refs.dialogForm.resetFields();
+      this.$refs.dialogForm.$el.reset();
     },
   },
 };
