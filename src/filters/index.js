@@ -32,8 +32,8 @@ export function parseBuildingArr(buildingNum, buildingNumBase) {
 
     const len = floorNumArr.length;
     for (let i = 0; i < restBuilding; i += 1) {
-      const index = len + parseInt(i / perArrCount);
-      
+      const index = len + parseInt(i / perArrCount, 10);
+
       if (!floorNumArr[index]) {
         floorNumArr[index] = [];
       }
@@ -86,6 +86,23 @@ export const householdNumList = ['全部', '公共部位', 'N户型', 'Q户型',
 export const questionOfTypeList = ['全部', '安全', '质量', '其他'];
 export const questionOfPriorityList = ['全部', '一般', '重要', '紧急'];
 export const questionStateList = ['全部', '待解决', '已解决'];
+export function getQuestionPercentInfo(name) {
+  const infoMap = {
+    sortPercent: {
+      name: '一般',
+      status: 'info',
+    },
+    importantPercent: {
+      name: '重要',
+      status: 'warning',
+    },
+    urgentPercent: {
+      name: '紧急',
+      status: 'exception',
+    },
+  };
+  return infoMap[name];
+}
 
 // quantity
 export const quantityTypeList = ['模型工程量', '预算工程量'];

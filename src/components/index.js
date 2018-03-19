@@ -1,6 +1,8 @@
+import Avatar from './Avatar';
 import Icon from './Icon';
 
 const components = [
+  Avatar,
   Icon,
 ];
 

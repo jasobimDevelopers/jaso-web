@@ -25,6 +25,7 @@ fieldset {
 html {
   height: 100%;
   box-sizing: border-box;
+  color: #606266;
 }
 
 #app{
@@ -54,10 +55,8 @@ html {
   .filter-item {
     display: inline-block;
     vertical-align: middle;
+    margin-right: 15px;
     margin-bottom: 10px;
-  }
-  .el-select {
-    margin-left: 15px;
   }
 }
 

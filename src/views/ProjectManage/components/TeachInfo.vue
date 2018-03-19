@@ -150,9 +150,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getItemByBuidlingInfo } from '@/api/item';
 import { getVideoList, deleteVideo, addVideo } from '@/api/video';
-import { teachTypeList, videoTypes, videoGradeList, parseBuildingArr } from '@/filters';
+import { teachTypeList, videoTypes, videoGradeList } from '@/filters';
 
 export default {
   name: 'TechInfo',

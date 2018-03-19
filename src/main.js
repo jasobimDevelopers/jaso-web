@@ -7,6 +7,9 @@ import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+// progress
+import Progress from 'vue-multiple-progress'
+
 import './styles/index.scss';
 
 import App from './App';
@@ -25,6 +28,8 @@ Vue.use(Element, {
   size: 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value),
 });
+
+Vue.use(Progress);
 
 // register components
 install(Vue);

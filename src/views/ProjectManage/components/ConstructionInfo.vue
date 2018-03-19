@@ -262,7 +262,7 @@ export default {
         projectId,
         buildingId: val,
       }).then((res) => {
-        let { buildingNum, buildingNumBase } = res;
+        const { buildingNum, buildingNumBase } = res;
 
         const floorNumArr = parseBuildingArr(buildingNum, buildingNumBase);
 

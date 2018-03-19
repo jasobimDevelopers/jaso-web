@@ -32,6 +32,12 @@ export default {
     upload: '上传',
     file: '文件',
     template: '模板',
+    view: '查看',
+    send: '发送',
+  },
+  dialog: {
+    add: '添加',
+    edit: '编辑',
   },
   table: {
     id: '序号',
@@ -146,7 +152,9 @@ export default {
     trades: '专业',
     questionDate: '创建时间',
     priority: '等级',
+    intro: '详情',
     state: '状态',
+    fileList: '图片信息',
   },
   message: {
     prompt: '提示',
@@ -154,11 +162,14 @@ export default {
     deleteProject: '此操作将永久删除该项目, 是否继续?',
     deleteQuestion: '此操作将永久删除该问题, 是否继续?',
     deletePaper: '此操作将永久删除该图纸, 是否继续?',
+    deleteMessage: '此操作将永久删除该留言, 是否继续?',
     deleteOk: '删除成功!',
     deleteCancel: '已取消删除',
     notEmpty: '不能为空',
     pleaseEnter: '请输入',
     notCorrect: '不正确',
     operationSuccess: '操作成功',
+    board: '留言板',
+    content: '内容',
   },
 };

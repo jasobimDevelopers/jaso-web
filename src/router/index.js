@@ -104,6 +104,16 @@ export const asyncRouterMap = [
         icon: 'quality',
         roles: ['admin', 'user'],
       },
+    }, {
+      path: 'question/:id',
+      component: asyncImport('QualityManage/QuestionInfo'),
+      name: 'question',
+      hidden: true,
+      meta: {
+        title: 'question',
+        icon: 'question',
+        roles: ['admin'],
+      },
     }],
   },
   {

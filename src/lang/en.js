@@ -32,6 +32,12 @@ export default {
     upload: 'Upload',
     file: 'File',
     template: 'Template',
+    view: 'View',
+    send: 'Send',
+  },
+  dialog: {
+    add: 'Add',
+    edit: 'Edit',
   },
   table: {
     id: 'ID',
@@ -146,6 +152,7 @@ export default {
     questionDate: 'Date',
     priority: 'Priority',
     state: 'State',
+    fileList: 'Pic Info',
   },
   message: {
     prompt: 'Prompt',
@@ -153,11 +160,14 @@ export default {
     deleteProject: 'Are you sure to delete this project?',
     deleteQuestion: 'Are you sure to delete this question?',
     deletePaper: 'Are you sure to delete this paper?',
+    deleteMessage: 'Are you sure to delete this message?',
     deleteOk: 'Delete successfully',
     deleteCancel: 'Cancel delete',
     notEmpty: ' Should not be empty',
     pleaseEnter: 'Please Enter',
     notCorrect: ' Not Correct',
     operationSuccess: 'Operate Successfully',
+    board: 'Message Board',
+    content: 'Content',
   },
 };

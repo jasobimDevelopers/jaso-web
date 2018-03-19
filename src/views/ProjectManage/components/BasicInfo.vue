@@ -135,7 +135,7 @@ export default {
       this.$store.dispatch('getProject', { id }).then((res) => {
         res.modelPart = res.modelPart.join(',');
         res.teamList = res.teamList.join(',');
-        this.project = {...this.project, ...res};
+        this.project = { ...this.project, ...res };
       });
     },
     handleModelChange(e) {

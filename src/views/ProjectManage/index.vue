@@ -340,7 +340,6 @@ export default {
       this.$refs.modelInput.value = null;
       this.$refs.picInput.value = null;
 
-      console.log('reset...');
       this.$refs.projectForm.resetFields();
     },
   },
