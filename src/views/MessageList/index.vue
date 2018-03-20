@@ -93,26 +93,26 @@ export default {
       editorOption: {
         modules: {
           toolbar: [
-            [{ 'size': ['small', false, 'large'] }],
+            [{ size: ['small', false, 'large'] }],
             ['bold', 'italic'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            ['link', 'image']
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link', 'image'],
           ],
           history: {
             delay: 1000,
             maxStack: 50,
-            userOnly: false
+            userOnly: false,
           },
           imageDrop: true,
           imageResize: {
             displayStyles: {
               backgroundColor: 'black',
               border: 'none',
-              color: 'white'
+              color: 'white',
             },
-            modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
-          }
-        }
+            modules: ['Resize', 'DisplaySize', 'Toolbar'],
+          },
+        },
       },
       // dialog
       dialogFormVisible: false,
@@ -145,7 +145,7 @@ export default {
       }).then(() => {
         // delete
         deleteMessage({
-          id
+          id,
         }).then(() => {
           this.getList();
         });
@@ -202,15 +202,15 @@ export default {
         });
       }
     },
-    onEditorBlur(editor) {
+    onEditorBlur() {
       // console.log('editor blur!', editor)
     },
-    onEditorFocus(editor) {
+    onEditorFocus() {
       // console.log('editor focus!', editor)
     },
-    onEditorReady(editor) {
+    onEditorReady() {
       // console.log('editor ready!', editor)
-    }
+    },
   },
 };
 </script>

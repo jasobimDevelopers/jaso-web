@@ -34,6 +34,7 @@ export default {
     template: 'Template',
     view: 'View',
     send: 'Send',
+    export: 'Export',
   },
   dialog: {
     add: 'Add',
@@ -43,6 +44,8 @@ export default {
     id: 'ID',
     operation: 'Operation',
     all: 'All',
+    list: 'List',
+    data: 'Data Statistics',
   },
   user: {
     userName: 'Username',
@@ -118,6 +121,8 @@ export default {
     bathroomEquipment: 'Bathroom Equipment',
     fireHydrant: 'Fire Hydrant',
     spray: 'Spray',
+    state: 'State',
+    date: 'Date',
   },
   paper: {
     originName: 'Name',
@@ -154,6 +159,16 @@ export default {
     state: 'State',
     fileList: 'Pic Info',
   },
+  output: {
+    num: 'Total Output',
+    finished: 'Finished',
+    dates: 'Date',
+  },
+  feedback: {
+    userName: 'Username',
+    content: 'Content',
+    date: 'Date',
+  },
   message: {
     prompt: 'Prompt',
     deleteUser: 'Are you sure to delete this user?',
@@ -161,6 +176,8 @@ export default {
     deleteQuestion: 'Are you sure to delete this question?',
     deletePaper: 'Are you sure to delete this paper?',
     deleteMessage: 'Are you sure to delete this message?',
+    deleteOutput: 'Are you sure to delete this output?',
+    deleteFeedback: 'Are you sure to delete this feedback?',
     deleteOk: 'Delete successfully',
     deleteCancel: 'Cancel delete',
     notEmpty: ' Should not be empty',
@@ -169,5 +186,6 @@ export default {
     operationSuccess: 'Operate Successfully',
     board: 'Message Board',
     content: 'Content',
+    keyword: 'Keyword',
   },
 };

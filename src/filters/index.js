@@ -114,3 +114,7 @@ export const paperProfessionTypeList = ['全部', '电气', '暖通', '给排水
 export const teachTypeList = ['全部', '质量', '安全', '技术'];
 export const videoTypes = ['视频', 'PDF', 'Word'];
 export const videoGradeList = ['公司总交底', '项目交底', '留底资料', '通用交底'];
+
+// duct
+export const ductTypeList = ['全部', '风管', '桥架', '弯头'];
+export const ductStateList = ['全部', '初始化', '出库', '安装', '完成'];

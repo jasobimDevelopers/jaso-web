@@ -8,7 +8,7 @@ import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 // progress
-import Progress from 'vue-multiple-progress'
+import Progress from 'vue-multiple-progress';
 
 import './styles/index.scss';
 

@@ -34,6 +34,7 @@ export default {
     template: '模板',
     view: '查看',
     send: '发送',
+    export: '导出',
   },
   dialog: {
     add: '添加',
@@ -43,6 +44,8 @@ export default {
     id: '序号',
     operation: '操作',
     all: '全部',
+    list: '列表',
+    data: '数据统计',
   },
   user: {
     userName: '用户名',
@@ -118,6 +121,8 @@ export default {
     bathroomEquipment: '卫浴装置',
     fireHydrant: '消防栓',
     spray: '喷淋',
+    state: '状态',
+    date: '时间',
   },
   paper: {
     originName: '图纸信息',
@@ -156,6 +161,16 @@ export default {
     state: '状态',
     fileList: '图片信息',
   },
+  output: {
+    num: '总产值',
+    finished: '已完成',
+    dates: '时间',
+  },
+  feedback: {
+    userName: '用户名',
+    content: '反馈内容',
+    date: '时间',
+  },
   message: {
     prompt: '提示',
     deleteUser: '此操作将永久删除该用户, 是否继续?',
@@ -163,6 +178,8 @@ export default {
     deleteQuestion: '此操作将永久删除该问题, 是否继续?',
     deletePaper: '此操作将永久删除该图纸, 是否继续?',
     deleteMessage: '此操作将永久删除该留言, 是否继续?',
+    deleteOutput: '此操作将永久删除该产值, 是否继续?',
+    deleteFeedback: '此操作将永久删除该意见反馈, 是否继续?',
     deleteOk: '删除成功!',
     deleteCancel: '已取消删除',
     notEmpty: '不能为空',
@@ -171,5 +188,6 @@ export default {
     operationSuccess: '操作成功',
     board: '留言板',
     content: '内容',
+    keyword: '关键字',
   },
 };

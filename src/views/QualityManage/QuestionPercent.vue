@@ -20,6 +20,7 @@
 
 <script>
 import { getQuestionPercentInfo } from '@/filters';
+
 export default {
   name: 'QuestionPercent',
   props: {

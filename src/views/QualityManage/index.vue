@@ -59,7 +59,7 @@
         </el-option>
       </el-select>
       <div class="filter-item" style="width: 240px">
-        <el-input :placeholder="$t('message.pleaseEnter')" v-model="listQuery.content" @keyup.enter.native="handleFilter">
+        <el-input :placeholder="$t('message.keyword')" v-model="listQuery.content" @keyup.enter.native="handleFilter">
           <el-button slot="append" icon="el-icon-search" @click="handleFilter"></el-button>
         </el-input>
       </div>
@@ -222,7 +222,7 @@ import QuestionPercent from './QuestionPercent';
 export default {
   name: 'QualityManage',
   components: {
-    QuestionPercent
+    QuestionPercent,
   },
   data() {
     return {
@@ -299,7 +299,6 @@ export default {
       this.getList();
     },
     handleAdd() {
-      this.dialogStatus = 'add';
       this.dialogFormVisible = true;
     },
     handleFileChange(e) {

@@ -1,4 +1,4 @@
-import Avatar from './Avatar.vue';
+import Avatar from './Avatar';
 
 Avatar.install = function install(Vue) {
   Vue.component(Avatar.name, Avatar);

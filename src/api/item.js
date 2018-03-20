@@ -34,3 +34,21 @@ export function getItemByBuidlingInfo(params) {
     params,
   });
 }
+
+export function getDuctStatusSum(params) {
+  return request.get('api/duct/getDuctStateSum', {
+    params,
+  });
+}
+
+export function getDuctList(params) {
+  return request.get('api/duct/getDuctList', {
+    params,
+  });
+}
+
+export function expotDuct(params) {
+  return request.get('api/duct/admin/exportDuct', {
+    params,
+  });
+}
