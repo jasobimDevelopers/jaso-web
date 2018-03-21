@@ -155,8 +155,8 @@
               <input type="file" ref="fileInput" @change="handleFileChange" />
               <span>上传</span>
             </el-button>
-            <img v-if="user.userIconUrl" class="file" :src="user.userIconUrl | setFileRoot" />
-            <img v-else-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
+            <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
+            <img v-else-if="user.userIconUrl" class="file" :src="user.userIconUrl | setFileRoot" />
           </div>
         </el-form-item>
       </el-form>
