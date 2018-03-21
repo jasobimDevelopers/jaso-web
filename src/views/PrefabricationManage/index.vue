@@ -60,7 +60,7 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('message.keyword')" v-model="listQuery.content">
       </el-input>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
-      <a v-if="expotDuctLink" :href="expotDuctLink" target="_blank">
+      <a v-if="exportDuctLink" :href="exportDuctLink | setFileRoot" target="_blank">
         <el-button class="filter-item" type="success" icon="el-icon-download">{{$t('btn.export')}}</el-button>
       </a>
     </div>
@@ -113,7 +113,7 @@
 
 <script>
 import DataSet from '@antv/data-set';
-import { getDuctStatusSum, getDuctList, expotDuct } from '@/api/item';
+import { getDuctStatusSum, getDuctList, exportDuct } from '@/api/item';
 import { getProjectList } from '@/api/projectManage';
 import { ductTypeList, ductStateList } from '@/filters';
 import G2 from '@antv/g2';
@@ -125,6 +125,7 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 10,
+        projectId: '',
         content: '',
         name: '',
         state: '',
@@ -137,7 +138,7 @@ export default {
       listLoading: false,
       list: null,
       projectList: [],
-      expotDuctLink: '',
+      exportDuctLink: '',
       // chart
       chartData: null,
       // filters
@@ -165,9 +166,6 @@ export default {
       this.getList();
     });
   },
-  mounted() {
-    this.refreshChart();
-  },
   methods: {
     getList() {
       this.listLoading = true;
@@ -179,41 +177,25 @@ export default {
         this.totalPage = totalPage;
         this.listLoading = false;
       });
+
+      this.refreshChart();
     },
     refreshChart() {
-      getDuctStatusSum().then((res) => {
+      const { projectId, content, name, state, dateStart, dateFinished } = this.listQuery;
+      getDuctStatusSum({
+        projectId,
+        content,
+        name,
+        state,
+        dateStart,
+        dateFinished,
+      }).then((res) => {
         const { data } = res;
         this.chartData = data;
         this.drawChart();
       });
     },
     drawChart() {
-      // const data = this.chartData || [];
-      // const result = {};
-      // // filter data
-      // data.forEach((item) => {
-      //   if (!result[item.month]) {
-      //     result[item.month] = [];
-      //   }
-
-      //   result[item.month].push(item);
-      // });
-
-      // const resultList = [];
-      // Object.keys(result).forEach((key) => {
-      //   const list = result[key];
-      //   let count = 0;
-
-      //   list.forEach((item) => {
-      //     count += item.sumDate;
-      //   });
-
-      //   resultList.push({
-      //     month: key,
-      //     count,
-      //     list,
-      //   });
-      // });
       if (!this.chart) {
         const data = this.chartData || [];
         const ds = new DataSet();
@@ -225,12 +207,6 @@ export default {
             const d2 = new Date(b.month);
             return (d1.getTime() - d2.getTime());
           }
-        }).transform({
-          type: 'aggregate',
-          fields: [ 'sumDate' ],
-          operations: ['sum'],
-          groupBy: ['month'],
-          as: ['count'],
         });
 
         const chart = new G2.Chart({
@@ -238,33 +214,42 @@ export default {
           forceFit: true,
           height: 560,
         });
+
+        const defs = {
+          'state':{
+            type: 'cat',
+            values: ['库存数量', '安装数量', '出库数量', '交底'],
+          },
+        };
+        chart.source(dv, defs);
         chart.source(dv);
         chart.tooltip({
           crosshairs: {
-            type: 'line',
+            type: 'line'
           }
         });
-        chart.legend('部门', {
-        selectedMode: 'single',
-        position: 'right',
-        hoverable: false
-      });
-        console.log('data', data);
-        console.log('dv.rows', dv.rows);
-        // chart.axis('temperature', {
-        //   label: {
-        //     formatter: val => {
-        //       return val + '°C';
-        //     }
-        //   }
-        // });
-        chart.line().position('month*count').color('count');
-        chart.point().position('month*count').color('count').size(4).shape('circle').style({
+
+        chart.line().position('month*sumDate').color('state');
+        chart.point().position('month*sumDate').color('state').size(4).shape('circle').style({
           stroke: '#fff',
           lineWidth: 1
         });
+        chart.render();
 
         this.chart = chart;
+      } else {
+        const data = this.chartData || [];
+        const ds = new DataSet();
+        const dv = ds.createView().source(data);
+        dv.transform({
+          type: 'sort',
+          callback(a, b) {
+            const d1 = new Date(a.month);
+            const d2 = new Date(b.month);
+            return (d1.getTime() - d2.getTime());
+          }
+        });
+        this.chart.changeData(dv);
       }
     },
     handleTabClick(tab, event) {
@@ -272,23 +257,27 @@ export default {
         if (this.chart) {
           this.chart.forceFit();
         }
-      })
+      });
     },
     handleFilter() {
       this.listQuery.pageIndex = 1;
       this.getList();
     },
     handleProjectChange(val) {
-      expotDuct({
-        projectId: val,
-      }).then((res) => {
-        const { data } = res;
-        this.expotDuctLink = data;
+      if (val) {
+        exportDuct({
+          projectId: val,
+        }).then((res) => {
+          const { data } = res;
+          this.exportDuctLink = data;
 
+          this.handleFilter();
+        }).catch(() => {
+          this.exportDuctLink = '';
+        });
+      } else {
         this.handleFilter();
-      }).catch(() => {
-        this.expotDuctLink = '';
-      });
+      }
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val;
@@ -299,8 +288,13 @@ export default {
       this.getList();
     },
     handleDateChange(dateArr) {
-      this.listQuery.dateStart = dateArr[0];
-      this.listQuery.dateFinished = dateArr[1];
+      if (dateArr) {
+        this.listQuery.dateStart = dateArr[0];
+        this.listQuery.dateFinished = dateArr[1];
+      } else {
+        this.listQuery.dateStart = null;
+        this.listQuery.dateFinished = null;
+      }
       this.handleFilter();
     },
   },

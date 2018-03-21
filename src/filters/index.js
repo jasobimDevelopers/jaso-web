@@ -118,3 +118,7 @@ export const videoGradeList = ['公司总交底', '项目交底', '留底资料'
 // duct
 export const ductTypeList = ['全部', '风管', '桥架', '弯头'];
 export const ductStateList = ['全部', '初始化', '出库', '安装', '完成'];
+
+// log
+export const projectPartList = ['全部', '模型区域', '图纸区域', '登录区域', '交底区域', '预制化区域', '紧急事项区域', '通知区域', '产值区域', '班组信息区域', '施工任务单', '预付单区域'];
+export const phoneSystemList = ['全部', '苹果系统', '安卓系统'];

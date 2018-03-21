@@ -169,6 +169,15 @@ export default {
     content: 'Content',
     date: 'Date',
   },
+  log: {
+    userName: 'Username',
+    projectName: 'Project Name',
+    projectPart: 'Project Part',
+    systemType: 'System Type',
+    actionDate: 'Action Date',
+    fileName: 'File Name',
+    version: 'Version',
+  },
   message: {
     prompt: 'Prompt',
     deleteUser: 'Are you sure to delete this user?',
@@ -178,6 +187,7 @@ export default {
     deleteMessage: 'Are you sure to delete this message?',
     deleteOutput: 'Are you sure to delete this output?',
     deleteFeedback: 'Are you sure to delete this feedback?',
+    deleteLog: 'Are you sure to delete this user log?',
     deleteOk: 'Delete successfully',
     deleteCancel: 'Cancel delete',
     notEmpty: ' Should not be empty',

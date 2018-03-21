@@ -171,6 +171,15 @@ export default {
     content: '反馈内容',
     date: '时间',
   },
+  log: {
+    userName: '用户名',
+    projectName: '项目名',
+    projectPart: '功能区域',
+    systemType: '系统类型',
+    actionDate: '操作时间',
+    fileName: '文件内容',
+    version: '版本',
+  },
   message: {
     prompt: '提示',
     deleteUser: '此操作将永久删除该用户, 是否继续?',
@@ -180,6 +189,7 @@ export default {
     deleteMessage: '此操作将永久删除该留言, 是否继续?',
     deleteOutput: '此操作将永久删除该产值, 是否继续?',
     deleteFeedback: '此操作将永久删除该意见反馈, 是否继续?',
+    deleteLog: '此操作将永久删除该记录, 是否继续?',
     deleteOk: '删除成功!',
     deleteCancel: '已取消删除',
     notEmpty: '不能为空',

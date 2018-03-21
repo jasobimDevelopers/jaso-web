@@ -47,7 +47,7 @@ export function getDuctList(params) {
   });
 }
 
-export function expotDuct(params) {
+export function exportDuct(params) {
   return request.get('api/duct/admin/exportDuct', {
     params,
   });
