@@ -40,6 +40,8 @@ export const constantRouterMap = [
     component: asyncImport('Login'),
     hidden: true,
   },
+  { path: '/404', component: asyncImport('errorPage/404'), hidden: true },
+  { path: '/401', component: asyncImport('errorPage/401'), hidden: true },
 ];
 
 export default new Router({
@@ -76,7 +78,7 @@ export const asyncRouterMap = [
       meta: {
         title: 'projectManage',
         icon: 'project',
-        roles: ['admin'],
+        roles: ['admin', 'user'],
       },
     }, {
       path: 'project/:id',
@@ -228,4 +230,5 @@ export const asyncRouterMap = [
       },
     }],
   },
+  { path: '*', redirect: '/404', hidden: true },
 ];
