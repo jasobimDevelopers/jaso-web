@@ -12,7 +12,7 @@ export default {
     userRecords: '用户记录',
   },
   login: {
-    title: '系统登录',
+    title: '智慧安装平台',
     logIn: '登录',
     username: '账号',
     password: '密码',

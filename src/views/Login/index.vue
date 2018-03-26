@@ -1,27 +1,77 @@
 <template>
-  <div class="login-container">
-    <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-      <div class="title-container">
-        <h3 class="title">{{$t('login.title')}}</h3>
+  <div class="login-container fit-parent flex-center">
+    <div class="login-wrapper flex-row">
+      <div class="left-wrapper">
+        <div class="bg"></div>
+        <div class="content fit-parent">
+          <header>智慧安装平台</header>
+          <div class="info">
+            <section>集BIM应用</section>
+            <section>项目施工信息化管理平台</section>
+          </div>
+        </div>
       </div>
-      <el-form-item prop="username">
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
-      </el-form-item>
+      <div class="right-wrapper">
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tab-pane label="登陆" name="login">
+            <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
+              <el-form-item prop="username">
+                <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+              </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="password" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon icon-class="eye" />
-        </span>
-      </el-form-item>
-      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
-    </el-form>
+              <el-form-item prop="password">
+                <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="password" />
+              </el-form-item>
+
+              <div class="sub-info flex-sb">
+                <el-checkbox v-model="checkedLogin">记住我</el-checkbox>
+                <router-link to="/resetPwd">忘记密码?</router-link>
+              </div>
+
+              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="注册" name="register">
+            <el-form v-if="registerStep === 1" class="register-form" :model="registerForm" :rules="registerRules" ref="loginForm" label-position="left">
+              <el-form-item prop="username">
+                <el-input name="username" type="text" placeholder="请输入手机号码" />
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input name="code" @keyup.enter.native="handleLogin" placeholder="请输入验证码" />
+                <el-button type="primary" round size="mini" class="get-code" :disabled="true">获取验证码</el-button>
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input name="password" type="password" placeholder="请输入密码" />
+              </el-form-item>
+
+              <div class="sub-info">
+                <el-checkbox v-model="checkedLogin">*我已阅读并已同意《智慧安装服务协议》</el-checkbox>
+              </div>
+
+              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="registerStep = 2">下一步</el-button>
+            </el-form>
+
+            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm" :rules="registerRules" ref="loginForm" label-position="left">
+              <el-form-item prop="username">
+                <el-input name="nickname" type="text" placeholder="请输入昵称" />
+              </el-form-item>
+
+              <el-form-item prop="username">
+                <el-input name="realName" type="text" placeholder="请输入姓名" />
+              </el-form-item>
+
+              <el-form-item prop="username">
+                <el-input name="email" type="text" placeholder="请输入邮箱" />
+              </el-form-item>
+
+              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">注册</el-button>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,11 +102,19 @@ export default {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
       },
+      registerForm: {},
+      registerRules: {},
       passwordType: 'password',
+      checkedLogin: false,
       loading: false,
+      activeName: 'login',
+      registerStep: 1,
     };
   },
   methods: {
+    handleTabClick(tab, event) {
+      console.log(tab, event);
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = '';
@@ -90,107 +148,120 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$bg:#2d3a4b;
-$light_gray:#eee;
-
 /* reset element-ui css */
 .login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: #fff !important;
-      }
+  .el-tabs__nav {
+    width: 100%;
+  }
+
+  .el-tabs__header {
+    margin-bottom: 22px;
+  }
+
+  .el-tabs__item {
+    width: 50%;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bolder;
+    color: #999999;
+
+    &.is-active {
+      color: #000000;
     }
   }
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
+
+  .el-tabs__active-bar {
+    background-color: #247946;
+  }
+
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #247946;
+    border-color: #247946;
+  }
+
+  .el-checkbox__input.is-checked+.el-checkbox__label {
+    color: #247946;
+  }
+
+  .register-form {
+    .el-checkbox__label{
+      font-size: 12px;
+    }
+  }
+
+  .login-btn {
+    margin-top: 10px;
+    width: 100%;
+    border-color: #129346;
+    background-color: #129346;
+  }
+  
+  .get-code {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    border-color: #129346;
+    background-color: #129346;
   }
 }
 </style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
-
 .login-container {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  background-color: $bg;
-  .login-form {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 520px;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
-  }
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+  background-image: url('../../assets/images/login-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.login-wrapper {
+  width: 542px;
+  height: 379px;
+
+  .left-wrapper {
+    position: relative;
+    height: 100%;
+    width: 232px;
+
+    .bg {
+      width: 100%;
+      height: 100%;
+      background-color: #129346;
+      opacity: .8;
+      filter: blur(1px);
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .content {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #ffffff;
+
+      header {
+        margin-bottom: 35px;
+        font-size: 24px;
+      }
+
+      section {
+        font-size: 14px;
       }
     }
   }
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-    &_login {
-      font-size: 20px;
+
+  .right-wrapper {
+    height: 100%;
+    width: 310px;
+    padding: 32px;
+    background-color: #ffffff;
+
+    .login-form {
+      .sub-info {
+        font-size: 14px;
+      }
     }
-  }
-  .title-container {
-    position: relative;
-    .title {
-      font-size: 26px;
-      font-weight: 400;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-    .set-language {
-      color: #fff;
-      position: absolute;
-      top: 5px;
-      right: 0px;
-    }
-  }
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-  .thirdparty-button {
-    position: absolute;
-    right: 35px;
-    bottom: 28px;
   }
 }
 </style>

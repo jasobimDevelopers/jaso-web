@@ -28,6 +28,10 @@ html {
   color: #606266;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #app{
   height: 100%;
 }

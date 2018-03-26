@@ -7,7 +7,7 @@ export function spliteWords(words, count) {
 
 // file root
 export function setFileRoot(url) {
-  const fileRoot = 'http://jasobim.com/';
+  const fileRoot = 'http://jasobim.com:8080/';
 
   return `${fileRoot}${url}`;
 }
