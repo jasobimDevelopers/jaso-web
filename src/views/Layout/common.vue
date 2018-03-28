@@ -1,18 +1,21 @@
 <template>
   <div class="app-wrapper">
     <navbar></navbar>
-    <app-main></app-main>
+    <section class="common-app-main">
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </section>
   </div>
 </template>
 
 <script>
-import { Navbar, AppMain } from './components';
+import { Navbar } from './components';
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
-    AppMain,
   },
 };
 </script>
@@ -25,5 +28,17 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+  }
+
+  .common-app-main {
+    width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1200px) {
+    .common-app-main {
+      padding: 0 8px;
+      width: 100%;
+    }
   }
 </style>
