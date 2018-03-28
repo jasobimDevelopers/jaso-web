@@ -25,11 +25,16 @@ fieldset {
 html {
   height: 100%;
   box-sizing: border-box;
-  color: #606266;
+  color: #303133;
+  background-color: #f5f5f5;
 }
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  height: 100%;
 }
 
 #app{

@@ -1,8 +1,8 @@
 <template>
-  <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
-    <sidebar class="sidebar-container"></sidebar>
+  <div class="app-wrapper" >
+    <navbar></navbar>
     <div class="main-container">
-      <navbar></navbar>
+      <sidebar class="sidebar-container"></sidebar>
       <app-main></app-main>
     </div>
   </div>
@@ -34,5 +34,13 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+  }
+
+  // media
+  @media (max-width: 1200px) {
+    .main-container {
+      padding: 0 8px;
+      width: 100%;
+    }
   }
 </style>

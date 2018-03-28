@@ -12,3 +12,15 @@ export function login(username, password) {
 export function getUserInfo() {
   return request.get('api/user/common/getUserInfo');
 }
+
+export function getCode(params) {
+  return request.get('api/user/web/getIdentifyingCode', {
+    params,
+  });
+}
+
+export function verifyCode(params) {
+  return request.get('api/user/web/getIdentifyingInfo', {
+    params,
+  });
+}

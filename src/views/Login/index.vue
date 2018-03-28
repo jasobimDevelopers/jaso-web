@@ -12,15 +12,15 @@
         </div>
       </div>
       <div class="right-wrapper">
-        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tabs v-model="activeName">
           <el-tab-pane label="登陆" name="login">
             <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
               <el-form-item prop="username">
-                <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+                <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="用户名" />
               </el-form-item>
 
               <el-form-item prop="password">
-                <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="password" />
+                <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码" />
               </el-form-item>
 
               <div class="sub-info flex-sb">
@@ -28,32 +28,52 @@
                 <router-link to="/resetPwd">忘记密码?</router-link>
               </div>
 
-              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+              <el-button
+                type="success"
+                class="login-btn"
+                :loading="loading"
+                :disabled="loginForm.username === '' || loginForm.password === ''"
+                @click.native.prevent="handleLogin"
+              >{{$t('login.logIn')}}</el-button>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="注册" name="register">
-            <el-form v-if="registerStep === 1" class="register-form" :model="registerForm" :rules="registerRules" ref="loginForm" label-position="left">
-              <el-form-item prop="username">
-                <el-input name="username" type="text" placeholder="请输入手机号码" />
+            <el-form v-if="registerStep === 1" class="register-form" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left">
+              <el-form-item prop="mobile">
+                <el-input name="mobile" type="text" v-model="registerForm.mobile" placeholder="请输入手机号码" />
+              </el-form-item>
+
+              <el-form-item prop="code">
+                <el-input name="code" v-model="registerForm.code" @keyup.enter.native="handleGetCode" placeholder="请输入验证码" />
+                <el-button
+                  type="success"
+                  round
+                  size="mini"
+                  class="get-code"
+                  :loading="codeStatus === 1"
+                  :disabled="registerForm.mobile === '' || codeStatus !== 0"
+                  @click="handleGetCode"
+                >{{ codeStatus === 2 ? `还剩${codeTime}s` : '获取验证码' }}</el-button>
               </el-form-item>
 
               <el-form-item prop="password">
-                <el-input name="code" @keyup.enter.native="handleLogin" placeholder="请输入验证码" />
-                <el-button type="primary" round size="mini" class="get-code" :disabled="true">获取验证码</el-button>
-              </el-form-item>
-
-              <el-form-item prop="password">
-                <el-input name="password" type="password" placeholder="请输入密码" />
+                <el-input name="password" type="password" v-model="registerForm.password" placeholder="请输入密码" />
               </el-form-item>
 
               <div class="sub-info">
-                <el-checkbox v-model="checkedLogin">*我已阅读并已同意《智慧安装服务协议》</el-checkbox>
+                <el-checkbox v-model="checkedRegister">*我已阅读并已同意《智慧安装服务协议》</el-checkbox>
               </div>
 
-              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="registerStep = 2">下一步</el-button>
+              <el-button
+                type="success"
+                class="login-btn"
+                :loading="loading"
+                @click.native.prevent="handleNextRegister"
+                :disabled="registerForm.mobile === '' || registerForm.code === '' || registerForm.password === '' || !checkedRegister"
+              >下一步</el-button>
             </el-form>
 
-            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm" :rules="registerRules" ref="loginForm" label-position="left">
+            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left">
               <el-form-item prop="username">
                 <el-input name="nickname" type="text" placeholder="请输入昵称" />
               </el-form-item>
@@ -66,7 +86,7 @@
                 <el-input name="email" type="text" placeholder="请输入邮箱" />
               </el-form-item>
 
-              <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">注册</el-button>
+              <el-button type="success" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">注册</el-button>
             </el-form>
           </el-tab-pane>
         </el-tabs>
@@ -76,50 +96,111 @@
 </template>
 
 <script>
+import { getCode, verifyCode } from '@/api/user';
+import { validateEmail, validePhone } from '@/utils/validate';
+
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value.trim() === '') {
-        callback(new Error('Please enter the correct user name'));
+        callback(new Error(`${this.$t('user.userName')}${this.$t('message.notCorrect')}`));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'));
+        callback(new Error(`密码长度不能低于6位`));
       } else {
         callback();
       }
     };
+
+    const checkEmail = (rule, value, callback) => {
+      if (!validateEmail(value)) {
+        callback(new Error(`${this.$t('user.email')}${this.$t('message.notCorrect')}`));
+      } else {
+        callback();
+      }
+    };
+
+    const checkPhone = (rule, value, callback) => {
+      if (!validePhone(value)) {
+        callback(new Error(`${this.$t('user.tel')}${this.$t('message.notCorrect')}`));
+      } else {
+        callback();
+      }
+    };
+
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456',
+        username: '',
+        password: '',
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
       },
-      registerForm: {},
-      registerRules: {},
+      registerForm: {
+        mobile: '',
+        code: '',
+        password: '',
+      },
+      registerRules: {
+        mobile: [{ required: true, validator: checkPhone, trigger: 'blur' }],
+        code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }],
+        password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
+      },
       passwordType: 'password',
       checkedLogin: false,
+      checkedRegister: false,
       loading: false,
       activeName: 'login',
       registerStep: 1,
+      // code
+      codeTime: 60,
+      // 0: 未获取， 1: 正在获取, 2: 已经获取
+      codeStatus: 0,
+      timer: null,
     };
   },
+  mounted() {
+    const username = window.localStorage.getItem('username');
+    const password = window.localStorage.getItem('password');
+
+    this.loginForm.username = username;
+    this.loginForm.password = password;
+  },
   methods: {
-    handleTabClick(tab, event) {
-      console.log(tab, event);
-    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = '';
       } else {
         this.passwordType = 'password';
+      }
+    },
+    handleGetCode() {
+      const { mobile } = this.registerForm;
+
+      if (validePhone(mobile)) {
+        this.codeStatus = 1;
+        getCode({
+          mobile,
+          systemType: 1,
+        }).then((res) => {
+          this.codeStatus = 2;
+
+          this.timer = setInterval(() => {
+            this.codeTime -= 1;
+
+            if (this.codeTime === 0) {
+              clearInterval(this.timer);
+              this.codeStatus = 0;
+              this.codeTime = 60;
+            }
+          }, 1e3);
+        });
       }
     },
     handleLogin() {
@@ -130,17 +211,39 @@ export default {
             const { userType } = userInfo;
             this.loading = false;
 
-            if (userType === 0) {
-              this.$router.push({ path: '/userManage' });
+            // if check the login info
+            if (this.checkedLogin) {
+              window.localStorage.setItem('username', this.loginForm.username);
+              window.localStorage.setItem('password', this.loginForm.password);
             } else {
-              this.$router.push({ path: '/projectManage' });
+              window.localStorage.setItem('username', '');
+              window.localStorage.setItem('password', '');
             }
+
+            this.$router.push({ path: '/ProjectList' });
+
+            // if (userType === 0) {
+            //   this.$router.push({ path: '/userManage' });
+            // } else {
+            //   this.$router.push({ path: '/projectManage' });
+            // }
           }).catch(() => {
             this.loading = false;
           });
         } else {
           console.log('login fail');
         }
+      });
+    },
+    handleNextRegister() {
+      const { code, mobile } = this.registerForm;
+      verifyCode({
+        code,
+        mobile,
+      }).then((res) => {
+        console.log('res', res);
+        this.codeStatus = 0;
+        this.registerStep = 2;
       });
     },
   },
@@ -192,16 +295,12 @@ export default {
   .login-btn {
     margin-top: 10px;
     width: 100%;
-    border-color: #129346;
-    background-color: #129346;
   }
   
   .get-code {
     position: absolute;
     top: 4px;
     right: 8px;
-    border-color: #129346;
-    background-color: #129346;
   }
 }
 </style>
@@ -228,7 +327,6 @@ export default {
       height: 100%;
       background-color: #129346;
       opacity: .8;
-      filter: blur(1px);
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
     }
