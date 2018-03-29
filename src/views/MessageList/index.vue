@@ -8,14 +8,14 @@
       @update="handleUpdate"
     ></message-item>
 
-    <quill-editor
+    <!-- <quill-editor
       v-model="editorContent"
       :options="editorOption"
       ref="quillEditor"
       @blur="onEditorBlur($event)"
       @focus="onEditorFocus($event)"
       @ready="onEditorReady($event)">
-    </quill-editor>
+    </quill-editor> -->
 
     <div class="flex-end" style="margin: 24px 0">
       <el-button type="primary" @click="handleSendMessage">{{$t('btn.send')}}</el-button>
@@ -29,7 +29,7 @@
       width="640px"
     >
       <el-form :rules="rules" ref="dialogForm" :model="message" label-position="left" style='width: 400px; margin-left:50px;'>
-        <el-form-item :label="$t('message.content')" prop="content">
+        <!-- <el-form-item :label="$t('message.content')" prop="content">
           <quill-editor
             v-model="message.content"
             :options="editorOption"
@@ -38,7 +38,7 @@
             @focus="onEditorFocus($event)"
             @ready="onEditorReady($event)">
           </quill-editor>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer">
         <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
@@ -57,17 +57,17 @@ import {
   addMessage,
 } from '@/api/message';
 // require styles
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
-import 'quill/dist/quill.bubble.css';
+// import 'quill/dist/quill.core.css';
+// import 'quill/dist/quill.snow.css';
+// import 'quill/dist/quill.bubble.css';
 
-import { quillEditor, Quill } from 'vue-quill-editor';
-import { ImageDrop } from 'quill-image-drop-module';
-import ImageResize from 'quill-image-resize-module';
+// import { quillEditor, Quill } from 'vue-quill-editor';
+// import { ImageDrop } from 'quill-image-drop-module';
+// import ImageResize from 'quill-image-resize-module';
 import MessageItem from './MessageItem';
 
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
+// Quill.register('modules/imageDrop', ImageDrop);
+// Quill.register('modules/imageResize', ImageResize);
 
 export default {
   name: 'MessageList',
@@ -80,7 +80,7 @@ export default {
   },
   components: {
     MessageItem,
-    quillEditor,
+    // quillEditor,
   },
   data() {
     return {
