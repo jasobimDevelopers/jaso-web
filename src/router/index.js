@@ -3,7 +3,6 @@ import Router from 'vue-router';
 
 /* Layout */
 import Layout from '../views/Layout';
-import commonLayout from '../views/Layout/common.vue';
 
 /** note: submenu only apppear when children.length>=1
 *   detail see  https://panjiachen.github.io/vue-element-admin-site/#/router-and-nav?id=sidebar
@@ -51,449 +50,185 @@ export default new Router({
 });
 
 export const asyncRouterMap = [
-  /******** Common Layout ********/
-  {
-    path: '/projectList',
-    component: commonLayout,
-    redirect: '/projectList/index',
-    meta: { roles: ['admin', 'user'] },
-    hidden: true,
-    children: [{
-      path: 'index',
-      component: asyncImport('ProjectList'),
-      name: 'ProjectList',
-    }],
-  },
   {
     path: '/userManage',
-    component: commonLayout,
+    component: Layout,
     redirect: '/userManage/index',
     meta: { roles: ['admin'] },
-    hidden: true,
     children: [{
       path: 'index',
       component: asyncImport('UserManage'),
-      name: 'ProjectList',
-    }],
-  },
-  /******** /Common Layout ********/
-
-  {
-    path: '/project/:id',
-    component: Layout,
-    name: 'project',
-    meta: {
-      basePath: 'project',
-      redirect: 'projectManage',
-      icon: 'project',
-      title: '生产管理',
-      roles: ['admin', 'user']
-    },
-    children: [{
-      path: 'projectManage',
-      component: asyncImport('ProjectManage/BasicInfo'),
-      name: 'projectManage',
+      name: 'UserManage',
       meta: {
-        title: '项目基本信息',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '施工任务单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '施工日志',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '预付单',
-        roles: ['admin', 'user'],
+        title: 'userManage',
+        icon: 'user',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/cost/:id',
+    path: '/projectManage',
     component: Layout,
-    name: 'cost',
-    meta: {
-      basePath: 'cost',
-      icon: 'project',
-      title: '成本管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/projectManage/index',
+    meta: { roles: ['admin', 'user'] },
     children: [{
-      path: 'ProjectManage',
+      path: 'index',
       component: asyncImport('ProjectManage'),
       name: 'projectManage',
       meta: {
-        title: '预算',
+        title: 'projectManage',
+        icon: 'project',
         roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'project/:id',
+      component: asyncImport('ProjectManage/Project'),
+      name: 'project',
+      hidden: true,
+      meta: {
+        title: 'project',
+        icon: 'project',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/statistics/:id',
+    path: '/qualityManage',
     component: Layout,
-    name: 'statistics',
-    meta: {
-      basePath: 'statistics',
-      icon: 'project',
-      title: '统计管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/qualityManage/index',
+    meta: { roles: ['admin', 'user'] },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'index',
+      component: asyncImport('QualityManage'),
+      name: 'qualityManage',
       meta: {
-        title: '用工统计',
+        title: 'qualityManage',
+        icon: 'quality',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'question/:id',
+      component: asyncImport('QualityManage/QuestionInfo'),
+      name: 'question',
+      hidden: true,
       meta: {
-        title: '考勤管理',
-        roles: ['admin', 'user'],
+        title: 'question',
+        icon: 'question',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/material/:id',
+    path: '/prefabricationManage',
     component: Layout,
-    name: 'material',
-    meta: {
-      basePath: 'material',
-      icon: 'project',
-      title: '物资管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/prefabricationManage/index',
+    meta: { roles: ['admin'] },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'index',
+      component: asyncImport('PrefabricationManage'),
+      name: 'prefabricationManage',
       meta: {
-        title: '物资统计',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '材料计划',
-        roles: ['admin', 'user'],
+        title: 'prefabricationManage',
+        icon: 'prefabrication',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/quality/:id',
+    path: '/outputValueManage',
     component: Layout,
-    name: 'quality',
-    meta: {
-      basePath: 'quality',
-      icon: 'project',
-      title: '质量管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/outputValueManage/index',
+    meta: { roles: ['admin'] },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'index',
+      component: asyncImport('OutputValueManage'),
+      name: 'outputValueManage',
       meta: {
-        title: '质量整改单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '质量罚款单',
-        roles: ['admin', 'user'],
+        title: 'outputValueManage',
+        icon: 'money',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/security/:id',
+    path: '/userRecords',
     component: Layout,
-    name: 'security',
-    meta: {
-      basePath: 'security',
-      icon: 'project',
-      title: '安全管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/userRecords/index',
+    meta: { roles: ['admin'] },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'index',
+      component: asyncImport('UserRecords'),
+      name: 'userRecords',
       meta: {
-        title: '安全整改单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '安全交底',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '安全罚款单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '安全整改反馈单',
-        roles: ['admin', 'user'],
+        title: 'userRecords',
+        icon: 'record',
+        roles: ['admin'],
       },
     }],
   },
   {
-    path: '/goods/:id',
+    path: '/qrcode',
     component: Layout,
-    name: 'goods',
-    meta: {
-      basePath: 'goods',
-      icon: 'project',
-      title: '资料管理',
-      roles: ['admin', 'user']
-    },
+    redirect: '/qrcode/index',
+    meta: { roles: ['user'] },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'index',
+      component: asyncImport('Qrcode'),
+      name: 'qrcode',
       meta: {
-        title: '图纸信息',
-        roles: ['admin', 'user'],
+        title: 'qrcode',
+        icon: 'dashboard',
+        roles: ['user'],
       },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+    }],
+  },
+  {
+    path: '/standard',
+    component: Layout,
+    redirect: '/standard/index',
+    meta: { roles: ['user'] },
+    children: [{
+      path: 'index',
+      component: asyncImport('Standard'),
+      name: 'standard',
       meta: {
-        title: '文档',
-        roles: ['admin', 'user'],
+        title: 'standard',
+        icon: 'dashboard',
+        roles: ['user'],
       },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+    }],
+  },
+  {
+    path: '/about',
+    component: Layout,
+    redirect: '/about/index',
+    meta: { roles: ['user'] },
+    children: [{
+      path: 'index',
+      component: asyncImport('About'),
+      name: 'about',
       meta: {
-        title: '图片',
-        roles: ['admin', 'user'],
+        title: 'about',
+        icon: 'dashboard',
+        roles: ['user'],
       },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+    }],
+  },
+  {
+    path: '/feedback',
+    component: Layout,
+    redirect: '/feedback/index',
+    meta: { roles: ['admin', 'user'] },
+    children: [{
+      path: 'index',
+      component: asyncImport('Feedback'),
+      name: 'feedback',
       meta: {
-        title: 'BIM模型',
+        title: 'feedback',
+        icon: 'message',
         roles: ['admin', 'user'],
       },
     }],
   },
-  // {
-  //   path: '/userManage',
-  //   component: Layout,
-  //   redirect: '/userManage/index',
-  //   meta: { roles: ['admin'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('UserManage'),
-  //     name: 'UserManage',
-  //     meta: {
-  //       title: 'userManage',
-  //       icon: 'user',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/projectManage',
-  //   component: Layout,
-  //   redirect: '/projectManage/index',
-  //   meta: { roles: ['admin', 'user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('ProjectManage'),
-  //     name: 'projectManage',
-  //     meta: {
-  //       title: 'projectManage',
-  //       icon: 'project',
-  //       roles: ['admin', 'user'],
-  //     },
-  //   }, {
-  //     path: 'project/:id',
-  //     component: asyncImport('ProjectManage/Project'),
-  //     name: 'project',
-  //     hidden: true,
-  //     meta: {
-  //       title: 'project',
-  //       icon: 'project',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/qualityManage',
-  //   component: Layout,
-  //   redirect: '/qualityManage/index',
-  //   meta: { roles: ['admin', 'user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('QualityManage'),
-  //     name: 'qualityManage',
-  //     meta: {
-  //       title: 'qualityManage',
-  //       icon: 'quality',
-  //       roles: ['admin', 'user'],
-  //     },
-  //   }, {
-  //     path: 'question/:id',
-  //     component: asyncImport('QualityManage/QuestionInfo'),
-  //     name: 'question',
-  //     hidden: true,
-  //     meta: {
-  //       title: 'question',
-  //       icon: 'question',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/prefabricationManage',
-  //   component: Layout,
-  //   redirect: '/prefabricationManage/index',
-  //   meta: { roles: ['admin'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('PrefabricationManage'),
-  //     name: 'prefabricationManage',
-  //     meta: {
-  //       title: 'prefabricationManage',
-  //       icon: 'prefabrication',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/outputValueManage',
-  //   component: Layout,
-  //   redirect: '/outputValueManage/index',
-  //   meta: { roles: ['admin'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('OutputValueManage'),
-  //     name: 'outputValueManage',
-  //     meta: {
-  //       title: 'outputValueManage',
-  //       icon: 'money',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/userRecords',
-  //   component: Layout,
-  //   redirect: '/userRecords/index',
-  //   meta: { roles: ['admin'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('UserRecords'),
-  //     name: 'userRecords',
-  //     meta: {
-  //       title: 'userRecords',
-  //       icon: 'record',
-  //       roles: ['admin'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/qrcode',
-  //   component: Layout,
-  //   redirect: '/qrcode/index',
-  //   meta: { roles: ['user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('Qrcode'),
-  //     name: 'qrcode',
-  //     meta: {
-  //       title: 'qrcode',
-  //       icon: 'dashboard',
-  //       roles: ['user'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/standard',
-  //   component: Layout,
-  //   redirect: '/standard/index',
-  //   meta: { roles: ['user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('Standard'),
-  //     name: 'standard',
-  //     meta: {
-  //       title: 'standard',
-  //       icon: 'dashboard',
-  //       roles: ['user'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/about',
-  //   component: Layout,
-  //   redirect: '/about/index',
-  //   meta: { roles: ['user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('About'),
-  //     name: 'about',
-  //     meta: {
-  //       title: 'about',
-  //       icon: 'dashboard',
-  //       roles: ['user'],
-  //     },
-  //   }],
-  // },
-  // {
-  //   path: '/feedback',
-  //   component: Layout,
-  //   redirect: '/feedback/index',
-  //   meta: { roles: ['admin', 'user'] },
-  //   children: [{
-  //     path: 'index',
-  //     component: asyncImport('Feedback'),
-  //     name: 'feedback',
-  //     meta: {
-  //       title: 'feedback',
-  //       icon: 'message',
-  //       roles: ['admin', 'user'],
-  //     },
-  //   }],
-  // },
   { path: '*', redirect: '/404', hidden: true },
 ];

@@ -337,7 +337,6 @@ export default {
         picFile: '',
       };
       // reset file src
-      this.uploadFileSrc = null;
       this.$refs.modelInput.value = null;
       this.$refs.picInput.value = null;
 
