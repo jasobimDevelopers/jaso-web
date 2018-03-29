@@ -8,6 +8,7 @@
   }
 
   .app-main {
+    flex: 1;
     margin-left: 215px;
     background-color: #ffffff;
   }
@@ -44,6 +45,16 @@
     .svg-icon {
       margin-right: 16px;
       color: #66b1ff;
+    }
+  }
+}
+
+
+// media
+@media (max-width: 768px) {
+  #app {
+    .main-container {
+      width: 100%;
     }
   }
 }

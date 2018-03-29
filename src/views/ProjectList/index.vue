@@ -7,7 +7,7 @@
     </div>
 
     <div class="list-wrapper">
-      <router-link :to="`/project/${item.id}/ProjectManage`" class="item" v-for="item in list" :key="item.id">
+      <router-link :to="`/project/${item.id}/projectManage`" class="item" v-for="item in list" :key="item.id">
         <img v-if="item.picUrl !== ''" :src="item.picUrl | setFileRoot" />
         <img v-else src="@/assets/images/project-bg.png" />
         <div class="name">{{ item.name }}</div>

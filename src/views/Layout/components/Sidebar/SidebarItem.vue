@@ -7,7 +7,7 @@
           <div>{{ item.meta.title }}</div>
         </header>
         <div class="menu-list" v-if="item.children.length > 0">
-          <router-link :to="`/${item.basePath}/${projectId}/${menu.path}`" v-for="menu in item.children" :key="menu.name">
+          <router-link :to="`/${item.meta.basePath}/${projectId}/${menu.path}`" v-for="menu in item.children" :key="menu.name">
             <span>{{ menu.meta.title }}</span>
           </router-link>
         </div>

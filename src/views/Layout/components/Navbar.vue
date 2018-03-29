@@ -10,7 +10,7 @@
       <div class="right-menu flex-row">
         <div class="menu-list flex-row">
           <router-link to="/#" class="menu-item">我的</router-link>
-          <router-link to="/#" class="menu-item">用户管理</router-link>
+          <router-link to="/userManage/index" class="menu-item">用户管理</router-link>
           <router-link to="/#" class="menu-item">设置</router-link>
         </div>
 

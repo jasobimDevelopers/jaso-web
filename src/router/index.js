@@ -51,10 +51,11 @@ export default new Router({
 });
 
 export const asyncRouterMap = [
+  /******** Common Layout ********/
   {
-    path: '/ProjectList',
+    path: '/projectList',
     component: commonLayout,
-    redirect: '/ProjectList/index',
+    redirect: '/projectList/index',
     meta: { roles: ['admin', 'user'] },
     hidden: true,
     children: [{
@@ -64,18 +65,33 @@ export const asyncRouterMap = [
     }],
   },
   {
+    path: '/userManage',
+    component: commonLayout,
+    redirect: '/userManage/index',
+    meta: { roles: ['admin'] },
+    hidden: true,
+    children: [{
+      path: 'index',
+      component: asyncImport('UserManage'),
+      name: 'ProjectList',
+    }],
+  },
+  /******** /Common Layout ********/
+
+  {
     path: '/project/:id',
     component: Layout,
     name: 'project',
-    basePath: 'project',
     meta: {
+      basePath: 'project',
+      redirect: 'projectManage',
       icon: 'project',
       title: '生产管理',
       roles: ['admin', 'user']
     },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
+      path: 'projectManage',
+      component: asyncImport('ProjectManage/BasicInfo'),
       name: 'projectManage',
       meta: {
         title: '项目基本信息',
@@ -102,7 +118,7 @@ export const asyncRouterMap = [
       component: asyncImport('ProjectManage'),
       name: 'projectManage',
       meta: {
-        title: '构件信息',
+        title: '预付单',
         roles: ['admin', 'user'],
       },
     }],
@@ -111,8 +127,8 @@ export const asyncRouterMap = [
     path: '/cost/:id',
     component: Layout,
     name: 'cost',
-    basePath: 'cost',
     meta: {
+      basePath: 'cost',
       icon: 'project',
       title: '成本管理',
       roles: ['admin', 'user']
@@ -122,31 +138,7 @@ export const asyncRouterMap = [
       component: asyncImport('ProjectManage'),
       name: 'projectManage',
       meta: {
-        title: '工程量清单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '合同产值',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '累计发生成本',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '当月发生成本',
+        title: '预算',
         roles: ['admin', 'user'],
       },
     }],
@@ -155,8 +147,8 @@ export const asyncRouterMap = [
     path: '/statistics/:id',
     component: Layout,
     name: 'statistics',
-    basePath: 'statistics',
     meta: {
+      basePath: 'statistics',
       icon: 'project',
       title: '统计管理',
       roles: ['admin', 'user']
@@ -166,7 +158,7 @@ export const asyncRouterMap = [
       component: asyncImport('ProjectManage'),
       name: 'projectManage',
       meta: {
-        title: '统计管理',
+        title: '用工统计',
         roles: ['admin', 'user'],
       },
     }, {
@@ -183,8 +175,8 @@ export const asyncRouterMap = [
     path: '/material/:id',
     component: Layout,
     name: 'material',
-    basePath: 'material',
     meta: {
+      basePath: 'material',
       icon: 'project',
       title: '物资管理',
       roles: ['admin', 'user']
@@ -211,29 +203,13 @@ export const asyncRouterMap = [
     path: '/quality/:id',
     component: Layout,
     name: 'quality',
-    basePath: 'quality',
     meta: {
+      basePath: 'quality',
       icon: 'project',
       title: '质量管理',
       roles: ['admin', 'user']
     },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '实测实量',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '创优创杯',
-        roles: ['admin', 'user'],
-      },
-    }, {
       path: 'ProjectManage',
       component: asyncImport('ProjectManage'),
       name: 'projectManage',
@@ -255,8 +231,8 @@ export const asyncRouterMap = [
     path: '/security/:id',
     component: Layout,
     name: 'security',
-    basePath: 'security',
     meta: {
+      basePath: 'security',
       icon: 'project',
       title: '安全管理',
       roles: ['admin', 'user']
@@ -291,6 +267,50 @@ export const asyncRouterMap = [
       name: 'projectManage',
       meta: {
         title: '安全整改反馈单',
+        roles: ['admin', 'user'],
+      },
+    }],
+  },
+  {
+    path: '/goods/:id',
+    component: Layout,
+    name: 'goods',
+    meta: {
+      basePath: 'goods',
+      icon: 'project',
+      title: '资料管理',
+      roles: ['admin', 'user']
+    },
+    children: [{
+      path: 'ProjectManage',
+      component: asyncImport('ProjectManage'),
+      name: 'projectManage',
+      meta: {
+        title: '图纸信息',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'ProjectManage',
+      component: asyncImport('ProjectManage'),
+      name: 'projectManage',
+      meta: {
+        title: '文档',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'ProjectManage',
+      component: asyncImport('ProjectManage'),
+      name: 'projectManage',
+      meta: {
+        title: '图片',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'ProjectManage',
+      component: asyncImport('ProjectManage'),
+      name: 'projectManage',
+      meta: {
+        title: 'BIM模型',
         roles: ['admin', 'user'],
       },
     }],

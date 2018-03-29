@@ -168,9 +168,11 @@ export default {
   mounted() {
     const username = window.localStorage.getItem('username');
     const password = window.localStorage.getItem('password');
+    const checked = window.localStorage.getItem(`checkedLogin`);
 
     this.loginForm.username = username;
     this.loginForm.password = password;
+    this.checkedLogin = (checked === '1');
   },
   methods: {
     showPwd() {
@@ -215,12 +217,14 @@ export default {
             if (this.checkedLogin) {
               window.localStorage.setItem('username', this.loginForm.username);
               window.localStorage.setItem('password', this.loginForm.password);
+              window.localStorage.setItem(`checkedLogin`, 1);
             } else {
               window.localStorage.setItem('username', '');
               window.localStorage.setItem('password', '');
+              window.localStorage.setItem(`checkedLogin`, 0);
             }
 
-            this.$router.push({ path: '/ProjectList' });
+            this.$router.push({ path: '/projectList' });
 
             // if (userType === 0) {
             //   this.$router.push({ path: '/userManage' });
