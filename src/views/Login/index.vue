@@ -67,26 +67,26 @@
               <el-button
                 type="success"
                 class="login-btn"
-                :loading="loading"
+                :loading="loadingRegister"
                 @click.native.prevent="handleNextRegister"
                 :disabled="registerForm.mobile === '' || registerForm.code === '' || registerForm.password === '' || !checkedRegister"
               >下一步</el-button>
             </el-form>
 
-            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left">
-              <el-form-item prop="username">
-                <el-input name="nickname" type="text" placeholder="请输入昵称" />
+            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm2" :rules="registerRules2" ref="registerForm2" label-position="left">
+              <el-form-item prop="userName">
+                <el-input name="userName" type="text" v-model="registerForm2.userName" placeholder="请输入昵称" />
               </el-form-item>
 
-              <el-form-item prop="username">
-                <el-input name="realName" type="text" placeholder="请输入姓名" />
+              <el-form-item prop="realName">
+                <el-input name="realName" type="text" v-model="registerForm2.realName" placeholder="请输入姓名" />
               </el-form-item>
 
-              <el-form-item prop="username">
-                <el-input name="email" type="text" placeholder="请输入邮箱" />
+              <el-form-item prop="email">
+                <el-input name="email" type="text" v-model="registerForm2.email" placeholder="请输入邮箱" />
               </el-form-item>
 
-              <el-button type="success" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">注册</el-button>
+              <el-button type="success" class="login-btn" :loading="loadingRegister" @click.native.prevent="handleRegister">注册</el-button>
             </el-form>
           </el-tab-pane>
         </el-tabs>
@@ -96,8 +96,9 @@
 </template>
 
 <script>
-import { getCode, verifyCode } from '@/api/user';
+import { getCode, verifyCode, registerUserInfo } from '@/api/user';
 import { validateEmail, validePhone } from '@/utils/validate';
+import { setToken } from '@/utils/auth';
 
 export default {
   name: 'Login',
@@ -147,18 +148,26 @@ export default {
         code: '',
         password: '',
       },
+      registerForm2: {
+        userName: '',
+        realName: '',
+        email: '',
+      },
       registerRules: {
         mobile: [{ required: true, validator: checkPhone, trigger: 'blur' }],
         code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }],
         password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
       },
       registerRules2: {
+        userName: [{ required: true, message: '昵称不能为空', trigger: 'blur' }],
+        realName: [{ required: true, message: '昵称不能为空', trigger: 'blur' }],
         email: [{ required: true, trigger: 'blur', validator: checkEmail }],
       },
       passwordType: 'password',
       checkedLogin: false,
       checkedRegister: false,
       loading: false,
+      loadingRegister: false,
       activeName: 'login',
       registerStep: 1,
       // code
@@ -228,12 +237,6 @@ export default {
             }
 
             this.$router.push({ path: '/projectList' });
-
-            // if (userType === 0) {
-            //   this.$router.push({ path: '/userManage' });
-            // } else {
-            //   this.$router.push({ path: '/projectManage' });
-            // }
           }).catch(() => {
             this.loading = false;
           });
@@ -243,13 +246,44 @@ export default {
       });
     },
     handleNextRegister() {
+      this.loadingRegister = true;
       const { code, mobile } = this.registerForm;
       verifyCode({
         code,
         mobile,
       }).then(() => {
+        this.loadingRegister = false;
         this.codeStatus = 0;
         this.registerStep = 2;
+      }).catch(() => {
+        this.loadingRegister = false;
+      });
+    },
+    handleRegister() {
+      this.$refs.registerForm2.validate((valid) => {
+        if (valid) {
+          this.loadingRegister = true;
+          const { mobile, password } = this.registerForm;
+          const { userName, realName, email } = this.registerForm2;
+
+          registerUserInfo({
+            tel: mobile,
+            password,
+            userName,
+            realName,
+            email,
+          }).then((res) => {
+            this.loadingRegister = false;
+            const { token } = res;
+            setToken(token);
+
+            this.$router.push({ path: '/projectList' });
+          }).catch(() => {
+            this.loadingRegister = false;
+          });
+        } else {
+          console.log('register fail');
+        }
       });
     },
   },

@@ -182,6 +182,7 @@ export default {
         modelFile: '',
         modelFileName: '',
         picFile: '',
+        picUrl: '',
       },
       // status
       actionStatus: 'view',

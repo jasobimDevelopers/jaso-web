@@ -24,3 +24,7 @@ export function verifyCode(params) {
     params,
   });
 }
+
+export function registerUserInfo(params) {
+  return request.post('api/user/web/registerUserInfo', params);
+}
