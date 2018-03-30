@@ -111,7 +111,7 @@ export default {
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error(`密码长度不能低于6位`));
+        callback(new Error('密码长度不能低于6位'));
       } else {
         callback();
       }
@@ -152,6 +152,9 @@ export default {
         code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }],
         password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
       },
+      registerRules2: {
+        email: [{ required: true, trigger: 'blur', validator: checkEmail }],
+      },
       passwordType: 'password',
       checkedLogin: false,
       checkedRegister: false,
@@ -168,7 +171,7 @@ export default {
   mounted() {
     const username = window.localStorage.getItem('username');
     const password = window.localStorage.getItem('password');
-    const checked = window.localStorage.getItem(`checkedLogin`);
+    const checked = window.localStorage.getItem('checkedLogin');
 
     this.loginForm.username = username;
     this.loginForm.password = password;
@@ -190,7 +193,7 @@ export default {
         getCode({
           mobile,
           systemType: 1,
-        }).then((res) => {
+        }).then(() => {
           this.codeStatus = 2;
 
           this.timer = setInterval(() => {
@@ -209,19 +212,19 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('Login', this.loginForm).then((userInfo) => {
-            const { userType } = userInfo;
+          this.$store.dispatch('Login', this.loginForm).then(() => {
+            // const { userType } = userInfo;
             this.loading = false;
 
             // if check the login info
             if (this.checkedLogin) {
               window.localStorage.setItem('username', this.loginForm.username);
               window.localStorage.setItem('password', this.loginForm.password);
-              window.localStorage.setItem(`checkedLogin`, 1);
+              window.localStorage.setItem('checkedLogin', 1);
             } else {
               window.localStorage.setItem('username', '');
               window.localStorage.setItem('password', '');
-              window.localStorage.setItem(`checkedLogin`, 0);
+              window.localStorage.setItem('checkedLogin', 0);
             }
 
             this.$router.push({ path: '/projectList' });
@@ -244,8 +247,7 @@ export default {
       verifyCode({
         code,
         mobile,
-      }).then((res) => {
-        console.log('res', res);
+      }).then(() => {
         this.codeStatus = 0;
         this.registerStep = 2;
       });
@@ -300,7 +302,7 @@ export default {
     margin-top: 10px;
     width: 100%;
   }
-  
+
   .get-code {
     position: absolute;
     top: 4px;

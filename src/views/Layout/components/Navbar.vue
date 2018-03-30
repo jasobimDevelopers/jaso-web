@@ -68,7 +68,7 @@ export default {
     background-color: #ffffff;
     z-index: 10;
   }
-  
+
   .nav-wrapper {
     margin: 0 auto;
     padding: 15px 0;

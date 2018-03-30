@@ -24,26 +24,26 @@
 </template>
 
 <script>
-import errGif from '@/assets/401_images/401.gif'
+import errGif from '@/assets/401_images/401.gif';
 
 export default {
   name: 'page401',
   data() {
     return {
-      errGif: errGif + '?' + +new Date(),
-      dialogVisible: false
-    }
+      errGif: `${errGif}? ${new Date()}`,
+      dialogVisible: false,
+    };
   },
   methods: {
     back() {
       if (this.$route.query.noGoBack) {
-        this.$router.push({ path: '/dashboard' })
+        this.$router.push({ path: '/dashboard' });
       } else {
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

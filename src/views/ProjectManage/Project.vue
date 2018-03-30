@@ -42,7 +42,6 @@ export default {
     QuestionList,
   },
   data() {
-    console.log(this);
     return {
       activeName: 'first',
     };

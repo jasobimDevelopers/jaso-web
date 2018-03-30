@@ -212,7 +212,7 @@ export default {
         const { data } = res;
         // type change
         data.map((item) => {
-          item.projectPart = parseInt(item.projectPart);
+          item.projectPart = parseInt(item.projectPart, 10);
           return item;
         });
 
@@ -231,7 +231,7 @@ export default {
             const d1 = new Date(a.actionDate);
             const d2 = new Date(b.actionDate);
             return (d1.getTime() - d2.getTime());
-          }
+          },
         });
 
         const chart = new G2.Chart({
@@ -241,26 +241,29 @@ export default {
         });
 
         const defs = {
-          'projectPart':{
+          projectPart: {
             type: 'cat',
-            values: ['模型', '图纸', '登录', '交底', '预制化', '紧急事项', '通知', '产值', '班组信息', '施工任务单区域', '预付单区域', '在线预览区域', '模型构建信息区域' ],
+            values: ['模型', '图纸', '登录', '交底', '预制化', '紧急事项', '通知', '产值', '班组信息', '施工任务单区域', '预付单区域', '在线预览区域', '模型构建信息区域'],
           },
         };
         chart.source(dv, defs);
         chart.tooltip({
           crosshairs: {
-            type: 'line'
-          }
+            type: 'line',
+          },
         });
 
         chart.legend({
           title: null,
         });
         chart.line().position('date*num').color('projectPart');
-        chart.point().position('date*num').color('projectPart').size(4).shape('circle').style({
-          stroke: '#fff',
-          lineWidth: 1
-        });
+        chart.point().position('date*num').color('projectPart')
+          .size(4)
+          .shape('circle')
+          .style({
+            stroke: '#fff',
+            lineWidth: 1,
+          });
         chart.render();
 
         this.chart = chart;
@@ -274,12 +277,12 @@ export default {
             const d1 = new Date(a.month);
             const d2 = new Date(b.month);
             return (d1.getTime() - d2.getTime());
-          }
+          },
         });
         this.chart.changeData(dv);
       }
     },
-    handleTabClick(tab, event) {
+    handleTabClick() {
       this.$nextTick().then(() => {
         if (this.chart) {
           this.chart.forceFit();

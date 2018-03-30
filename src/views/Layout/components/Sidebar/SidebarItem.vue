@@ -37,9 +37,5 @@ export default {
   methods: {
     generateTitle,
   },
-  mounted() {
-    console.log('this.$route', this.$route);
-    console.log(this.routes);
-  },
 };
 </script>

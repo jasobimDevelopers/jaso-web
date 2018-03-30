@@ -277,7 +277,7 @@ export default {
         color: #909399;
       }
     }
-    
+
     .sub-info {
       margin-top: 14px;
     }

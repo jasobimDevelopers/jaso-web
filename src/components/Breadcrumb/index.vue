@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       levelList: null,
-    }
+    };
   },
   computed: {
     projectId() {
@@ -32,18 +32,17 @@ export default {
   watch: {
     $route() {
       this.getBreadcrumb();
-    }
+    },
   },
   methods: {
     generateTitle,
     getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name);
-      console.log('matched', matched);
+      const matched = this.$route.matched.filter(item => item.name);
 
       this.levelList = matched;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { getToken } from '@/utils/auth';
-import request, { apiRoot, config } from './request';
+import request from './request';
 
 export function getUserLogList(params) {
   return request.get('api/userLog/admin/getUserLogList', {

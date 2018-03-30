@@ -73,6 +73,7 @@
 
 <script>
 import { getProjectList } from '@/api/projectManage';
+
 export default {
   name: 'ProjectList',
   data() {
@@ -109,7 +110,6 @@ export default {
       this.dialogFormVisible = true;
     },
     handleSave() {
-      console.log('do save');
     },
     handlePicChange(e) {
       const files = e.target.files;

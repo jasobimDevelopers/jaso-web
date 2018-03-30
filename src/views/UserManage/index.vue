@@ -448,7 +448,6 @@ export default {
       this.uploadFileSrc = null;
       this.$refs.fileInput.value = null;
 
-      console.log('reset...');
       this.$refs.userForm.resetFields();
     },
   },

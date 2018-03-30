@@ -206,7 +206,7 @@ export default {
             const d1 = new Date(a.month);
             const d2 = new Date(b.month);
             return (d1.getTime() - d2.getTime());
-          }
+          },
         });
 
         const chart = new G2.Chart({
@@ -216,7 +216,7 @@ export default {
         });
 
         const defs = {
-          'state':{
+          state: {
             type: 'cat',
             values: ['库存数量', '安装数量', '出库数量', '交底'],
           },
@@ -225,15 +225,18 @@ export default {
         chart.source(dv);
         chart.tooltip({
           crosshairs: {
-            type: 'line'
-          }
+            type: 'line',
+          },
         });
 
         chart.line().position('month*sumDate').color('state');
-        chart.point().position('month*sumDate').color('state').size(4).shape('circle').style({
-          stroke: '#fff',
-          lineWidth: 1
-        });
+        chart.point().position('month*sumDate').color('state')
+          .size(4)
+          .shape('circle')
+          .style({
+            stroke: '#fff',
+            lineWidth: 1,
+          });
         chart.render();
 
         this.chart = chart;
@@ -247,12 +250,12 @@ export default {
             const d1 = new Date(a.month);
             const d2 = new Date(b.month);
             return (d1.getTime() - d2.getTime());
-          }
+          },
         });
         this.chart.changeData(dv);
       }
     },
-    handleTabClick(tab, event) {
+    handleTabClick() {
       this.$nextTick().then(() => {
         if (this.chart) {
           this.chart.forceFit();
