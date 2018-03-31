@@ -161,7 +161,9 @@ export default {
   created() {
     this.getList();
 
-    getUserList().then((res) => {
+    getUserList({
+      pageIndex: -1,
+    }).then((res) => {
       const { data } = res;
       this.userList = data;
     });
