@@ -44,6 +44,11 @@ export function parseBuildingArr(buildingNum, buildingNumBase) {
   return floorNumArr;
 }
 
+// status 0: 未完成, 1: 已完成
+export function setStatus(status) {
+  return (status && status === 1) ? '已完成' : '未完成';
+}
+
 // user role name map
 export const roleList = ['管理员', '普通用户', '投资方', '项目人员/项目负责人'];
 export function setUserRole(userType) {

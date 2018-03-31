@@ -40,6 +40,10 @@
       display: inline-block;
       width: 50%;
       margin-bottom: 16px;
+
+      &.router-link-active {
+        color: #409EFF;
+      }
     }
 
     .svg-icon {

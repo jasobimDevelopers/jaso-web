@@ -15,7 +15,7 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" :label="$t('table.id')" prop="id">
+      <el-table-column align="center" :label="$t('table.id')" prop="id" width="50">
       </el-table-column>
       <el-table-column align="center" label="施工日志内容" prop="content">
       </el-table-column>
@@ -54,7 +54,7 @@
     >
       <el-form :rules="rules" ref="dialogForm" :model="log" label-position="left" label-width="120px" style='margin: 0 50px;'>
         <el-form-item label="施工日志内容" prop="content">
-          <el-input v-model="log.content"></el-input>
+          <el-input type="textarea" v-model="log.content"></el-input>
         </el-form-item>
         <el-form-item label="天气" prop="weather">
           <el-input v-model="log.weather"></el-input>

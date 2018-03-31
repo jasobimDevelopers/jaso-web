@@ -99,9 +99,9 @@ export const asyncRouterMap = [
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'taskList',
+      component: asyncImport('Production/TaskList'),
+      name: 'taskList',
       meta: {
         title: '施工任务单',
         roles: ['admin', 'user'],
