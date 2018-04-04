@@ -51,7 +51,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-.filter-wrapper {
-  border: 1px solid #ebeef5;
-}
 </style>
