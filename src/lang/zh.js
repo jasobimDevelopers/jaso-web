@@ -89,6 +89,8 @@ export default {
     quantitiesInfo: '工程量信息',
     teachInfo: '安全技术交底',
     questionList: '问题列表',
+    contact: '联系人',
+    constructionControlUnit: '监理单位',
   },
   item: {
     name: '构件名称',

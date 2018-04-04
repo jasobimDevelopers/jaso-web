@@ -85,39 +85,39 @@ export const asyncRouterMap = [
     name: 'project',
     meta: {
       basePath: 'project',
-      redirect: 'projectManage',
+      redirect: 'project_detail_info',
       icon: 'project',
       title: '生产管理',
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'projectManage',
+      path: 'project_detail_info',
       component: asyncImport('ProjectManage/BasicInfo'),
-      name: 'projectManage',
+      name: 'project_detail_info',
       meta: {
         title: '项目基本信息',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'taskList',
+      path: 'construction_task',
       component: asyncImport('Production/TaskList'),
-      name: 'taskList',
+      name: 'construction_task',
       meta: {
         title: '施工任务单',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'constructionLog',
+      path: 'construction_log',
       component: asyncImport('Production/ConstructionLog'),
-      name: 'constructionLog',
+      name: 'construction_log',
       meta: {
         title: '施工日志',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'order',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'order',
       meta: {
         title: '预付单',
         roles: ['admin', 'user'],
@@ -135,9 +135,9 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
+      path: 'budget',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'budget',
       meta: {
         title: '预算',
         roles: ['admin', 'user'],
@@ -155,17 +155,17 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
+      path: 'workers',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'workers',
       meta: {
         title: '用工统计',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'attendance',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'attendance',
       meta: {
         title: '考勤管理',
         roles: ['admin', 'user'],
@@ -183,17 +183,17 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
+      path: 'material_count',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'material_count',
       meta: {
         title: '物资统计',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'material_plan',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'material_plan',
       meta: {
         title: '材料计划',
         roles: ['admin', 'user'],
@@ -211,19 +211,27 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
+      path: 'quality_question',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'quality_question',
       meta: {
         title: '质量整改单',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'quality_ticket',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'quality_ticket',
       meta: {
         title: '质量罚款单',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'quality_files',
+      component: asyncImport('Quality/QualityFiles'),
+      name: 'quality_files',
+      meta: {
+        title: '质量交底',
         roles: ['admin', 'user'],
       },
     }],
@@ -239,77 +247,69 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
+      path: 'security_question',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'security_question',
       meta: {
         title: '安全整改单',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'security_files',
+      component: asyncImport('Security/SecurityFiles'),
+      name: 'security_files',
       meta: {
         title: '安全交底',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'security_ticket',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'security_ticket',
       meta: {
         title: '安全罚款单',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
-      meta: {
-        title: '安全整改反馈单',
         roles: ['admin', 'user'],
       },
     }],
   },
   {
-    path: '/goods/:id',
+    path: '/datas/:id',
     component: Layout,
-    name: 'goods',
+    name: 'datas',
     meta: {
-      basePath: 'goods',
+      basePath: 'datas',
       icon: 'project',
       title: '资料管理',
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'ProjectManage',
-      component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      path: 'paper',
+      component: asyncImport('Datas/Paper'),
+      name: 'paper',
       meta: {
         title: '图纸信息',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'docs',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'docs',
       meta: {
         title: '文档',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'pics',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'pics',
       meta: {
         title: '图片',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'ProjectManage',
+      path: 'model',
       component: asyncImport('ProjectManage'),
-      name: 'projectManage',
+      name: 'model',
       meta: {
         title: 'BIM模型',
         roles: ['admin', 'user'],

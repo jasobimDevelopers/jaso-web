@@ -7,7 +7,13 @@
     </div>
 
     <div class="list-wrapper">
-      <router-link :to="`/project/${item.id}/projectManage`" class="item" v-for="item in list" :key="item.id">
+      <router-link
+        :to="`/project/${item.id}/project_detail_info`"
+        class="item"
+        v-for="item in list"
+        v-if="keyword.trim() === '' || item.name.indexOf(keyword) > -1"
+        :key="item.id"
+      >
         <img v-if="item.picUrl !== ''" :src="item.picUrl | setFileRoot" />
         <img v-else src="@/assets/images/project-bg.png" />
         <div class="name">{{ item.name }}</div>
@@ -29,6 +35,9 @@
       <el-form :rules="rules" ref="dialogForm" :model="project" label-position="left" label-width="80px" style='width: 440px; margin-left:30px;'>
         <el-form-item :label="$t('project.name')" prop="name">
           <el-input v-model="project.name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.leader')" prop="leader">
+          <el-input v-model="project.leader"></el-input>
         </el-form-item>
         <el-form-item :label="$t('project.place')" prop="place">
           <el-input v-model="project.place"></el-input>
@@ -72,7 +81,7 @@
 </template>
 
 <script>
-import { getProjectList } from '@/api/projectManage';
+import { getProjectList, addProject } from '@/api/projectManage';
 
 export default {
   name: 'ProjectList',
@@ -82,6 +91,7 @@ export default {
       list: [],
       project: {
         name: '',
+        leader: '',
         place: '',
         startDate: null,
         finishedDate: null,
@@ -92,8 +102,16 @@ export default {
       // dialog
       dialogFormVisible: false,
       // rules
-      rules: {},
+      rules: {
+        name: [{ required: true, message: `${this.$t('project.name')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        leader: [{ required: true, message: `${this.$t('project.leader')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        place: [{ required: true, message: `${this.$t('project.place')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        startDate: [{ required: true, message: `${this.$t('project.startDate')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        description: [{ required: true, message: `${this.$t('project.description')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        picFile: [{ required: true, message: `${this.$t('project.picFile')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
+      },
       uploadFileSrc: null,
+      loading: false,
     };
   },
   created() {
@@ -110,6 +128,14 @@ export default {
       this.dialogFormVisible = true;
     },
     handleSave() {
+      this.$refs.dialogForm.validate((valid) => {
+        if (valid) {
+          addProject(this.project).then(() => {
+            this.dialogFormVisible = false;
+            this.getList();
+          });
+        }
+      });
     },
     handlePicChange(e) {
       const files = e.target.files;

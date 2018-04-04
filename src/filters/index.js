@@ -49,6 +49,12 @@ export function setStatus(status) {
   return (status && status === 1) ? '已完成' : '未完成';
 }
 
+export function setWeekInfo(week) {
+  const dayOfWeek = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+
+  return dayOfWeek[week];
+}
+
 // user role name map
 export const roleList = ['管理员', '普通用户', '投资方', '项目人员/项目负责人'];
 export function setUserRole(userType) {
@@ -127,3 +133,6 @@ export const ductStateList = ['全部', '初始化', '出库', '安装', '完成
 // log
 export const projectPartList = ['全部', '模型区域', '图纸区域', '登录区域', '交底区域', '预制化区域', '紧急事项区域', '通知区域', '产值区域', '班组信息区域', '施工任务单', '预付单区域'];
 export const phoneSystemList = ['全部', '苹果系统', '安卓系统'];
+
+// weather
+export const weatherList = ['晴', '小雪', '小雨', '阴', '多云', '浮尘', '雷阵雨', '沙尘暴', '雾', '雾霾', '暴雪', '暴雨', '大雪', '大雨'];

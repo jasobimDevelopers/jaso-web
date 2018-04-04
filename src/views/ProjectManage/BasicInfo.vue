@@ -3,9 +3,12 @@
     <div v-if="actionStatus === 'view'" class="view-info">
       <div class="header flex-sb-start">
         <div class="info-wrapper">
-          <img v-if="project.picUrl !== ''" :src="project.picUrl | setFileRoot" />
+          <zooming-img v-if="project.picUrl !== ''" :src="project.picUrl | setFileRoot" />
         </div>
         <div class="info-wrapper basic-info">
+          <div class="flex-end">
+            <el-button type="primary" @click="actionStatus = 'edit'">{{$t('btn.edit')}}</el-button>
+          </div>
           <div class="name">{{ project.name }}</div>
           <div class="desc">{{ project.description }}</div>
         </div>
@@ -42,7 +45,7 @@
           </div>
           <div class="info-item sub-info">
             <span class="label">联系人：</span>
-            <span class="value">李某（13955552222）</span>
+            <span class="value">{{ project.buildingUnitUser }}</span>
           </div>
         </div>
         <div class="info-item info-wrapper">
@@ -52,7 +55,7 @@
           </div>
           <div class="info-item sub-info">
             <span class="label">联系人：</span>
-            <span class="value">李某（13955552222）</span>
+            <span class="value">{{ project.constructionUnitUser }}</span>
           </div>
         </div>
         <div class="info-wrapper">
@@ -62,101 +65,122 @@
           </div>
           <div class="info-item sub-info">
             <span class="label">联系人：</span>
-            <span class="value">李某（13955552222）</span>
+            <span class="value">{{ project.designUnitUser }}</span>
           </div>
         </div>
         <div class="info-wrapper">
           <div class="info-item">
             <span class="label">监理单位：</span>
-            <span class="value">{{ project.designUnit }}</span>
+            <span class="value">{{ project.constructionControlUnit }}</span>
           </div>
           <div class="info-item sub-info">
             <span class="label">联系人：</span>
-            <span class="value">李某（13955552222）</span>
+            <span class="value">{{ project.constructionControlUser }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <el-form v-else :rules="rules" ref="projectForm" :model="project" label-position="left" label-width="120px" style='width: 400px; margin-left:50px;'>
-      <el-form-item :label="$t('project.name')" prop="name">
-        <el-input v-model="project.name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.num')" prop="num">
-        <el-input v-model="project.num"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.constructionUnit')" prop="constructionUnit">
-        <el-input v-model="project.constructionUnit"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.leader')" prop="leader">
-        <el-input v-model="project.leader"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.place')" prop="place">
-        <el-input v-model="project.place"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.buildingUnit')" prop="buildingUnit">
-        <el-input v-model="project.buildingUnit"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.designUnit')" prop="designUnit">
-        <el-input v-model="project.designUnit"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.startDate')" prop="startDate">
-        <el-input v-model="project.startDate"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.phase')" prop="phase">
-        <el-input v-model="project.phase"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.teamList')" prop="teamList">
-        <el-input v-model="project.teamList"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.modelPart')" prop="modelPart">
-        <el-input v-model="project.modelPart"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.version')" prop="version">
-        <el-input v-model="project.version"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.state')" prop="state">
-        <el-select v-model="project.state" :placeholder="$t('project.state')">
-          <el-option
-            v-for="(item, i) in projectStateList"
-            :key="i"
-            :label="item"
-            :value="i">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('project.description')" prop="description">
-        <el-input v-model="project.description" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('project.modelFile')" prop="modelFile">
-        <div class="upload-file-wrapper flex-row">
-          <el-button type="primary" style="width: 100px">
-            <input type="file" ref="modelInput" @change="handleModelChange" />
-            <span>上传</span>
-          </el-button>
-          <div style="marginLeft: 8px;">{{project.modelFileName}}</div>
-        </div>
-      </el-form-item>
-      <el-form-item :label="$t('project.picFile')" prop="picFile">
-        <div class="upload-file-wrapper flex-column">
-          <el-button type="primary" style="width: 100px">
-            <input type="file" ref="picInput" @change="handlePicChange" />
-            <span>上传</span>
-          </el-button>
-          <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
-        </div>
-      </el-form-item>
-
-      <div class="action-wrapper">
-        <el-button @click="handleBack">{{$t('btn.cancel')}}</el-button>
-        <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+    <div v-else>
+      <div class="flex-end">
+        <el-button type="danger" @click="handleDelete">{{$t('btn.delete')}}</el-button>
       </div>
-    </el-form>
+      <el-form :rules="rules" ref="projectForm" :model="project" label-position="left" label-width="120px" style='width: 400px; margin-left:50px;'>
+        <el-form-item :label="$t('project.name')" prop="name">
+          <el-input v-model="project.name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.num')" prop="num">
+          <el-input v-model="project.num"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.leader')" prop="leader">
+          <el-input v-model="project.leader"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.place')" prop="place">
+          <el-input v-model="project.place"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.constructionUnit')" prop="constructionUnit">
+          <el-input v-model="project.constructionUnit"></el-input>
+        </el-form-item>
+        <el-form-item :label="`${$t('project.constructionUnit')}${$t('project.contact')}`" prop="constructionUnitUser">
+          <el-input v-model="project.constructionUnitUser"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.buildingUnit')" prop="buildingUnit">
+          <el-input v-model="project.buildingUnit"></el-input>
+        </el-form-item>
+        <el-form-item :label="`${$t('project.buildingUnit')}${$t('project.contact')}`" prop="buildingUnitUser">
+          <el-input v-model="project.buildingUnitUser"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.constructionControlUnit')" prop="constructionControlUnit">
+          <el-input v-model="project.constructionControlUnit"></el-input>
+        </el-form-item>
+        <el-form-item :label="`${$t('project.constructionControlUnit')}${$t('project.contact')}`" prop="constructionControlUser">
+          <el-input v-model="project.constructionControlUser"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.designUnit')" prop="designUnit">
+          <el-input v-model="project.designUnit"></el-input>
+        </el-form-item>
+        <el-form-item :label="`${$t('project.designUnit')}${$t('project.contact')}`" prop="designUnitUser">
+          <el-input v-model="project.designUnitUser"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.startDate')" prop="startDate">
+          <el-input v-model="project.startDate"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.phase')" prop="phase">
+          <el-input v-model="project.phase"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.teamList')" prop="teamList">
+          <el-input v-model="project.teamList"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.modelPart')" prop="modelPart">
+          <el-input v-model="project.modelPart"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.version')" prop="version">
+          <el-input v-model="project.version"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.state')" prop="state">
+          <el-select v-model="project.state" :placeholder="$t('project.state')">
+            <el-option
+              v-for="(item, i) in projectStateList"
+              :key="i"
+              :label="item"
+              :value="i">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('project.description')" prop="description">
+          <el-input v-model="project.description" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('project.modelFile')" prop="modelFile">
+          <div class="upload-file-wrapper flex-row">
+            <el-button type="primary" style="width: 100px">
+              <input type="file" ref="modelInput" @change="handleModelChange" />
+              <span>上传</span>
+            </el-button>
+            <div style="marginLeft: 8px;">{{project.modelName}}</div>
+          </div>
+        </el-form-item>
+        <el-form-item :label="$t('project.picFile')" prop="picFile">
+          <div class="upload-file-wrapper flex-column">
+            <el-button type="primary" style="width: 100px">
+              <input type="file" ref="picInput" @change="handlePicChange" />
+              <span>上传</span>
+            </el-button>
+            <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
+            <img v-else-if="project.picUrl" class="file" :src="project.picUrl | setFileRoot" />
+          </div>
+        </el-form-item>
+
+        <div class="action-wrapper">
+          <el-button @click="actionStatus = 'view'">{{$t('btn.cancel')}}</el-button>
+          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-import { updateProject } from '@/api/projectManage';
+import { updateProject, deleteProject } from '@/api/projectManage';
 import { projectStateList } from '@/filters';
 
 export default {
@@ -180,9 +204,14 @@ export default {
         state: '',
         description: '',
         modelFile: '',
-        modelFileName: '',
+        modelName: '',
         picFile: '',
         picUrl: '',
+        constructionControlUnit: '',
+        constructionUnitUser: '',
+        buildingUnitUser: '',
+        constructionControlUser: '',
+        designUnitUser: '',
       },
       // status
       actionStatus: 'view',
@@ -203,6 +232,7 @@ export default {
         version: [{ required: true, message: `${this.$t('project.version')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         state: [{ required: true, message: `${this.$t('project.state')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         description: [{ required: true, message: `${this.$t('project.description')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        constructionControlUnit: [{ required: true, message: `${this.$t('project.constructionControlUnit')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
     };
   },
@@ -212,17 +242,17 @@ export default {
   methods: {
     getInfo() {
       const { params: { id } } = this.$route;
-      this.$store.dispatch('getBuildingInfo', { id });
+      // this.$store.dispatch('getBuildingInfo', { id });
       this.$store.dispatch('getProject', { id }).then((res) => {
-        res.modelPart = res.modelPart.join(',');
-        res.teamList = res.teamList.join(',');
+        res.modelPart = res.modelPart ? res.modelPart.join(',') : null;
+        res.teamList = res.teamList ? res.teamList.join(',') : null;
         this.project = { ...this.project, ...res };
       });
     },
     handleModelChange(e) {
       const file = e.target.files[0];
       this.project.modelFile = file;
-      this.project.modelFileName = file.name;
+      this.project.modelName = file.name;
     },
     handlePicChange(e) {
       const files = e.target.files;
@@ -236,6 +266,31 @@ export default {
         self.project.picFile = file;
       };
     },
+    handleDelete() {
+      const { params: { id } } = this.$route;
+      this.$confirm(this.$t('message.deleteProject'), this.$t('message.prompt'), {
+        confirmButtonText: this.$t('btn.comfirm'),
+        cancelButtonText: this.$t('btn.cancel'),
+        type: 'warning',
+      }).then(() => {
+        // delete
+        deleteProject({
+          projectId: id,
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: this.$t('message.deleteOk'),
+          });
+
+          this.$router.replace('/projectList');
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('message.deleteCancel'),
+        });
+      });
+    },
     handleSave() {
       this.$refs.projectForm.validate((valid) => {
         if (valid) {
@@ -244,12 +299,12 @@ export default {
               type: 'success',
               message: this.$t('message.operationSuccess'),
             });
+
+            this.actionStatus = 'view';
+            this.getInfo();
           });
         }
       });
-    },
-    handleBack() {
-      this.$router.go(-1);
     },
   },
 };
@@ -293,13 +348,13 @@ export default {
   }
 
   .basic-info {
-    margin-top: 20px;
     flex: 1;
     font-size: 14px;
     color: #909399;
     line-height: 36px;
 
     .name {
+      margin-top: 20px;
       font-size: 30px;
       color: #303133;
     }

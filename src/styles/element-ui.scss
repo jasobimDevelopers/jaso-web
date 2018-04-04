@@ -1,4 +1,8 @@
 // override ui styles
+.el-button {
+  position: relative;
+}
+
 .el-table--border.el-loading-parent--relative {
   border: 1px solid #ebeef5;
 }

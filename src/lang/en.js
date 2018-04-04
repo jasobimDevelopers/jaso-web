@@ -89,6 +89,8 @@ export default {
     quantitiesInfo: 'Quantities Info',
     teachInfo: 'Teach Info',
     questionList: 'Problem List',
+    contact: 'Contact',
+    constructionControlUnit: 'ConstructionControl Unit',
   },
   item: {
     name: 'Name',

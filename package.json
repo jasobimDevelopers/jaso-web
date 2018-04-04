@@ -24,7 +24,8 @@
     "vue-multiple-progress": "^1.4.0",
     "vue-quill-editor": "^3.0.5",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "zooming": "^1.5.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
