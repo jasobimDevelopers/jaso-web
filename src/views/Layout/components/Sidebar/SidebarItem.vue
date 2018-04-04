@@ -3,7 +3,7 @@
     <template v-for="item in routes" v-if="!item.hidden && item.children">
       <div class="menu-block" :key="item.name">
         <header class="menu-header flex-row">
-          <svg-icon v-if="item.meta&&item.meta.icon" :icon-class="item.meta.icon"></svg-icon>
+          <svg-icon v-if="item.meta&&item.meta.icon" :icon-class="item.meta.icon" size="18px"></svg-icon>
           <div>{{ item.meta.title }}</div>
         </header>
         <div class="menu-list" v-if="item.children.length > 0">
