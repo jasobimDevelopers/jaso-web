@@ -36,6 +36,10 @@ export default {
     width: 100%;
   }
 
+  .main-container {
+    width: 1200px;
+  }
+
   // media
   @media (max-width: 1200px) {
     .main-container {

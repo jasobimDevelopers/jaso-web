@@ -63,7 +63,7 @@
           <a :href="scope.row.url" target="_blank" :download="scope.row.originName">
             <el-button type="primary" size="mini" icon="el-icon-download">{{$t('btn.download')}}</el-button>
           </a>
-          <el-button type="danger" size="mini">{{$t('btn.delete')}}</el-button>
+          <el-button type="danger" size="mini" @click="handleDelete(scope.row.id, scope.row.fileId)">{{$t('btn.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -255,19 +255,19 @@ export const asyncRouterMap = [
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'security_files',
-      component: asyncImport('Security/SecurityFiles'),
-      name: 'security_files',
-      meta: {
-        title: '安全交底',
-        roles: ['admin', 'user'],
-      },
-    }, {
       path: 'security_ticket',
       component: asyncImport('ProjectManage'),
       name: 'security_ticket',
       meta: {
         title: '安全罚款单',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'security_files',
+      component: asyncImport('Security/SecurityFiles'),
+      name: 'security_files',
+      meta: {
+        title: '安全交底',
         roles: ['admin', 'user'],
       },
     }],
