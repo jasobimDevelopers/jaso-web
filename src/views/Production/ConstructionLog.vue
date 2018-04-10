@@ -31,7 +31,7 @@
     </el-table> -->
     <!-- /table -->
 
-    <div v-if="list" class="log-list">
+    <div v-if="list && list.length > 0" class="log-list">
       <div class="log-wrapper hover-cursor flex" @click="handleTable(item)" v-for="(item, i) in list" :key="i">
         <div class="date-info flex-column-center">
           <span class="day">{{ item.day }}</span>

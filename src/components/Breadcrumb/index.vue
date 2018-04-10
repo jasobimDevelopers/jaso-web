@@ -3,7 +3,7 @@
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index)  in levelList" :key="item.path" v-if='item.meta.title'>
         <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{generateTitle(item.meta.title)}}</span>
-        <router-link v-else :to="item.redirect ||  `/${item.meta.basePath}/${projectId}/${item.meta.redirect || ''}`">{{generateTitle(item.meta.title)}}</router-link>
+        <router-link v-else :to="backUrl">{{generateTitle(item.meta.title)}}</router-link>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       levelList: null,
+      backUrl: '/',
     };
   },
   computed: {
@@ -40,6 +41,17 @@ export default {
       const matched = this.$route.matched.filter(item => item.name);
 
       this.levelList = matched;
+      this.getBackUrl();
+    },
+    getBackUrl() {
+      const routers = this.$store.getters.permission_routers;
+      const rootPath = this.levelList[0].name;
+
+      routers.forEach((router) => {
+        if (router.children && router.children.length > 0 && router.name === rootPath) {
+          this.backUrl = `/${router.name}/${this.projectId}/${router.children[0].name}`;
+        }
+      });
     },
   },
 };

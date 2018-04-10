@@ -8,7 +8,7 @@
 
     <div class="list-wrapper">
       <router-link
-        :to="`/project/${item.id}/project_detail_info`"
+        :to="`/${linkPathArr[0]}/${item.id}/${linkPathArr[1]}`"
         class="item"
         v-for="item in list"
         v-if="keyword.trim() === '' || item.name.indexOf(keyword) > -1"
@@ -113,6 +113,22 @@ export default {
       uploadFileSrc: null,
       loading: false,
     };
+  },
+  computed: {
+    linkPathArr() {
+      const routers = this.$store.getters.permission_routers;
+      let linkPathArr = ['project', 'project_detail_info'];
+
+      for (let i = 0; i < routers.length; i += 1) {
+        const router = routers[i];
+        if (!router.hidden && router.children && router.children.length > 0) {
+          linkPathArr = [router.name, router.children[0].name];
+          break;
+        }
+      }
+
+      return linkPathArr;
+    },
   },
   created() {
     this.getList();
