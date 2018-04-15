@@ -49,6 +49,27 @@ export default new Router({
   routes: constantRouterMap,
 });
 
+// admin routers
+export const adminRouterMap = [
+  {
+    path: '/admin',
+    component: commonLayout,
+    redirect: '/admin/UserManage',
+    meta: { roles: ['admin'] },
+    hidden: true,
+    children: [{
+      path: 'UserManage',
+      component: asyncImport('UserManage'),
+      name: 'UserManage',
+    }, {
+      path: 'setting',
+      component: asyncImport('Setting'),
+      name: 'setting',
+    }],
+  },
+];
+
+// async menu list routers
 export const asyncRouterMap = [
   /* ******* Common Layout ******* */
   {
@@ -60,18 +81,6 @@ export const asyncRouterMap = [
     children: [{
       path: 'index',
       component: asyncImport('ProjectList'),
-      name: 'ProjectList',
-    }],
-  },
-  {
-    path: '/userManage',
-    component: commonLayout,
-    redirect: '/userManage/index',
-    meta: { roles: ['admin'] },
-    hidden: true,
-    children: [{
-      path: 'index',
-      component: asyncImport('UserManage'),
       name: 'ProjectList',
     }],
   },

@@ -7,6 +7,7 @@ const getters = {
   userInfo: state => state.user.userInfo,
   project: state => state.project.info,
   building: state => state.project.building,
+  editable: state => (state.user.userInfo && state.user.userInfo),
 };
 
 export default getters;

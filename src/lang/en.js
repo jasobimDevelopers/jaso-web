@@ -35,6 +35,7 @@ export default {
     view: 'View',
     send: 'Send',
     export: 'Export',
+    save: 'Save',
   },
   dialog: {
     add: 'Add',

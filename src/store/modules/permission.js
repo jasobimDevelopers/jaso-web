@@ -1,22 +1,8 @@
-import { asyncRouterMap, constantRouterMap } from '@/router';
-
-/**
- * 通过meta.role判断是否与当前用户权限匹配
- * @param roles
- * @param route
- */
-// function hasPermission(roles, route) {
-//   if (route.meta && route.meta.roles) {
-//     return roles.some(role => route.meta.roles.indexOf(role) >= 0);
-//   }
-
-//   return true;
-// }
+import { asyncRouterMap, constantRouterMap, adminRouterMap } from '@/router';
 
 /**
  * 将menuList转换成menuMap，方便检索
- * @param roles
- * @param route
+ * @param menuList
  */
 function transformMenuToMap(menuList) {
   const menuMap = {};
@@ -32,8 +18,8 @@ function transformMenuToMap(menuList) {
  * @param asyncRouterMap
  * @param roles
  */
-function filterAsyncRouter(routerMap, menuList) {
-  const accessedRouters = [];
+function filterAsyncRouter(routerMap, menuList, userType) {
+  let accessedRouters = [];
   const menuMap = transformMenuToMap(menuList);
   routerMap.forEach((router) => {
     // 目前如果router是隐藏的，说明路由是一定要加载的
@@ -46,6 +32,11 @@ function filterAsyncRouter(routerMap, menuList) {
         const menuChildren = menuRoot.children;
         let routerChildren = router.children;
 
+        // convert name
+        if (menuRoot.name) {
+          router.meta.title = menuRoot.name;
+        }
+
         const menuChildrenPathList = menuChildren.map(menuChild => menuChild.menuPath);
         routerChildren = routerChildren.filter(routerChild => menuChildrenPathList.indexOf(routerChild.name) >= 0);
 
@@ -55,15 +46,12 @@ function filterAsyncRouter(routerMap, menuList) {
       }
     }
   });
-  // const accessedRouters = routerMap.filter((route) => {
-  //   if (hasPermission(menuList, route)) {
-  //     if (route.children && route.children.length) {
-  //       route.children = filterAsyncRouter(route.children, menuList);
-  //     }
-  //     return true;
-  //   }
-  //   return false;
-  // });
+
+  // if user is admin role
+  if (userType === 0) {
+    accessedRouters = accessedRouters.concat(adminRouterMap);
+  }
+
   return accessedRouters;
 }
 
@@ -81,15 +69,9 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise((resolve) => {
-        const { menuList } = data;
-        // let accessedRouters;
-        // if (roles.indexOf('admin') >= 0) {
-        //   accessedRouters = asyncRouterMap;
-        // } else {
-        //   accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
-        // }
+        const { menuList, userType } = data;
 
-        const accessedRouters = filterAsyncRouter(asyncRouterMap, menuList);
+        const accessedRouters = filterAsyncRouter(asyncRouterMap, menuList, userType);
         commit('SET_ROUTERS', accessedRouters);
         resolve();
       });

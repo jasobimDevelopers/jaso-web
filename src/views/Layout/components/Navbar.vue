@@ -8,10 +8,11 @@
       </div>
 
       <div class="right-menu flex-row">
-        <div class="menu-list flex-row">
-          <router-link to="/#" class="menu-item">我的</router-link>
-          <router-link to="/userManage/index" class="menu-item">用户管理</router-link>
-          <router-link to="/#" class="menu-item">设置</router-link>
+        <div class="menu-list flex-row" v-if="userInfo">
+          <!-- <router-link to="/#" class="menu-item">我的</router-link> -->
+          <router-link v-if="userInfo.userType === 0" class="menu-item" to="/admin/UserManage">用户管理</router-link>
+          <span v-else-if="userInfo.userType === 4" class="hover-cursor menu-item" @click="handleUserGuide"></span>
+          <router-link v-if="userInfo.userType === 0" to="/admin/setting" class="menu-item">设置</router-link>
         </div>
 
         <el-dropdown class="avatar-container right-menu-item" trigger="click">
@@ -55,6 +56,8 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
       });
+    },
+    handleUserGuide() {
     },
   },
 };

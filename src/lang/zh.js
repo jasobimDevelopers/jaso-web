@@ -35,6 +35,7 @@ export default {
     view: '查看',
     send: '发送',
     export: '导出',
+    save: '保存',
   },
   dialog: {
     add: '添加',
