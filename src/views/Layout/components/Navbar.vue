@@ -78,8 +78,12 @@ export default {
     width: 1200px;
     height: 70px;
 
+    .logo-wrapper img {
+      height: 40px;
+    }
+
     .company-name {
-      margin-left: 20px;
+      margin-left: 15px;
       font-size: 18px;
       font-weight: bolder;
     }

@@ -28,6 +28,8 @@ export default {
 <style lang="scss" scoped>
   .edit-line {
     position: relative;
+    padding-left: 8px;
+    padding-right: 8px;
     min-height: 48px;
 
     .action-wrapper {
@@ -42,8 +44,11 @@ export default {
     }
 
     &:hover {
+      background-color: #F0F2F5;
+
       .action-wrapper {
         display: flex;
+        background-color: #F0F2F5;
       }
     }
   }
