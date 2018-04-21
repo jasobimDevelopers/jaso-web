@@ -1,164 +1,168 @@
 <template>
-  <div class="app-container">
-    <!-- filter -->
-    <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.name')" v-model="listQuery.name">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.num')" v-model="listQuery.num">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.constructionUnit')" v-model="listQuery.constructionUnit">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.leader')" v-model="listQuery.leader">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.buildingUnit')" v-model="listQuery.buildingUnit">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.place')" v-model="listQuery.place">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.designUnit')" v-model="listQuery.designUnit">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.version')" v-model="listQuery.version">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.startDate')" v-model="listQuery.startDate">
-      </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.phase')" v-model="listQuery.phase">
-      </el-input>
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
-      <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAddProject">{{$t('btn.add')}}</el-button>
-    </div>
-    <!-- /filter -->
+  <div>
+    <breadcrumb></breadcrumb>
 
-    <!-- table -->
-    <el-table
-      :data="list"
-      v-loading="listLoading"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column align="center" :label="$t('table.id')" prop="id">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.name')" prop="name">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.constructionUnit')" prop="constructionUnit">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.leader')" prop="leader">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.buildingUnit')" prop="buildingUnit">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.version')" prop="version">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.startDate')" prop="startDate">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('project.phase')" prop="phase">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('table.operation')" width="200">
-        <template slot-scope="scope">
-          <router-link :to="`project/${scope.row.id}`">
-            <el-button type="primary" size="mini">{{$t('btn.edit')}}</el-button>
-          </router-link>
-          <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">{{$t('btn.delete')}}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- /table -->
-
-    <!-- pagination -->
-    <div class="pagination-container">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="listQuery.pageIndex"
-        :page-sizes="[5, 10, 20, 40]"
-        :page-size="listQuery.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalNumber">
-      </el-pagination>
-    </div>
-    <!-- /pagination -->
-
-    <!-- dialog -->
-    <el-dialog
-      :title="$t('project.addProject')"
-      :visible.sync="dialogFormVisible"
-      @close="resetForm"
-      width="640px"
-    >
-      <el-form :rules="rules" ref="projectForm" :model="project" label-position="left" label-width="120px" style='width: 400px; margin-left:50px;'>
-        <el-form-item :label="$t('project.name')" prop="name">
-          <el-input v-model="project.name"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.num')" prop="num">
-          <el-input v-model="project.num"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.constructionUnit')" prop="constructionUnit">
-          <el-input v-model="project.constructionUnit"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.leader')" prop="leader">
-          <el-input v-model="project.leader"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.place')" prop="place">
-          <el-input v-model="project.place"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.buildingUnit')" prop="buildingUnit">
-          <el-input v-model="project.buildingUnit"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.designUnit')" prop="designUnit">
-          <el-input v-model="project.designUnit"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.startDate')" prop="startDate">
-          <el-input v-model="project.startDate"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.phase')" prop="phase">
-          <el-input v-model="project.phase"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.teamList')" prop="teamList">
-          <el-input v-model="project.teamList"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.modelPart')" prop="modelPart">
-          <el-input v-model="project.modelPart"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.version')" prop="version">
-          <el-input v-model="project.version"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.state')" prop="state">
-          <el-select v-model="project.state" :placeholder="$t('project.state')">
-            <el-option
-              v-for="(item, i) in projectStateList"
-              :key="i"
-              :label="item"
-              :value="i">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('project.description')" prop="description">
-          <el-input v-model="project.description" type="textarea"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('project.modelFile')" prop="modelFile">
-          <div class="upload-file-wrapper flex-row">
-            <el-button type="primary" style="width: 100px">
-              <input type="file" ref="modelInput" @change="handleModelChange" />
-              <span>上传</span>
-            </el-button>
-            <div style="marginLeft: 8px;">{{project.modelFileName}}</div>
-          </div>
-        </el-form-item>
-        <el-form-item :label="$t('project.picFile')" prop="picFile">
-          <div class="upload-file-wrapper flex-column">
-            <el-button type="primary" style="width: 100px">
-              <input type="file" ref="picInput" @change="handlePicChange" />
-              <span>上传</span>
-            </el-button>
-            <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
-          </div>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-        <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+    <div class="app-container">
+      <!-- filter -->
+      <div class="filter-container">
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.name')" v-model="listQuery.name">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.num')" v-model="listQuery.num">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.constructionUnit')" v-model="listQuery.constructionUnit">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.leader')" v-model="listQuery.leader">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.buildingUnit')" v-model="listQuery.buildingUnit">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.place')" v-model="listQuery.place">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.designUnit')" v-model="listQuery.designUnit">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.version')" v-model="listQuery.version">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.startDate')" v-model="listQuery.startDate">
+        </el-input>
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('project.phase')" v-model="listQuery.phase">
+        </el-input>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAddProject">{{$t('btn.add')}}</el-button>
       </div>
-    </el-dialog>
-    <!-- /dialog -->
+      <!-- /filter -->
+
+      <!-- table -->
+      <el-table
+        :data="list"
+        v-loading="listLoading"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+      >
+        <el-table-column align="center" :label="$t('table.id')" prop="id">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.name')" prop="name">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.constructionUnit')" prop="constructionUnit">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.leader')" prop="leader">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.buildingUnit')" prop="buildingUnit">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.version')" prop="version">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.startDate')" prop="startDate">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('project.phase')" prop="phase">
+        </el-table-column>
+        <el-table-column align="center" :label="$t('table.operation')" width="200">
+          <template slot-scope="scope">
+            <router-link :to="`project/${scope.row.id}`">
+              <el-button type="primary" size="mini">{{$t('btn.edit')}}</el-button>
+            </router-link>
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">{{$t('btn.delete')}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- /table -->
+
+      <!-- pagination -->
+      <div class="pagination-container">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="listQuery.pageIndex"
+          :page-sizes="[5, 10, 20, 40]"
+          :page-size="listQuery.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
+      <!-- /pagination -->
+
+      <!-- dialog -->
+      <el-dialog
+        :title="$t('project.addProject')"
+        :visible.sync="dialogFormVisible"
+        @close="resetForm"
+        width="640px"
+      >
+        <el-form :rules="rules" ref="projectForm" :model="project" label-position="right" label-width="120px" style='width: 400px; margin-left:50px;'>
+          <el-form-item :label="$t('project.name')" prop="name">
+            <el-input v-model="project.name"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.num')" prop="num">
+            <el-input v-model="project.num"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.constructionUnit')" prop="constructionUnit">
+            <el-input v-model="project.constructionUnit"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.leader')" prop="leader">
+            <el-input v-model="project.leader"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.place')" prop="place">
+            <el-input v-model="project.place"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.buildingUnit')" prop="buildingUnit">
+            <el-input v-model="project.buildingUnit"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.designUnit')" prop="designUnit">
+            <el-input v-model="project.designUnit"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.startDate')" prop="startDate">
+            <el-input v-model="project.startDate"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.phase')" prop="phase">
+            <el-input v-model="project.phase"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.teamList')" prop="teamList">
+            <el-input v-model="project.teamList"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.modelPart')" prop="modelPart">
+            <el-input v-model="project.modelPart"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.version')" prop="version">
+            <el-input v-model="project.version"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.state')" prop="state">
+            <el-select v-model="project.state" :placeholder="$t('project.state')">
+              <el-option
+                v-for="(item, i) in projectStateList"
+                :key="i"
+                :label="item"
+                :value="i">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('project.description')" prop="description">
+            <el-input v-model="project.description" type="textarea"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('project.modelFile')" prop="modelFile">
+            <div class="upload-file-wrapper flex-row">
+              <el-button type="primary" style="width: 100px">
+                <input type="file" ref="modelInput" @change="handleModelChange" />
+                <span>上传</span>
+              </el-button>
+              <div style="marginLeft: 8px;">{{project.modelFileName}}</div>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('project.picFile')" prop="picFile">
+            <div class="upload-file-wrapper flex-column">
+              <el-button type="primary" style="width: 100px">
+                <input type="file" ref="picInput" @change="handlePicChange" />
+                <span>上传</span>
+              </el-button>
+              <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
+            </div>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
+          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+        </div>
+      </el-dialog>
+      <!-- /dialog -->
+    </div>
   </div>
 </template>
 

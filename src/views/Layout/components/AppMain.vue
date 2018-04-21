@@ -1,6 +1,6 @@
 <template>
   <section class="app-main">
-    <breadcrumb class="breadcrumb-container"></breadcrumb>
+    <!-- <breadcrumb class="breadcrumb-container"></breadcrumb> -->
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -8,12 +8,25 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb';
 
 export default {
   name: 'AppMain',
-  components: {
-    Breadcrumb,
+  created() {
+    this.getProjectInfo();
+  },
+  methods: {
+    getProjectInfo() {
+      const { params: { id } } = this.$route;
+
+      // if no project info, should fetch it first
+      if (!this.$store.getters.project && this.$route.name !== 'project_detail_info') {
+        this.$store.dispatch('getProject', { id }).then((res) => {
+          res.modelPart = res.modelPart ? res.modelPart.join(',') : null;
+          res.teamList = res.teamList ? res.teamList.join(',') : null;
+          this.project = { ...this.project, ...res };
+        });
+      }
+    },
   },
 };
 </script>

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getDepartmentList, addDepartment, deleteDepartment } from '@/api/department';
+import { getDepartmentList, addDepartment, deleteDepartment, updateDepartment } from '@/api/department';
 
 export default {
   name: 'Department',
@@ -83,7 +83,7 @@ export default {
               this.getList();
             });
           } else {
-            addDepartment(this.department).then(() => {
+            updateDepartment(this.department).then(() => {
               this.dialogFormVisible = false;
               this.getList();
             });

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getUserTeamList, addUserTeam, deleteUserTeam } from '@/api/team';
+import { getUserTeamList, addUserTeam, deleteUserTeam, updateUserTeam } from '@/api/team';
 
 export default {
   name: 'WorkGroup',
@@ -83,7 +83,7 @@ export default {
               this.getList();
             });
           } else {
-            addUserTeam(this.team).then(() => {
+            updateUserTeam(this.team).then(() => {
               this.dialogFormVisible = false;
               this.getList();
             });

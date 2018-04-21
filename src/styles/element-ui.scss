@@ -1,8 +1,23 @@
 // override ui styles
+// button
 .el-button {
   position: relative;
 }
 
+// breadcrumb
+.el-breadcrumb__item .el-icon-minus {
+  transform: rotate(90deg);
+}
+
+.el-breadcrumb__separator {
+  color: #606266;
+}
+
+// table
 .el-table--border.el-loading-parent--relative {
   border: 1px solid #ebeef5;
+}
+
+.el-table tr {
+  height: 48px;
 }

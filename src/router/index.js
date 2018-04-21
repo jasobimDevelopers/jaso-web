@@ -98,7 +98,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'project_detail_info',
-      component: asyncImport('ProjectManage/BasicInfo'),
+      component: asyncImport('Project/BasicInfo'),
       name: 'project_detail_info',
       meta: {
         title: '项目基本信息',
@@ -106,7 +106,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'construction_task',
-      component: asyncImport('Production/TaskList'),
+      component: asyncImport('Project/TaskList'),
       name: 'construction_task',
       meta: {
         title: '施工任务单',
@@ -114,10 +114,18 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'construction_log',
-      component: asyncImport('Production/ConstructionLog'),
+      component: asyncImport('Project/ConstructionLog'),
       name: 'construction_log',
       meta: {
         title: '施工日志',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'item',
+      component: asyncImport('ProjectManage'),
+      name: 'item',
+      meta: {
+        title: '构建信息',
         roles: ['admin', 'user'],
       },
     }, {
@@ -161,6 +169,14 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
+      path: 'value_output',
+      component: asyncImport('Statistics/Output'),
+      name: 'value_output',
+      meta: {
+        title: '产值统计',
+        roles: ['admin', 'user'],
+      },
+    }, {
       path: 'workers',
       component: asyncImport('ProjectManage'),
       name: 'workers',
@@ -240,6 +256,14 @@ export const asyncRouterMap = [
         title: '质量交底',
         roles: ['admin', 'user'],
       },
+    }, {
+      path: 'quality_feedback',
+      component: asyncImport('ProjectManage'),
+      name: 'quality_feedback',
+      meta: {
+        title: '质量整改反馈单',
+        roles: ['admin', 'user'],
+      },
     }],
   },
   {
@@ -276,6 +300,14 @@ export const asyncRouterMap = [
         title: '安全交底',
         roles: ['admin', 'user'],
       },
+    }, {
+      path: 'question_feedback',
+      component: asyncImport('ProjectManage'),
+      name: 'question_feedback',
+      meta: {
+        title: '安全整改反馈单',
+        roles: ['admin', 'user'],
+      },
     }],
   },
   {
@@ -289,35 +321,49 @@ export const asyncRouterMap = [
       roles: ['admin', 'user'],
     },
     children: [{
-      path: 'paper',
-      component: asyncImport('Datas/Paper'),
-      name: 'paper',
+      path: 'file',
+      component: asyncImport('ProjectManage'),
+      name: 'file',
       meta: {
-        title: '图纸信息',
+        title: '文件',
+        roles: ['admin', 'user'],
+      },
+    },
+    // {
+    //   path: 'model',
+    //   component: asyncImport('ProjectManage'),
+    //   name: 'model',
+    //   meta: {
+    //     title: 'BIM模型',
+    //     roles: ['admin', 'user'],
+    //   },
+    // }
+    ],
+  },
+  {
+    path: '/work_manage/:id',
+    component: Layout,
+    name: 'work_manage',
+    meta: {
+      basePath: 'work_manage',
+      icon: 'project',
+      title: '劳务管理',
+      roles: ['admin', 'user'],
+    },
+    children: [{
+      path: 'mechanic',
+      component: asyncImport('ProjectManage'),
+      name: 'mechanic',
+      meta: {
+        title: '技工管理',
         roles: ['admin', 'user'],
       },
     }, {
-      path: 'docs',
+      path: 'roster',
       component: asyncImport('ProjectManage'),
-      name: 'docs',
+      name: 'roster',
       meta: {
-        title: '文档',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'pics',
-      component: asyncImport('ProjectManage'),
-      name: 'pics',
-      meta: {
-        title: '图片',
-        roles: ['admin', 'user'],
-      },
-    }, {
-      path: 'model',
-      component: asyncImport('ProjectManage'),
-      name: 'model',
-      meta: {
-        title: 'BIM模型',
+        title: '人员花名册',
         roles: ['admin', 'user'],
       },
     }],

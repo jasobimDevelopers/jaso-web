@@ -1,18 +1,23 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
-    <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item, index)  in levelList" :key="item.path" v-if='item.meta.title'>
-        <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{generateTitle(item.meta.title)}}</span>
-        <router-link v-else :to="backUrl">{{generateTitle(item.meta.title)}}</router-link>
-      </el-breadcrumb-item>
-    </transition-group>
-  </el-breadcrumb>
+  <div class="app-breadcrumb flex-sb">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <transition-group name="breadcrumb">
+        <el-breadcrumb-item v-for="(item, index)  in levelList" :key="item.path" v-if='item.meta.title'>
+          <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{generateTitle(item.meta.title)}}</span>
+          <router-link v-else :to="backUrl">{{generateTitle(item.meta.title)}}</router-link>
+        </el-breadcrumb-item>
+      </transition-group>
+    </el-breadcrumb>
+
+    <slot></slot>
+  </div>
 </template>
 
 <script>
 import { generateTitle } from '@/utils/i18n';
 
 export default {
+  name: 'breadcrumb',
   created() {
     this.getBreadcrumb();
   },
@@ -58,17 +63,19 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .app-breadcrumb.el-breadcrumb {
-    display: flex;
+  .app-breadcrumb {
     margin-left: 30px;
     margin-right: 30px;
-    font-size: 14px;
-    line-height: 50px;
     border-bottom: 1px solid #DCDFE6;
 
-    .no-redirect {
-      color: #97a8be;
-      cursor: text;
+    .el-breadcrumb {
+      display: flex;
+      font-size: 14px;
+      line-height: 48px;
+
+      .no-redirect {
+        cursor: text;
+      }
     }
   }
 </style>

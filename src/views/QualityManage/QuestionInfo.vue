@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="question" v-if="question" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+    <el-form ref="form" :model="question" v-if="question" label-position="right" label-width="100px" style='width: 400px; margin-left:50px;'>
       <el-form-item :label="$t('question.name')" prop="name">
         <el-input v-model="question.name" :disabled="true"></el-input>
       </el-form-item>

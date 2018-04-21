@@ -14,7 +14,7 @@
       <div class="right-wrapper">
         <el-tabs v-model="activeName">
           <el-tab-pane label="登陆" name="login">
-            <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
+            <el-form class="login-form" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="right">
               <el-form-item prop="username">
                 <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="用户名" />
               </el-form-item>
@@ -38,7 +38,7 @@
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="注册" name="register">
-            <el-form v-if="registerStep === 1" class="register-form" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left">
+            <el-form v-if="registerStep === 1" class="register-form" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="right">
               <el-form-item prop="mobile">
                 <el-input name="mobile" type="text" v-model="registerForm.mobile" placeholder="请输入手机号码" />
               </el-form-item>
@@ -73,7 +73,7 @@
               >下一步</el-button>
             </el-form>
 
-            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm2" :rules="registerRules2" ref="registerForm2" label-position="left">
+            <el-form v-if="registerStep === 2" class="register-form" :model="registerForm2" :rules="registerRules2" ref="registerForm2" label-position="right">
               <el-form-item prop="userName">
                 <el-input name="userName" type="text" v-model="registerForm2.userName" placeholder="请输入昵称" />
               </el-form-item>

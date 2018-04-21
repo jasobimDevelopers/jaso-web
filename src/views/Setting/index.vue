@@ -40,7 +40,6 @@ export default {
 <style lang="scss">
   .admin-container {
     padding: 15px 29px;
-    font-size: 14px;
 
     .admin-header {
       border-bottom: 1px solid #DCDFE6;

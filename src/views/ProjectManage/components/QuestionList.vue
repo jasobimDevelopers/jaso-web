@@ -3,7 +3,7 @@
     <!-- filter -->
     <div class="filter-container">
       <div class="filter-wrapper">
-        <el-form ref="filterForm" label-position="left" label-width="100px">
+        <el-form ref="filterForm" label-position="right" label-width="100px">
           <el-form-item :label="$t('question.questionType')">
             <el-radio
               v-model="listQuery.questionType"

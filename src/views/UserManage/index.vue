@@ -82,7 +82,7 @@
       @close="resetForm"
       width="640px"
     >
-      <el-form :rules="rules" ref="userForm" :model="user" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
+      <el-form :rules="rules" ref="userForm" :model="user" label-position="right" label-width="80px" style='width: 400px; margin-left:50px;'>
         <el-form-item :label="$t('user.userName')" prop="userName">
           <el-input v-model="user.userName"></el-input>
         </el-form-item>

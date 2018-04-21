@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :rules="rules" ref="projectForm" :model="project" label-position="left" label-width="120px" style='width: 400px; margin-left:50px;'>
+    <el-form :rules="rules" ref="projectForm" :model="project" label-position="right" label-width="120px" style='width: 400px; margin-left:50px;'>
       <el-form-item :label="$t('project.name')" prop="name">
         <el-input v-model="project.name"></el-input>
       </el-form-item>

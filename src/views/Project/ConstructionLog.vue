@@ -1,139 +1,17 @@
 <template>
-  <div class="app-container">
-    <!-- filter -->
-    <div class="filter-container flex-end">
-      <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
-    </div>
-    <!-- /filter -->
-
-    <!-- table -->
-    <!-- <el-table
-      :data="list"
-      v-loading="listLoading"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column align="center" :label="$t('table.id')" prop="id" width="50">
-      </el-table-column>
-      <el-table-column align="center" label="施工日志内容" prop="content">
-      </el-table-column>
-      <el-table-column align="center" label="施工时间" prop="constructionDate">
-      </el-table-column>
-      <el-table-column align="center" label="天气" prop="weather">
-      </el-table-column>
-      <el-table-column align="center" :label="$t('table.operation')" width="200">
-        <template slot-scope="scope">
-          <el-button type="danger" size="mini" @click="handleDelete({ id: scope.row.id })">{{$t('btn.delete')}}</el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
-    <!-- /table -->
-
-    <div v-if="list && list.length > 0" class="log-list">
-      <div class="log-wrapper hover-cursor flex" @click="handleTable(item)" v-for="(item, i) in list" :key="i">
-        <div class="date-info flex-column-center">
-          <span class="day">{{ item.day }}</span>
-          <span class="month">{{ `${item.year}.${item.month + 1}` }}</span>
-          <section class="week">{{ item.week | setWeekInfo }}</section>
-          <section class="weather flex-row">
-            <svg-icon :icon-class="`天气-${item.weather}`" size="18"></svg-icon>
-            <div>{{ item.weather }}</div>
-          </section>
-        </div>
-        <div class="logs">
-          <div class="log-item" v-for="log in item.list" :key="log.id">
-            <section class="content">{{ log.content }}</section>
-            <section class="user-info">
-              <span class="username">{{ log.createUserName }}</span>
-              <span class="date">{{ `创建于${log.createUserName}` }}</span>
-            </section>
-          </div>
-        </div>
+  <div>
+    <breadcrumb></breadcrumb>
+    <div class="app-container">
+      <!-- filter -->
+      <div class="filter-container flex-end">
+        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
       </div>
-    </div>
+      <!-- /filter -->
 
-    <empty-card v-else>暂无日志</empty-card>
-
-    <!-- pagination -->
-    <div class="pagination-container">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="listQuery.pageIndex"
-        :page-sizes="[5, 10, 20, 40]"
-        :page-size="listQuery.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalNumber">
-      </el-pagination>
-    </div>
-    <!-- /pagination -->
-
-    <!-- dialog -->
-    <el-dialog
-      :title="actionStatus === 'add' ?  $t('btn.add') : $t('btn.edit')"
-      :visible.sync="dialogFormVisible"
-      @close="resetForm"
-      width="640px"
-    >
-      <el-form :rules="rules" ref="dialogForm" :model="log" label-position="left" label-width="120px" style='margin: 0 50px;'>
-        <el-form-item label="施工日志内容" prop="content">
-          <el-input type="textarea" v-model="log.content"></el-input>
-        </el-form-item>
-        <el-form-item label="天气" prop="weather">
-          <el-select v-model="log.weather" placeholder="请选择">
-            <el-option
-              v-for="(item, i) in weatherList"
-              :key="i"
-              :label="item"
-              :value="item">
-              <span style="float: left">
-                <svg-icon :icon-class="`天气-${item}`" size="18"></svg-icon>
-              </span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="施工时间" prop="constructionDate">
-          <el-date-picker
-            v-model="log.constructionDate"
-            type="date"
-            placeholder="选择日期"
-            class="filter-item"
-            value-format="yyyy-MM-dd"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="$t('btn.file')" prop="files">
-          <input type="file" @change="handleUpload" multiple />
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-        <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="dialogTableVisible"
-      width="880px"
-    >
-      <div slot="title">
-        <div class="log-title flex-row" v-if="logTable">
-          <span>施工日志详情</span>
-          <section class="date">{{ `${logTable.year}.${logTable.month + 1}.${logTable.day}` }}</section>
-          <section class="week">{{ logTable.week | setWeekInfo }}</section>
-          <section class="weather flex-row">
-            <svg-icon :icon-class="`天气-${logTable.weather}`" size="18"></svg-icon>
-            <div>{{ logTable.weather }}</div>
-          </section>
-        </div>
-      </div>
       <!-- table -->
-      <el-table
-        v-if="logTable"
-        :data="logTable.list"
+      <!-- <el-table
+        :data="list"
+        v-loading="listLoading"
         border
         fit
         highlight-current-row
@@ -141,23 +19,148 @@
       >
         <el-table-column align="center" :label="$t('table.id')" prop="id" width="50">
         </el-table-column>
-        <el-table-column align="center" label="施工日志内容" prop="content" width="360">
+        <el-table-column align="center" label="施工日志内容" prop="content">
         </el-table-column>
-        <el-table-column align="center" label="施工时间" prop="constructionDate" width="120">
+        <el-table-column align="center" label="施工时间" prop="constructionDate">
         </el-table-column>
         <el-table-column align="center" label="天气" prop="weather">
         </el-table-column>
         <el-table-column align="center" :label="$t('table.operation')" width="200">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('btn.edit')}}</el-button>
             <el-button type="danger" size="mini" @click="handleDelete({ id: scope.row.id })">{{$t('btn.delete')}}</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
       <!-- /table -->
-    </el-dialog>
-    <!-- /dialog -->
 
+      <div v-if="list && list.length > 0" class="log-list">
+        <div class="log-wrapper hover-cursor flex" @click="handleTable(item)" v-for="(item, i) in list" :key="i">
+          <div class="date-info flex-column-center">
+            <span class="day">{{ item.day }}</span>
+            <span class="month">{{ `${item.year}.${item.month + 1}` }}</span>
+            <section class="week">{{ item.week | setWeekInfo }}</section>
+            <section class="weather flex-row">
+              <svg-icon :icon-class="`天气-${item.weather}`" size="18"></svg-icon>
+              <div>{{ item.weather }}</div>
+            </section>
+          </div>
+          <div class="logs">
+            <div class="log-item" v-for="log in item.list" :key="log.id">
+              <section class="content">{{ log.content }}</section>
+              <section class="user-info">
+                <span class="username">{{ log.createUserName }}</span>
+                <span class="date">{{ `创建于${log.createUserName}` }}</span>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <empty-card v-else>暂无日志</empty-card>
+
+      <!-- pagination -->
+      <div class="pagination-container">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="listQuery.pageIndex"
+          :page-sizes="[5, 10, 20, 40]"
+          :page-size="listQuery.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
+      <!-- /pagination -->
+
+      <!-- dialog -->
+      <el-dialog
+        :title="actionStatus === 'add' ?  $t('btn.add') : $t('btn.edit')"
+        :visible.sync="dialogFormVisible"
+        @close="resetForm"
+        width="640px"
+      >
+        <el-form :rules="rules" ref="dialogForm" :model="log" label-position="right" label-width="120px" style='margin: 0 50px;'>
+          <el-form-item label="施工日志内容" prop="content">
+            <el-input type="textarea" v-model="log.content"></el-input>
+          </el-form-item>
+          <el-form-item label="天气" prop="weather">
+            <el-select v-model="log.weather" placeholder="请选择">
+              <el-option
+                v-for="(item, i) in weatherList"
+                :key="i"
+                :label="item"
+                :value="item">
+                <span style="float: left">
+                  <svg-icon :icon-class="`天气-${item}`" size="18"></svg-icon>
+                </span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="施工时间" prop="constructionDate">
+            <el-date-picker
+              v-model="log.constructionDate"
+              type="date"
+              placeholder="选择日期"
+              class="filter-item"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item :label="$t('btn.file')" prop="files">
+            <input type="file" @change="handleUpload" multiple />
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
+          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog
+        :visible.sync="dialogTableVisible"
+        width="880px"
+      >
+        <div slot="title">
+          <div class="log-title flex-row" v-if="logTable">
+            <span>施工日志详情</span>
+            <section class="date">{{ `${logTable.year}.${logTable.month + 1}.${logTable.day}` }}</section>
+            <section class="week">{{ logTable.week | setWeekInfo }}</section>
+            <section class="weather flex-row">
+              <svg-icon :icon-class="`天气-${logTable.weather}`" size="18"></svg-icon>
+              <div>{{ logTable.weather }}</div>
+            </section>
+          </div>
+        </div>
+        <!-- table -->
+        <el-table
+          v-if="logTable"
+          :data="logTable.list"
+          border
+          fit
+          highlight-current-row
+          style="width: 100%"
+        >
+          <el-table-column align="center" :label="$t('table.id')" prop="id" width="50">
+          </el-table-column>
+          <el-table-column align="center" label="施工日志内容" prop="content" width="360">
+          </el-table-column>
+          <el-table-column align="center" label="施工时间" prop="constructionDate" width="120">
+          </el-table-column>
+          <el-table-column align="center" label="天气" prop="weather">
+          </el-table-column>
+          <el-table-column align="center" :label="$t('table.operation')" width="200">
+            <template slot-scope="scope">
+              <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('btn.edit')}}</el-button>
+              <el-button type="danger" size="mini" @click="handleDelete({ id: scope.row.id })">{{$t('btn.delete')}}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- /table -->
+      </el-dialog>
+      <!-- /dialog -->
+
+    </div>
   </div>
 </template>
 

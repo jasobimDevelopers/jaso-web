@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <router-view/>
+    <grid></grid>
   </div>
 </template>
 
 <script>
+import Grid from '@/components/Grid';
+
 export default {
   name: 'App',
+  components: {
+    Grid,
+  },
 };
 </script>
 

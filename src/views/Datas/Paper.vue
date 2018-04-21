@@ -3,7 +3,7 @@
     <!-- filter -->
     <div class="filter-container">
       <div class="filter-wrapper">
-        <el-form ref="filterForm" label-position="left" label-width="100px">
+        <el-form ref="filterForm" label-position="right" label-width="100px">
           <el-form-item :label="$t('paper.professionType')">
             <el-radio
               v-model="listQuery.professionType"
@@ -117,7 +117,7 @@
       @close="resetForm"
       width="640px"
     >
-      <el-form :rules="rules" ref="dialogForm" :model="paper" label-position="left" label-width="120px" style='margin: 0 50px;'>
+      <el-form :rules="rules" ref="dialogForm" :model="paper" label-position="right" label-width="120px" style='margin: 0 50px;'>
         <el-form-item :label="$t('paper.professionType')" prop="diyProfessionType">
           <el-select
             v-model="paper.diyProfessionType"

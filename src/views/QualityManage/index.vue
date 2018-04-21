@@ -137,7 +137,7 @@
       @close="resetForm"
       width="640px"
     >
-      <el-form :rules="rules" ref="dialogForm" :model="question" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+      <el-form :rules="rules" ref="dialogForm" :model="question" label-position="right" label-width="100px" style='width: 400px; margin-left:50px;'>
         <el-form-item :label="$t('project.name')" prop="projectId">
           <el-select
             v-model="question.projectId"

@@ -28,7 +28,7 @@
       @close="resetForm"
       width="640px"
     >
-      <el-form :rules="rules" ref="dialogForm" :model="message" label-position="left" style='width: 400px; margin-left:50px;'>
+      <el-form :rules="rules" ref="dialogForm" :model="message" label-position="right" style='width: 400px; margin-left:50px;'>
         <!-- <el-form-item :label="$t('message.content')" prop="content">
           <quill-editor
             v-model="message.content"

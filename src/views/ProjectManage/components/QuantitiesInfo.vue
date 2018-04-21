@@ -3,7 +3,7 @@
     <!-- filter -->
     <div class="filter-container">
       <div class="filter-wrapper">
-        <el-form ref="filterForm" label-position="left" label-width="100px">
+        <el-form ref="filterForm" label-position="right" label-width="100px">
           <el-form-item :label="$t('quantity.professionType')">
             <el-radio
               v-model="listQuery.professionType"
@@ -134,7 +134,7 @@
       @close="resetForm"
       width="640px"
     >
-      <el-form :rules="rules" ref="dialogForm" :model="quantity" label-position="left" label-width="120px" style='margin: 0 50px;'>
+      <el-form :rules="rules" ref="dialogForm" :model="quantity" label-position="right" label-width="120px" style='margin: 0 50px;'>
         <el-form-item :label="$t('btn.file')" prop="file">
           <input type="file" @change="handleUpload" multiple accept=".xls,.xlsx,.csv" />
         </el-form-item>

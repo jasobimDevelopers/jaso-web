@@ -32,7 +32,7 @@
       @close="resetForm"
       width="540px"
     >
-      <el-form :rules="rules" ref="dialogForm" :model="project" label-position="left" label-width="80px" style='width: 440px; margin-left:30px;'>
+      <el-form :rules="rules" ref="dialogForm" label-position="right" :model="project" label-width="100px" style='width: 440px; margin-left:30px;'>
         <el-form-item :label="$t('project.name')" prop="name">
           <el-input v-model="project.name"></el-input>
         </el-form-item>
