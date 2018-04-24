@@ -31,7 +31,7 @@
     <el-dialog
       :visible.sync="dialogFormVisible"
       @close="resetForm"
-      width="420px"
+      width="435px"
     >
       <div slot="title" style="font-weight: bolder">
         {{ this.actionStatus === 'add' ? '新建职务' : '编辑职务' }}

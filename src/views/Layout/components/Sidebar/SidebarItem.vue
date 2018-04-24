@@ -2,7 +2,7 @@
   <div class="menu-wrapper">
     <router-link to="/projectList/index" v-if="project" class="project-name" style="width: 100%; margin-bottom: 0">
       <i class="el-icon-sort"></i>
-      <span>{{ project.name | spliteWords(6) }}</span>
+      <span :title="project.name">{{ project.name | spliteWords(6) }}</span>
     </router-link>
     <template v-for="item in routes" v-if="!item.hidden && item.children">
       <div class="menu-block" :key="item.name">

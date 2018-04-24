@@ -355,7 +355,7 @@ export const asyncRouterMap = [
       component: asyncImport('ProjectManage'),
       name: 'mechanic',
       meta: {
-        title: '技工管理',
+        title: '记工管理',
         roles: ['admin', 'user'],
       },
     }, {

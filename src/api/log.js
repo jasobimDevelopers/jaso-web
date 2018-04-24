@@ -58,3 +58,24 @@ export function addConstructionLog(params) {
 
   return axios.post(`${apiRoot}/api/constructionLog/web/addConstructionLog`, formData, config);
 }
+
+export function updateConstructionLog(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      // file list
+      if (key === 'files') {
+        Array.from(params[key]).forEach((file) => {
+          formData.append(key, file);
+        });
+      } else {
+        formData.append(key, params[key]);
+      }
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/constructionLog/updateConstructionLog`, formData, config);
+}

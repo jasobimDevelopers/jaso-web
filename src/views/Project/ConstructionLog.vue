@@ -1,12 +1,9 @@
 <template>
   <div>
-    <breadcrumb></breadcrumb>
+    <breadcrumb>
+      <el-button type="text" @click="handleAdd">{{$t('btn.add')}}</el-button>
+    </breadcrumb>
     <div class="app-container">
-      <!-- filter -->
-      <div class="filter-container flex-end">
-        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
-      </div>
-      <!-- /filter -->
 
       <!-- table -->
       <!-- <el-table
@@ -49,7 +46,7 @@
               <section class="content">{{ log.content }}</section>
               <section class="user-info">
                 <span class="username">{{ log.createUserName }}</span>
-                <span class="date">{{ `创建于${log.createUserName}` }}</span>
+                <span class="date">{{ `创建于${log.createDate}` }}</span>
               </section>
             </div>
           </div>
@@ -151,8 +148,10 @@
           </el-table-column>
           <el-table-column align="center" :label="$t('table.operation')" width="200">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('btn.edit')}}</el-button>
-              <el-button type="danger" size="mini" @click="handleDelete({ id: scope.row.id })">{{$t('btn.delete')}}</el-button>
+              <div class="operation-btns">
+                <i class="el-icon-edit-outline" @click="handleUpdate(scope.row)"></i>
+                <i class="el-icon-delete" @click="handleDelete({ id: scope.row.id })"></i>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -166,7 +165,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getConstructionLogList, deleteConstructionLog, addConstructionLog } from '@/api/log';
+import { getConstructionLogList, deleteConstructionLog, addConstructionLog, updateConstructionLog } from '@/api/log';
 import { weatherList } from '@/filters';
 
 export default {
@@ -226,7 +225,7 @@ export default {
       list = list || [];
 
       list.forEach((item) => {
-        const date = new Date(item.createDate);
+        const date = new Date(item.constructionDate);
         const day = date.getDate();
         const year = date.getFullYear();
         const week = date.getDay();
@@ -278,13 +277,25 @@ export default {
       this.dialogFormVisible = true;
     },
     handleUpdate(log) {
-      this.log = log;
+      this.log = { ...log };
       this.actionStatus = 'edit';
       this.dialogFormVisible = true;
     },
     handleDeleteTableItem(id) {
       const list = this.logTable.list || [];
       const newList = list.filter(log => log.id !== id);
+
+      this.logTable.list = newList;
+    },
+    handleUpdateTableItem(id, newLog) {
+      const list = this.logTable.list || [];
+      const newList = list.map((item) => {
+        if (item.id === id) {
+          item = newLog;
+        }
+
+        return item;
+      });
 
       this.logTable.list = newList;
     },
@@ -319,10 +330,28 @@ export default {
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
-          addConstructionLog(this.log).then(() => {
-            this.dialogFormVisible = false;
-            this.getList();
-          });
+          if (this.actionStatus === 'add') {
+            addConstructionLog(this.log).then(() => {
+              this.dialogFormVisible = false;
+              this.getList();
+            });
+          } else {
+            const { id, projectId, content, constructionDate, weather, files } = this.log;
+            console.log('first', this.log, content);
+            const params = {
+              id,
+              projectId,
+              content,
+              constructionDate,
+              weather,
+              files,
+            };
+            updateConstructionLog(params).then(() => {
+              this.getList();
+              this.handleUpdateTableItem(id, params);
+              this.dialogFormVisible = false;
+            });
+          }
         }
       });
     },

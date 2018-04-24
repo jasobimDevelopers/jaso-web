@@ -45,3 +45,9 @@ export function updateValueOutput(params) {
 
   return axios.post(`${apiRoot}/api/valueOutput/updateValueOutput`, formData, config);
 }
+
+export function exportValueOutput(params) {
+  return request.get('api/valueOutput/exportValueOutput', {
+    params,
+  });
+}

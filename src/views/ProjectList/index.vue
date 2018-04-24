@@ -32,7 +32,7 @@
       @close="resetForm"
       width="540px"
     >
-      <el-form :rules="rules" ref="dialogForm" label-position="right" :model="project" label-width="100px" style='width: 440px; margin-left:30px;'>
+      <el-form :rules="rules" ref="dialogForm" label-position="right" :model="project" label-width="120px" style='width: 440px; margin-left:30px;'>
         <el-form-item :label="$t('project.name')" prop="name">
           <el-input v-model="project.name"></el-input>
         </el-form-item>
@@ -41,6 +41,9 @@
         </el-form-item>
         <el-form-item :label="$t('project.place')" prop="place">
           <el-input v-model="project.place"></el-input>
+        </el-form-item>
+        <el-form-item label="产值(万元)：" prop="price">
+          <el-input-number v-model="project.price" :min="1" label="请输入产值"></el-input-number>
         </el-form-item>
         <el-form-item :label="$t('project.startDate')" prop="startDate">
           <el-date-picker
@@ -96,6 +99,7 @@ export default {
         startDate: null,
         finishedDate: null,
         picFile: '',
+        price: 0,
       },
       // date
       dateValue: '',
@@ -109,6 +113,7 @@ export default {
         startDate: [{ required: true, message: `${this.$t('project.startDate')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         description: [{ required: true, message: `${this.$t('project.description')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         picFile: [{ required: true, message: `${this.$t('project.picFile')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        price: [{ required: true, message: `产值${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
       uploadFileSrc: null,
       loading: false,

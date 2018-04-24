@@ -3,7 +3,7 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-breadcrumb-item>
-          <el-button type="text" style="color: #606266;" @click="handleAdd">下载</el-button>
+          <a :href="downloadLink | setFileRoot" target="__blank" style="color: #606266; font-weight: normal">下载</a>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <el-button type="text" @click="handleAdd">新增产值</el-button>
@@ -76,7 +76,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { getValueOutputList, deleteValueOutput, addValueOutput, getValueOutputByDate, updateValueOutput } from '@/api/output';
+import { getValueOutputList, deleteValueOutput, addValueOutput, getValueOutputByDate, updateValueOutput, exportValueOutput } from '@/api/output';
 
 export default {
   name: 'OutputValueManage',
@@ -103,6 +103,8 @@ export default {
       actionStatus: 'add',
       // dialog
       dialogFormVisible: false,
+      // download link
+      downloadLink: '',
       // rules
       rules: {
         month: [{ required: true, message: `月份${this.$t('message.notEmpty')}`, trigger: 'blur' }],
@@ -116,8 +118,17 @@ export default {
     ]),
   },
   created() {
+    const { params: { id } } = this.$route;
     // project list
     this.getList();
+    // fetch download link
+    exportValueOutput({
+      projectId: id,
+    }).then((res) => {
+      const { data } = res;
+
+      this.downloadLink = data;
+    });
   },
   methods: {
     handleFilterList(data) {
