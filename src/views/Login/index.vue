@@ -97,7 +97,7 @@
 
 <script>
 import { getCode, verifyCode, registerUserInfo } from '@/api/user';
-import { validateEmail, validePhone } from '@/utils/validate';
+import { validateEmail, validatePhone } from '@/utils/validate';
 import { setToken } from '@/utils/auth';
 
 export default {
@@ -127,7 +127,7 @@ export default {
     };
 
     const checkPhone = (rule, value, callback) => {
-      if (!validePhone(value)) {
+      if (!validatePhone(value)) {
         callback(new Error(`${this.$t('user.tel')}${this.$t('message.notCorrect')}`));
       } else {
         callback();
@@ -197,7 +197,7 @@ export default {
     handleGetCode() {
       const { mobile } = this.registerForm;
 
-      if (validePhone(mobile)) {
+      if (validatePhone(mobile)) {
         this.codeStatus = 1;
         getCode({
           mobile,

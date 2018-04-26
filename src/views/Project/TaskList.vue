@@ -271,4 +271,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.app-container {
+  padding-top: 32px;
+}
 </style>

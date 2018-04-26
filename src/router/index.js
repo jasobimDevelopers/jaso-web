@@ -178,7 +178,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'workers',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Statistics/Workers'),
       name: 'workers',
       meta: {
         title: '用工统计',
@@ -186,7 +186,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'attendance',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Statistics/Attendance'),
       name: 'attendance',
       meta: {
         title: '考勤管理',
@@ -352,7 +352,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'mechanic',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('WorkManage/Mechanic'),
       name: 'mechanic',
       meta: {
         title: '记工管理',
@@ -360,7 +360,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'roster',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('WorkManage/Roster'),
       name: 'roster',
       meta: {
         title: '人员花名册',

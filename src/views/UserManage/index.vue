@@ -152,7 +152,7 @@
         <el-form-item :label="$t('user.file')" prop="file">
           <div class="upload-file-wrapper flex-column">
             <el-button type="primary" style="width: 100px">
-              <input type="file" ref="fileInput" @change="handleFileChange" />
+              <input type="file" ref="fileInput" accept="image/*" @change="handleFileChange" />
               <span>上传</span>
             </el-button>
             <img v-if="uploadFileSrc" class="file" :src="uploadFileSrc" />
@@ -177,7 +177,7 @@ import {
   updateUser,
   deleteUser,
 } from '@/api/userManage';
-import { validateEmail, validePhone } from '@/utils/validate';
+import { validateEmail, validatePhone } from '@/utils/validate';
 // user type lits
 import { roleList, systemTypeList, workNameList } from '@/filters';
 
@@ -215,7 +215,7 @@ export default {
     };
 
     const checkPhone = (rule, value, callback) => {
-      if (!validePhone(value)) {
+      if (!validatePhone(value)) {
         callback(new Error(`${this.$t('user.tel')}${this.$t('message.notCorrect')}`));
       } else {
         callback();
@@ -456,6 +456,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.app-container {
+  padding-top: 32px;
+}
+
 .filter-item {
   margin-right: 15px;
 }

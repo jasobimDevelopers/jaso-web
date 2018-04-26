@@ -2,7 +2,7 @@
   <div>
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
-        <el-breadcrumb-item>
+        <el-breadcrumb-item v-if="downloadLink !== ''">
           <a :href="downloadLink | setFileRoot" target="__blank" style="color: #606266; font-weight: normal">下载</a>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
@@ -50,7 +50,7 @@
         <div slot="title" style="font-weight: bolder">
           {{ this.actionStatus === 'add' ? '新增产值' : '编辑产值' }}
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="top" label-width="80px" style='width: 400px; margin-left:50px;'>
+        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="top">
           <el-form-item v-if="this.actionStatus === 'add'" label="月份：" prop="month">
             <el-date-picker
               type="month"
@@ -96,9 +96,6 @@ export default {
       },
       listLoading: false,
       list: null,
-      projectList: [],
-      // multi select
-      multipleSelection: [],
       // action status
       actionStatus: 'add',
       // dialog
@@ -217,13 +214,6 @@ export default {
 
       this.dialogFormVisible = true;
     },
-    handleChangeProject(val) {
-      this.projectList.forEach((item) => {
-        if (item.id === val) {
-          this.output.others = item.name;
-        }
-      });
-    },
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
@@ -258,7 +248,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .app-container {
-    padding-top: 0;
-  }
 </style>

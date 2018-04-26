@@ -18,14 +18,20 @@ export function validateUpperCase(str) {
 }
 
 // 大小写字母
-export function validatAlphabets(str) {
+export function validateAlphabets(str) {
   const reg = /^[A-Za-z]+$/;
   return reg.test(str);
 }
 
 // phone
-export function validePhone(phone) {
+export function validatePhone(phone) {
   const reg = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+  return reg.test(phone);
+}
+
+// 身份证
+export function validateIDCard(phone) {
+  const reg = /^[1-9]{1}[0-9]{14}$|^[1-9]{1}[0-9]{16}([0-9]|[xX])$/;
   return reg.test(phone);
 }
 
