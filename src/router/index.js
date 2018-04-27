@@ -322,7 +322,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'file',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Datas/File'),
       name: 'file',
       meta: {
         title: '文件',

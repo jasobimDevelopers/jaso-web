@@ -65,7 +65,7 @@
         <div slot="title" style="font-weight: bolder">
           新建记工
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="left">
           <el-form-item label="日期：" prop="username">
             <el-date-picker
               v-model="output.date"
@@ -74,6 +74,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="标准工时：10小时/天" prop="userList">
+            <el-button type="text" @click="dialogDateVisible = true">设置标准工时</el-button>
             <div class="user-list">
               <el-table
                 :data="output.userList"
@@ -112,6 +113,27 @@
         </div>
       </el-dialog>
       <!-- /dialog -->
+
+      <!-- dialog -->
+      <el-dialog
+        :visible.sync="dialogDateVisible"
+        @close="resetDateForm"
+        width="320px"
+      >
+        <div slot="title" style="font-weight: bolder">
+          设置标准工时
+        </div>
+        <el-form :rules="rules" ref="dialogDateForm" :model="dateInfo" label-position="left">
+          <el-form-item label="标准工时：" prop="hours">
+            <el-input-number v-model="dateInfo.hours" :min="0" :max="24"></el-input-number>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="dialogDateVisible = false">{{$t('btn.cancel')}}</el-button>
+          <el-button type="primary" @click="handleSaveDate">{{$t('btn.comfirm')}}</el-button>
+        </div>
+      </el-dialog>
+      <!-- /dialog -->
     </div>
   </div>
 </template>
@@ -137,6 +159,9 @@ export default {
           },
         ],
       },
+      dateInfo: {
+        hours: 10,
+      },
       listLoading: false,
       list: null,
       selectDayIndex: 0,
@@ -144,6 +169,7 @@ export default {
       multipleSelection: [],
       // dialog
       dialogFormVisible: false,
+      dialogDateVisible: false,
       // rules
       rules: {},
     };
@@ -201,6 +227,7 @@ export default {
       this.multipleSelection = val;
     },
     handleSave() {},
+    handleSaveDate() {},
     resetForm() {
       this.output = {
         date: null,
@@ -214,6 +241,13 @@ export default {
       };
 
       this.$refs.dialogForm.resetFields();
+    },
+    resetDateForm() {
+      this.dateInfo = {
+        hours: 10,
+      };
+
+      this.$refs.dialogDateForm.resetFields();
     },
   },
 };
