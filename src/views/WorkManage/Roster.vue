@@ -204,10 +204,12 @@ export default {
           if (this.actionStatus === 'add') {
             addMechanic(this.mechanic).then(() => {
               this.getList();
+              this.dialogFormVisible = false;
             });
           } else {
             updateMechanic(this.mechanic).then(() => {
               this.getList();
+              this.dialogFormVisible = false;
             });
           }
         }

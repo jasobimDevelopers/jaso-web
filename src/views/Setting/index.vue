@@ -42,6 +42,7 @@ export default {
     padding: 15px 29px;
 
     .admin-header {
+      padding-bottom: 15px;
       border-bottom: 1px solid #DCDFE6;
     }
 

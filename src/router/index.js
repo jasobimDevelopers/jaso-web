@@ -206,7 +206,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'material_count',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Material/MaterialCount'),
       name: 'material_count',
       meta: {
         title: '物资统计',

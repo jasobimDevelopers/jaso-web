@@ -8,6 +8,16 @@
   padding: 8px 24px;
 }
 
+.el-button--text {
+  padding: 0;
+}
+
+// dropdown
+.el-dropdown-link {
+  color: #409EFF;
+  cursor: pointer;
+}
+
 // breadcrumb
 .el-breadcrumb__item .el-icon-minus {
   transform: rotate(90deg);
@@ -29,4 +39,9 @@
 // form
 .el-form--label-top .el-form-item__label {
   padding: 0;
+}
+
+// dialog
+.el-dialog__body {
+  padding: 18px 20px;
 }

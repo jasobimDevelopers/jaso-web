@@ -226,13 +226,6 @@ export default {
     }
   }
 
-  .file-action {
-    .el-dropdown-link {
-      color: #409EFF;
-      cursor: pointer;
-    }
-  }
-
   .file-list {
     padding-top: 32px;
 

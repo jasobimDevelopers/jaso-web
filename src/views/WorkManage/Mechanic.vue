@@ -65,11 +65,12 @@
         <div slot="title" style="font-weight: bolder">
           新建记工
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="left">
+        <el-form :rules="rules" ref="dialogForm" :model="price" label-position="left">
           <el-form-item label="日期：" prop="username">
             <el-date-picker
-              v-model="output.date"
+              v-model="price.date"
               type="date"
+              value-format="yyyy-MM-dd"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -77,7 +78,7 @@
             <el-button type="text" @click="dialogDateVisible = true">设置标准工时</el-button>
             <div class="user-list">
               <el-table
-                :data="output.userList"
+                :data="mechanicList"
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
@@ -87,12 +88,12 @@
                   width="55">
                 </el-table-column>
                 <el-table-column
-                  prop="username"
+                  prop="realName"
                   label="姓名"
                   width="120">
                 </el-table-column>
                 <el-table-column
-                  prop="type"
+                  prop="workName"
                   label="工种"
                   width="120">
                 </el-table-column>
@@ -139,6 +140,8 @@
 </template>
 
 <script>
+import { addMechanicPriceList, updateWorkHour, getMechanicList } from '@/api/mechanic';
+
 export default {
   name: 'Mechanic',
   data() {
@@ -149,16 +152,10 @@ export default {
         pageIndex: -1,
         projectId: id,
       },
-      output: {
-        date: null,
-        userList: [
-          {
-            username: '张三',
-            type: '安装工',
-            hours: '10',
-          },
-        ],
+      price: {
+        date: new Date(),
       },
+      mechanicList: [],
       dateInfo: {
         hours: 10,
       },
@@ -177,6 +174,7 @@ export default {
   created() {
     this.getList();
     this.initDays();
+    this.getMechanicList();
   },
   methods: {
     getList() {
@@ -208,6 +206,21 @@ export default {
 
       this.days = days;
     },
+    getMechanicList() {
+      const { params: { id } } = this.$route;
+      getMechanicList({
+        pageIndex: -1,
+        projectId: id,
+      }).then((res) => {
+        const { data } = res;
+
+        data.forEach((item) => {
+          item.hours = 10;
+        });
+
+        this.mechanicList = data;
+      });
+    },
     handleSlideDays(index) {
       const perLineDays = 10;
       const maxIndex = Math.ceil(this.days.length / perLineDays) - 1;
@@ -226,18 +239,51 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleSave() {},
-    handleSaveDate() {},
+    handleSave() {
+      const { params: { id } } = this.$route;
+      const { date } = this.price;
+      const list = this.multipleSelection;
+
+      if (!date || date === '') {
+        this.$message({
+          type: 'info',
+          message: '请选择日期',
+        });
+        return;
+      }
+
+      if (list.length === 0) {
+        this.$message({
+          type: 'info',
+          message: '请选择工人',
+        });
+        return;
+      }
+
+      const userList = list.map(item => ({
+        mechanicId: item.id,
+        hour: item.hours,
+        projectId: id,
+        createDate: date,
+      }));
+
+      addMechanicPriceList({
+        am: JSON.stringify(userList),
+      }).then(() => {
+        this.getList();
+      });
+    },
+    handleSaveDate() {
+      const { params: { id } } = this.$route;
+
+      updateWorkHour({
+        projectId: id,
+        workHour: this.dateInfo.hours,
+      }).then(() => {});
+    },
     resetForm() {
-      this.output = {
+      this.price = {
         date: null,
-        userList: [
-          {
-            username: '张三',
-            type: '安装工',
-            hours: '10',
-          },
-        ],
       };
 
       this.$refs.dialogForm.resetFields();

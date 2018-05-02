@@ -27,9 +27,7 @@ export function updateMechanic(params) {
 
   for (const key in params) {
     if (params[key] != null) {
-      if (params[key] != null) {
-        formData.append(key, params[key]);
-      }
+      formData.append(key, params[key]);
     }
   }
 
@@ -42,4 +40,53 @@ export function deleteMechanic(params) {
   return request.get('api/mechanic/deleteMechanic', {
     params,
   });
+}
+
+export function getMechanicPriceList(params) {
+  return request.get('api/mechanicPrice/getMechanicPriceList', {
+    params,
+  });
+}
+
+export function addMechanicPriceList(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/mechanicPrice/addMechanicPriceList`, formData, config);
+}
+
+
+export function updateWorkHour(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/project/visitor/updateWorkHour`, formData, config);
+}
+
+export function updateMechanicPrice(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/mechanicPrice/updateMechanicPrice`, formData, config);
 }
