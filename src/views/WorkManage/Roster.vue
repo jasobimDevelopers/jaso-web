@@ -195,7 +195,7 @@ export default {
     },
     handleEdit(item) {
       this.actionStatus = 'edit';
-      this.mechanic = { ...item };
+      this.mechanic = { ...item, createDate: null, createUser: null };
       this.dialogFormVisible = true;
     },
     handleSave() {

@@ -2,8 +2,13 @@
   <div>
     <breadcrumb>
       <el-date-picker
+        v-model="listQuery.date"
         type="month"
-        placeholder="选择月">
+        value-format="yyyy-MM"
+        placeholder="选择月"
+        :clearable="false"
+        @change="getList"
+      >
       </el-date-picker>
     </breadcrumb>
 
@@ -16,17 +21,17 @@
         highlight-current-row
         style="width: 100%"
       >
-        <el-table-column align="center" label="姓名" prop="username" width="100">
+        <el-table-column align="center" label="姓名" prop="userName" width="100">
         </el-table-column>
-        <el-table-column align="center" label="工种" prop="type">
+        <el-table-column align="center" label="工种" prop="workName">
         </el-table-column>
-        <el-table-column align="center" label="工时" prop="hours">
+        <el-table-column align="center" label="工时" prop="hourNum">
         </el-table-column>
-        <el-table-column align="center" label="工日" prop="days">
+        <el-table-column align="center" label="工日" prop="dayNum">
         </el-table-column>
-        <el-table-column align="center" label="日工资" prop="money">
+        <el-table-column align="center" label="日工资" prop="daySalary">
         </el-table-column>
-        <el-table-column align="center" label="工资" prop="totalMoney">
+        <el-table-column align="center" label="工资" prop="salaryNum">
         </el-table-column>
       </el-table>
       <!-- /table -->
@@ -37,15 +42,21 @@
 </template>
 
 <script>
+import { zeroFull } from '@/utils/utils';
+import { getMechanicPriceNum } from '@/api/mechanic';
+
 export default {
   name: 'Workers',
   data() {
     const { params: { id } } = this.$route;
+    const now = new Date();
+    const date = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}`;
 
     return {
       listQuery: {
         pageIndex: -1,
         projectId: id,
+        date,
       },
       listLoading: false,
       list: null,
@@ -57,20 +68,16 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
+      const params = {
+        ...this.listQuery,
+        date: `${this.listQuery.date}-01`,
+      };
 
-      setTimeout(() => {
-        this.list = [
-          {
-            username: '张三',
-            type: '工种',
-            hours: 300,
-            days: 20,
-            money: 200,
-            totalMoney: 6000,
-          },
-        ];
+      getMechanicPriceNum(params).then((res) => {
+        const { data } = res;
+        this.list = data;
         this.listLoading = false;
-      }, 3e3);
+      });
     },
   },
 };

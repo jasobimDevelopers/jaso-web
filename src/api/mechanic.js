@@ -42,6 +42,12 @@ export function deleteMechanic(params) {
   });
 }
 
+export function getProjectHour(params) {
+  return request.get('api/project/admin/getProjectHour', {
+    params,
+  });
+}
+
 export function getMechanicPriceList(params) {
   return request.get('api/mechanicPrice/getMechanicPriceList', {
     params,
@@ -89,4 +95,10 @@ export function updateMechanicPrice(params) {
   formData.append('token', getToken());
 
   return axios.post(`${apiRoot}/api/mechanicPrice/updateMechanicPrice`, formData, config);
+}
+
+export function getMechanicPriceNum(params) {
+  return request.get('api/mechanicPrice/getMechanicPriceNum', {
+    params,
+  });
 }

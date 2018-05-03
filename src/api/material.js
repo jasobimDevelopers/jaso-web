@@ -68,6 +68,12 @@ export function addMaterial(params) {
   return axios.post(`${apiRoot}/api/material/vs/addMaterial`, formData, config);
 }
 
+export function deleteMaterial(params) {
+  return request.get('api/material/admin/deleteMaterial', {
+    params,
+  });
+}
+
 export function updateMaterial(params) {
   const formData = new FormData();
 
@@ -80,4 +86,18 @@ export function updateMaterial(params) {
   formData.append('token', getToken());
 
   return axios.post(`${apiRoot}/api/material/updateMaterial`, formData, config);
+}
+
+export function importMaterial(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/material/web/importMaterial`, formData, config);
 }

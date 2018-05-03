@@ -230,10 +230,10 @@
           从Excel文件导入
         </div>
         <div class="import-info">
-          <section>提示：从Excel文件导入必须按照标准格式，点击<a href="#" target="__blank">下载标准格式文档</a>下载。或者
+          <section>提示：从Excel文件导入必须按照标准格式，点击<a :href="downloadPath | setFileRoot" target="__blank">下载标准格式文档</a>下载。或者
             <a class="file-wrapper" @click="handleImport">
               <span>从本地导入</span>
-              <input type="file" accept=".xls,.xlsx,.csv" ref="importInput" />
+              <input type="file" accept=".xls,.xlsx,.csv" ref="importInput" @change="handleImportFile($event)" />
             </a>。
           </section>
         </div>
@@ -295,8 +295,10 @@ import {
   updateMaterialType,
   getMaterialList,
   addMaterial,
+  deleteMaterial,
   updateMaterial,
   getMaterialLogList,
+  importMaterial,
 } from '@/api/material';
 
 export default {
@@ -318,7 +320,7 @@ export default {
         pageSize: 10,
       },
       material: {
-        porjectId: id,
+        projectId: id,
         materialName: '',
         materialType: null,
         size: '',
@@ -351,6 +353,8 @@ export default {
       listLoading: false,
       listInLoading: false,
       listOutLoading: false,
+      // download path
+      downloadPath: 'fileUploads/model_file.xls',
       // rules
       rules: {
         materialName: [{ required: true, message: `物资名称${this.$t('message.notEmpty')}`, trigger: 'blur' }],
@@ -370,7 +374,7 @@ export default {
 
       getMaterialTypeList({
         pageIndex: -1,
-        porjectId: id,
+        projectId: id,
       }).then((res) => {
         const { data } = res;
         this.typeList = data;
@@ -379,7 +383,7 @@ export default {
     getMaterialList() {
       const { params: { id } } = this.$route;
       const condition = {
-        porjectId: id,
+        projectId: id,
         ...this.listQuery,
       };
 
@@ -483,7 +487,7 @@ export default {
 
       this.material = {
         ...this.material,
-        materialType: item.materialType,
+        materialType: item.materialTypeId,
         materialName: item.materialName,
         size: item.size,
         unit: item.unit,
@@ -499,7 +503,7 @@ export default {
         type: 'warning',
       }).then(() => {
         // delete user
-        deleteMaterialType(params).then(() => {
+        deleteMaterial(params).then(() => {
           this.$message({
             type: 'success',
             message: this.$t('message.deleteOk'),
@@ -533,6 +537,19 @@ export default {
     },
     handleImport() {
       this.$refs.importInput.click();
+    },
+    handleImportFile(e) {
+      const files = e.target.files;
+      const file = files[0];
+      const { params: { id } } = this.$route;
+
+      importMaterial({
+        file,
+        projectId: id,
+      }).then(() => {
+        this.dialogImportMaterialVisible = false;
+        this.getMaterialList();
+      });
     },
     handleAddType() {
       this.editTypeInfo = {
@@ -615,7 +632,7 @@ export default {
     resetForm() {
       const { params: { id } } = this.$route;
       this.material = {
-        porjectId: id,
+        projectId: id,
         materialName: '',
         materialType: null,
         size: '',

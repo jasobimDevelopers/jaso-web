@@ -113,7 +113,7 @@ export default {
       listQuery: {
         name: '',
       },
-      showType: 'list2',
+      showType: 'list',
       listLoading: false,
       list: null,
       checkAll: false,

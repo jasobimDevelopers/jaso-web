@@ -3,8 +3,13 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-date-picker
+          v-model="listQuery.date"
           type="month"
-          placeholder="选择月">
+          value-format="yyyy-MM"
+          placeholder="选择月"
+          :clearable="false"
+          @change="handleChangeDate"
+        >
         </el-date-picker>
 
         <el-button type="text" style="margin-left: 32px;" @click="handleAdd">新建记工</el-button>
@@ -20,17 +25,17 @@
         highlight-current-row
         style="width: 100%"
       >
-        <el-table-column align="center" label="姓名" prop="username" width="100">
+        <el-table-column align="center" label="姓名" prop="userName" width="100">
         </el-table-column>
-        <el-table-column align="center" label="工种" prop="p1">
+        <el-table-column align="center" label="工种" prop="workName">
         </el-table-column>
         <el-table-column align="center" width="646">
           <template slot-scope="scope">
             <div class="work-days">
-              <div class="work-wrapper" :style="`transform: translateX(-${selectDayIndex * 582}px)`">
-                <div class="edit-cell" v-for="item in days" :key="item">
-                  <input value="-" @blur="handleSaveWork(item, $event)" />
-                  <span class="content">-</span>
+              <div class="work-wrapper" :style="`transform: translateX(-${selectDayIndex * 580}px)`">
+                <div class="edit-cell" v-for="(item, i) in scope.row.list" :key="i">
+                  <input :value="item && item.hour ? item.hour : ''" @blur="handleSaveWork(scope.row, item, i, $event)" />
+                  <span class="content">{{ item && item.hour ? item.hour : '-' }}</span>
                   <span class="tip">编辑</span>
                 </div>
               </div>
@@ -45,7 +50,7 @@
           <i class="el-icon-arrow-left"></i>
         </div>
         <div class="select-day">
-          <div class="days-wrapper" :style="`transform: translateX(-${selectDayIndex * 582}px)`">
+          <div class="days-wrapper" :style="`transform: translateX(-${selectDayIndex * 580}px)`">
             <div class="day" v-for="item in days" :key="item">{{ item }}</div>
           </div>
         </div>
@@ -74,7 +79,7 @@
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="标准工时：10小时/天" prop="userList">
+          <el-form-item :label="`标准工时：${projectHour}小时/天`" prop="userList">
             <el-button type="text" @click="dialogDateVisible = true">设置标准工时</el-button>
             <div class="user-list">
               <el-table
@@ -140,17 +145,28 @@
 </template>
 
 <script>
-import { addMechanicPriceList, updateWorkHour, getMechanicList } from '@/api/mechanic';
+import { zeroFull, getMonthCount } from '@/utils/utils';
+import {
+  getMechanicPriceList,
+  addMechanicPriceList,
+  updateMechanicPrice,
+  updateWorkHour,
+  getMechanicList,
+  getProjectHour,
+} from '@/api/mechanic';
 
 export default {
   name: 'Mechanic',
   data() {
     const { params: { id } } = this.$route;
+    const now = new Date();
+    const date = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}`;
 
     return {
       listQuery: {
         pageIndex: -1,
         projectId: id,
+        date,
       },
       price: {
         date: new Date(),
@@ -168,40 +184,56 @@ export default {
       dialogFormVisible: false,
       dialogDateVisible: false,
       // rules
-      rules: {},
+      rules: {
+        hours: [{ required: true, message: `时间${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+      },
+      // project hour
+      projectHour: 10,
     };
   },
   created() {
     this.getList();
-    this.initDays();
     this.getMechanicList();
   },
   methods: {
+    filterList(list) {
+      const filterDate = new Date(this.listQuery.date);
+      const days = getMonthCount(filterDate.getFullYear(), filterDate.getMonth() + 1);
+
+      list = list.map((user) => {
+        const { mp } = user;
+
+        // list container
+        user.list = new Array(days).fill(null);
+        mp.forEach((item) => {
+          const { createDate } = item;
+          const d = new Date(createDate);
+          const index = d.getDate() - 1;
+          user.list[index] = item;
+        });
+        return user;
+      });
+
+      this.list = list;
+      this.initDays(days);
+    },
     getList() {
       this.listLoading = true;
+      const params = {
+        ...this.listQuery,
+        date: `${this.listQuery.date}-01`,
+      };
 
-      setTimeout(() => {
-        this.list = [
-          {
-            username: '王莉莉',
-            p1: '瓦工',
-          },
-          {
-            username: '王晓晓',
-            p1: '水电工',
-          },
-          {
-            username: '刘能',
-            p1: '安装员',
-          },
-        ];
+      getMechanicPriceList(params).then((res) => {
+        const { data } = res;
+        this.filterList(data);
         this.listLoading = false;
-      }, 2e3);
+      });
     },
-    initDays() {
+    initDays(count) {
       const days = [];
-      for (let i = 1; i < 32; i += 1) {
-        days.push(i);
+      for (let i = 0; i < count; i += 1) {
+        days.push(i + 1);
       }
 
       this.days = days;
@@ -221,6 +253,11 @@ export default {
         this.mechanicList = data;
       });
     },
+    handleChangeDate() {
+      // refresh days index
+      this.selectDayIndex = 0;
+      this.getList();
+    },
     handleSlideDays(index) {
       const perLineDays = 10;
       const maxIndex = Math.ceil(this.days.length / perLineDays) - 1;
@@ -231,10 +268,30 @@ export default {
       }
     },
     handleAdd() {
-      this.dialogFormVisible = true;
+      const { params: { id } } = this.$route;
+      getProjectHour({
+        projectId: id,
+      }).then((res) => {
+        this.projectHour = res.data;
+        this.dateInfo.hours = res.data;
+        this.dialogFormVisible = true;
+      });
     },
-    handleSaveWork(work, e) {
-      console.log('work', work, e.target.value);
+    handleSaveWork(user, work, index, e) {
+      const params = {
+        hour: e.target.value,
+        mechanicId: user.id,
+      };
+
+      if (!work) {
+        params.date = `${this.listQuery.date}-${zeroFull(index + 1)}`;
+      } else {
+        params.id = work.id;
+      }
+
+      updateMechanicPrice(params).then(() => {
+        this.getList();
+      });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -270,6 +327,7 @@ export default {
       addMechanicPriceList({
         am: JSON.stringify(userList),
       }).then(() => {
+        this.dialogFormVisible = false;
         this.getList();
       });
     },
@@ -279,7 +337,10 @@ export default {
       updateWorkHour({
         projectId: id,
         workHour: this.dateInfo.hours,
-      }).then(() => {});
+      }).then(() => {
+        this.projectHour = this.dateInfo.hours;
+        this.dialogDateVisible = false;
+      });
     },
     resetForm() {
       this.price = {
@@ -322,7 +383,7 @@ export default {
   }
 
   .select-day {
-    width: 582px;
+    width: 580px;
     overflow: hidden;
   }
 
@@ -344,7 +405,7 @@ export default {
 
 .work-days {
   margin-left: 22px;
-  width: 582px;
+  width: 580px;
   overflow: hidden;
   text-align: left;
 }
