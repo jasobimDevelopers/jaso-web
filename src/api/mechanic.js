@@ -102,3 +102,9 @@ export function getMechanicPriceNum(params) {
     params,
   });
 }
+
+export function exportMechanicNum(params) {
+  return request.get('api/mechanicPrice/exportMechanicNum', {
+    params,
+  });
+}

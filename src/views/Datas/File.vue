@@ -20,9 +20,9 @@
             v-model="listQuery.name">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <div class="btn-item">
+          <!-- <div class="btn-item">
             <svg-icon icon-class="排序"></svg-icon>
-          </div>
+          </div> -->
           <div @click="toggleShowType">
             <div class="btn-item" v-if="showType === 'list'">
               <svg-icon icon-class="缩略图"></svg-icon>

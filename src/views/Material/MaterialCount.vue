@@ -58,8 +58,20 @@
             <el-table-column align="center" label="单位" prop="unit">
             </el-table-column>
             <el-table-column align="center" label="入库数量" prop="inNum">
+              <template slot-scope="scope">
+                <div class="cell-action-wrapper">
+                  <div class="num">{{ scope.row.inNum }}</div>
+                  <el-button type="text" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 0})">新增入库</el-button>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column align="center" label="出库数量" prop="outNum">
+              <template slot-scope="scope">
+                <div class="cell-action-wrapper">
+                  <div class="num">{{ scope.row.outNum }}</div>
+                  <el-button type="text" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 1})">新增出库</el-button>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column align="center" label="库存数量" prop="leaveNum">
             </el-table-column>
@@ -110,8 +122,7 @@
             <el-table-column align="center" :label="$t('table.operation')">
               <template slot-scope="scope">
                 <div class="operation-btns">
-                  <i class="el-icon-edit-outline" @click="handleEditLogIn(scope.row)"></i>
-                  <i class="el-icon-delete" @click="handleDeleteLogIn({ id: scope.row.id })"></i>
+                  <i class="el-icon-delete" @click="handleDeleteLog({ id: scope.row.id, type: 'in' })"></i>
                 </div>
               </template>
             </el-table-column>
@@ -154,8 +165,7 @@
             <el-table-column align="center" :label="$t('table.operation')">
               <template slot-scope="scope">
                 <div class="operation-btns">
-                  <i class="el-icon-edit-outline" @click="handleEditLogOut(scope.row)"></i>
-                  <i class="el-icon-delete" @click="handleDeleteLogOut({ id: scope.row.id })"></i>
+                  <i class="el-icon-delete" @click="handleDeleteLog({ id: scope.row.id, type: 'out' })"></i>
                 </div>
               </template>
             </el-table-column>
@@ -283,11 +293,42 @@
         </div>
       </el-dialog>
       <!-- /type dialog -->
+
+      <!-- type dialog -->
+      <el-dialog
+        :visible.sync="dialogLogVisible"
+        width="360px"
+        @close="resetLogForm"
+      >
+        <div slot="title" style="font-weight: bolder">
+          {{ `新增${logInfo.materialName}${logInfo.logType === 0 ? '入库' : '出库'}` }}
+        </div>
+        <el-form :rules="logRules" ref="logForm" :model="logInfo" label-position="top">
+          <el-form-item label="日期：" prop="date">
+            <el-date-picker
+              v-model="logInfo.date"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item :label="`${logInfo.logType === 0 ? '入库' : '出库'}数量：`" prop="num">
+            <el-input v-model="logInfo.num" placeholder="请输入数量"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="dialogLogVisible = false">{{$t('btn.cancel')}}</el-button>
+          <el-button type="primary" @click="handleSaveLog">{{$t('btn.comfirm')}}</el-button>
+        </div>
+      </el-dialog>
+      <!-- /type dialog -->
     </div>
   </div>
 </template>
 
 <script>
+import { zeroFull } from '@/utils/utils';
 import {
   getMaterialTypeList,
   deleteMaterialType,
@@ -298,6 +339,8 @@ import {
   deleteMaterial,
   updateMaterial,
   getMaterialLogList,
+  addMaterialLog,
+  deleteMaterialLog,
   importMaterial,
 } from '@/api/material';
 
@@ -333,10 +376,18 @@ export default {
       dialogTypeManageVisible: false,
       dialogMaterialVisible: false,
       dialogImportMaterialVisible: false,
+      dialogLogVisible: false,
       // if adding type
       addingType: false,
       // edit
       editTypeInfo: null,
+      // log
+      logInfo: {
+        materialId: '',
+        logType: 0,
+        materialName: '',
+        date: new Date(),
+      },
       // list
       list: [],
       inList: [],
@@ -361,6 +412,10 @@ export default {
         materialType: [{ required: true, message: `物资分类${this.$t('message.notEmpty')}`, trigger: 'change' }],
         size: [{ required: true, message: `规格型号${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         unit: [{ required: true, message: `单位${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+      },
+      logRules: {
+        num: [{ required: true, message: `数量${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        date: [{ required: true, message: `日期${this.$t('message.notEmpty')}`, trigger: 'change' }],
       },
     };
   },
@@ -450,8 +505,6 @@ export default {
       this.listOutQuery.pageIndex = val;
       this.getMaterialOutLogs();
     },
-    handleEditLogIn() {},
-    handleEditLogOut() {},
     handleTabClick(tab) {
       switch (tab.index) {
         case '0': {
@@ -487,6 +540,7 @@ export default {
 
       this.material = {
         ...this.material,
+        id: item.id,
         materialType: item.materialTypeId,
         materialName: item.materialName,
         size: item.size,
@@ -510,6 +564,59 @@ export default {
           });
 
           this.getMaterialList();
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('message.deleteCancel'),
+        });
+      });
+    },
+    handleAddLog(log) {
+      const now = new Date();
+      const date = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}-${zeroFull(now.getDate())}`;
+      this.logInfo = {
+        ...log,
+        date,
+      };
+
+      this.dialogLogVisible = true;
+    },
+    handleSaveLog() {
+      const { materialId, materialName, logType, num } = this.logInfo;
+      this.$refs.logForm.validate((valid) => {
+        if (valid) {
+          addMaterialLog({
+            materialId,
+            intro: materialName,
+            logType,
+            num,
+          }).then(() => {
+            this.dialogLogVisible = false;
+            this.getMaterialList();
+          });
+        }
+      });
+    },
+    handleDeleteLog(params) {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', this.$t('message.prompt'), {
+        confirmButtonText: this.$t('btn.comfirm'),
+        cancelButtonText: this.$t('btn.cancel'),
+        type: 'warning',
+      }).then(() => {
+        // delete
+        const { id, type } = params;
+        deleteMaterialLog({ id }).then(() => {
+          this.$message({
+            type: 'success',
+            message: this.$t('message.deleteOk'),
+          });
+
+          if (type === 'in') {
+            this.getMaterialInLogs();
+          } else {
+            this.getMaterialOutLogs();
+          }
         });
       }).catch(() => {
         this.$message({
@@ -587,6 +694,7 @@ export default {
     },
     handleUpdateType() {
       const { id, name } = this.editTypeInfo;
+      const { params: { id: projectId } } = this.$route;
 
       if (name.trim() === '') {
         this.$message({
@@ -599,6 +707,7 @@ export default {
       updateMaterialType({
         id,
         name,
+        projectId,
       }).then(() => {
         this.editTypeInfo = null;
 
@@ -607,6 +716,7 @@ export default {
     },
     handleSaveType() {
       const { name } = this.editTypeInfo;
+      const { params: { id } } = this.$route;
 
       if (name.trim() === '') {
         this.$message({
@@ -618,6 +728,7 @@ export default {
 
       addMaterialType({
         name,
+        projectId: id,
       }).then(() => {
         this.addingType = false;
         this.editTypeInfo = null;
@@ -641,6 +752,13 @@ export default {
       };
 
       this.$refs.dialogForm.resetFields();
+    },
+    resetLogForm() {
+      this.logInfo = {
+        materialId: '',
+        logType: '0',
+        materialName: '',
+      };
     },
   },
 };
@@ -733,6 +851,25 @@ export default {
         right: 0;
         bottom: 0;
         opacity: 0;
+      }
+    }
+  }
+
+  .cell-action-wrapper {
+    height: 24px;
+    width: 120px;
+
+    button {
+      display: none;
+    }
+
+    &:hover {
+      .num {
+        display: none;
+      }
+
+      button {
+        display: inline-block;
       }
     }
   }

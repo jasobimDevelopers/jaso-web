@@ -1,6 +1,6 @@
 <template>
   <div class="jaso-avatar">
-    <img class="avatar" :src="avatar" :style="avatarStyle" alt="avatar" />
+    <img class="avatar" :src="avatar" :style="avatarStyle" :alt="alt" />
   </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     size: {
       type: Number,
       default: 40,
+    },
+    alt: {
+      type: String,
+      default: '',
     },
   },
   computed: {

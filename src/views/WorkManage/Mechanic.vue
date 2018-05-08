@@ -343,11 +343,7 @@ export default {
       });
     },
     resetForm() {
-      this.price = {
-        date: null,
-      };
-
-      this.$refs.dialogForm.resetFields();
+      // TODO: reset things
     },
     resetDateForm() {
       this.dateInfo = {

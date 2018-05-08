@@ -48,6 +48,26 @@ export function getMaterialLogList(params) {
   });
 }
 
+export function addMaterialLog(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/materialLog/vs/addMaterialLog`, formData, config);
+}
+
+export function deleteMaterialLog(params) {
+  return request.get('api/materialLog/deleteMaterialLog', {
+    params,
+  });
+}
+
 export function getMaterialList(params) {
   return request.get('api/material/vs/getMaterialList', {
     params,

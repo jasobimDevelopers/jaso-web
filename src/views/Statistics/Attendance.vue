@@ -2,8 +2,13 @@
   <div>
     <breadcrumb>
       <el-date-picker
+        v-model="listQuery.date"
         type="month"
-        placeholder="选择月">
+        value-format="yyyy-MM"
+        placeholder="选择月"
+        :clearable="false"
+        @change="getList"
+      >
       </el-date-picker>
     </breadcrumb>
 
@@ -16,17 +21,17 @@
         highlight-current-row
         style="width: 100%"
       >
-        <el-table-column align="center" label="姓名" prop="username" width="100">
+        <el-table-column align="center" label="姓名" prop="userName" width="100">
         </el-table-column>
-        <el-table-column align="center" label="出勤天数" prop="p1">
+        <el-table-column align="center" label="出勤天数" prop="workDays">
         </el-table-column>
-        <el-table-column align="center" label="迟到" prop="p2">
+        <el-table-column align="center" label="迟到" prop="lateNum">
         </el-table-column>
-        <el-table-column align="center" label="早退" prop="p3">
+        <el-table-column align="center" label="早退" prop="leaveEarlyNum">
         </el-table-column>
-        <el-table-column align="center" label="忘打卡" prop="p4">
+        <el-table-column align="center" label="忘打卡" prop="forgetClockNum">
         </el-table-column>
-        <el-table-column align="center" label="缺勤" prop="p5">
+        <el-table-column align="center" label="缺勤" prop="notWorkNum">
         </el-table-column>
       </el-table>
       <!-- /table -->
@@ -35,15 +40,21 @@
 </template>
 
 <script>
+import { zeroFull } from '@/utils/utils';
+import { getAttenceLogList } from '@/api/attendance';
+
 export default {
   name: 'Attendance',
   data() {
     const { params: { id } } = this.$route;
+    const now = new Date();
+    const date = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}`;
 
     return {
       listQuery: {
         pageIndex: -1,
         projectId: id,
+        date,
       },
       listLoading: false,
       list: null,
@@ -55,20 +66,18 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
+      const { projectId, date } = this.listQuery;
+      const dateArr = date.split('-');
 
-      setTimeout(() => {
-        this.list = [
-          {
-            username: '王莉莉',
-            p1: 25,
-            p2: 1,
-            p3: 2,
-            p4: 1,
-            p5: 1,
-          },
-        ];
+      getAttenceLogList({
+        projectId,
+        year: dateArr[0],
+        month: dateArr[1],
+      }).then((res) => {
+        const { data } = res;
+        this.list = data;
         this.listLoading = false;
-      }, 3e3);
+      });
     },
   },
 };

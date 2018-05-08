@@ -234,7 +234,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'quality_question',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Quality/QualityList'),
       name: 'quality_question',
       meta: {
         title: '质量整改单',

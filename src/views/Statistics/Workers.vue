@@ -36,14 +36,15 @@
       </el-table>
       <!-- /table -->
 
-      <el-button type="text" icon="el-icon-download" style="margin-top: 8px">导出用工统计表</el-button>
+      <el-button type="text" icon="el-icon-download" style="margin-top: 8px" @click="handleExport">导出用工统计表</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import { zeroFull } from '@/utils/utils';
-import { getMechanicPriceNum } from '@/api/mechanic';
+import { setFileRoot } from '@/filters';
+import { getMechanicPriceNum, exportMechanicNum } from '@/api/mechanic';
 
 export default {
   name: 'Workers',
@@ -77,6 +78,18 @@ export default {
         const { data } = res;
         this.list = data;
         this.listLoading = false;
+      });
+    },
+    handleExport() {
+      const { projectId, date } = this.listQuery;
+      const dateStr = `${date}-01`;
+      exportMechanicNum({
+        projectId,
+        date: dateStr,
+      }).then((res) => {
+        const { data } = res;
+        const url = setFileRoot(data);
+        window.open(url, '_blank');
       });
     },
   },

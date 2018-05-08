@@ -201,13 +201,14 @@ export default {
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
+          const params = { ...this.mechanic, idCardImg: null };
           if (this.actionStatus === 'add') {
-            addMechanic(this.mechanic).then(() => {
+            addMechanic(params).then(() => {
               this.getList();
               this.dialogFormVisible = false;
             });
           } else {
-            updateMechanic(this.mechanic).then(() => {
+            updateMechanic(params).then(() => {
               this.getList();
               this.dialogFormVisible = false;
             });
