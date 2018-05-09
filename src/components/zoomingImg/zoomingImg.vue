@@ -7,7 +7,7 @@
 import Zooming from 'zooming';
 
 export default {
-  name: 'zoomingImg',
+  name: 'ZoomingImg',
   props: {
     src: String,
   },
