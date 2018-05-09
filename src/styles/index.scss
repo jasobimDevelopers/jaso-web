@@ -79,7 +79,7 @@ body {
     margin: 0 8px;
   }
 
-  .el-icon-edit-outline {
+  .el-icon-edit-outlin, .el-icon-download {
     color: $blue;
 
     @include hoverCursor;

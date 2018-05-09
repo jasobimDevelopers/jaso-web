@@ -1,7 +1,7 @@
 import Avatar from './Avatar';
 import Icon from './Icon';
 import EmptyCard from './EmptyCard';
-import zoomingImg from './zoomingImg';
+import ZoomingImg from './ZoomingImg';
 import EditLine from './EditLine';
 import Breadcrumb from './Breadcrumb';
 
@@ -9,7 +9,7 @@ const components = [
   Avatar,
   Icon,
   EmptyCard,
-  zoomingImg,
+  ZoomingImg,
   EditLine,
   Breadcrumb,
 ];
@@ -24,7 +24,7 @@ export {
   install,
   Icon,
   EmptyCard,
-  zoomingImg,
+  ZoomingImg,
   EditLine,
   Breadcrumb,
 };

@@ -9,6 +9,7 @@
           v-for="item in list"
           :key="item.id"
           :moment="item"
+          :type="0"
         ></moment>
       </div>
 

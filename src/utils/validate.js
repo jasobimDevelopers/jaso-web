@@ -35,6 +35,12 @@ export function validateIDCard(phone) {
   return reg.test(phone);
 }
 
+// 图片
+export function validateImageFile(url) {
+  const reg = /^(gif|jpg|jpeg|png|gif|jpg|png)$/;
+  return reg.test(url);
+}
+
 /**
  * validate email
  * @param email

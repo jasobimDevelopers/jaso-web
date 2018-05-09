@@ -6,8 +6,8 @@
       </el-input>
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('user.realName')" v-model="listQuery.realName">
       </el-input>
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('user.email')" v-model="listQuery.email">
-      </el-input>
+      <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('user.email')" v-model="listQuery.email">
+      </el-input> -->
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('user.tel')" v-model="listQuery.tel">
       </el-input>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
@@ -20,7 +20,6 @@
     <el-table
       :data="list"
       v-loading="listLoading"
-      border
       fit
       highlight-current-row
       style="width: 100%"
@@ -54,8 +53,10 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('table.operation')" width="200">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('btn.edit')}}</el-button>
-          <el-button type="danger" size="mini" @click="handleDelete({ userId: scope.row.id })">{{$t('btn.delete')}}</el-button>
+          <div class="operation-btns">
+            <i class="el-icon-edit-outline" @click="handleUpdate(scope.row)"></i>
+            <i class="el-icon-delete" @click="handleDelete({ userId: scope.row.id })"></i>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -457,6 +458,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .app-container {
+  margin-top: 24px;
   padding-top: 32px;
 }
 

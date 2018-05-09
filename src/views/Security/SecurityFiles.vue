@@ -27,6 +27,7 @@
                 v-if="building"
                 :placeholder="$t('item.buildingNum')"
                 @change="handleFilter"
+                style="margin-left: 15px;"
               >
                 <el-option
                   v-for="(item, i) in building.buildingList"
@@ -63,10 +64,12 @@
         </el-table-column>
         <el-table-column align="center" :label="$t('table.operation')" width="200">
           <template slot-scope="scope">
-            <a :href="scope.row.url" target="_blank" :download="scope.row.originName">
-              <el-button type="primary" size="mini" icon="el-icon-download">{{$t('btn.download')}}</el-button>
-            </a>
-            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id, scope.row.fileId)">{{$t('btn.delete')}}</el-button>
+            <div class="operation-btns">
+              <a :href="scope.row.url | setFileRoot" target="_blank" :download="scope.row.originName">
+                <i class="el-icon-download"></i>
+              </a>
+              <i class="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.fileId)"></i>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -290,4 +293,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  .app-container {
+    padding-top: 24px;
+  }
 </style>

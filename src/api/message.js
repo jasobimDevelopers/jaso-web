@@ -23,11 +23,30 @@ export function addMessage(params) {
 
   for (const key in params) {
     if (params[key] != null) {
-      formData.append(key, params[key]);
+      // file list
+      if (key === 'file') {
+        Array.from(params[key]).forEach((file) => {
+          formData.append(key, file);
+        });
+      } else {
+        formData.append(key, params[key]);
+      }
     }
   }
 
   formData.append('token', getToken());
 
   return axios.post(`${apiRoot}/api/message/admin/addMessage`, formData, config);
+}
+
+export function getMessageListByQualityId(params) {
+  return request.get('api/message/getMessageListByQualityId', {
+    params,
+  });
+}
+
+export function getMessageListByQuestionId(params) {
+  return request.get('api/message/getMessageListByQuestionId', {
+    params,
+  });
 }

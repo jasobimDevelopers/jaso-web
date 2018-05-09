@@ -2,10 +2,10 @@
   <div class="navbar">
     <!-- <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger> -->
     <div class="nav-wrapper flex-sb">
-      <div class="logo-wrapper flex-row">
+      <router-link to="/projectList" class="logo-wrapper flex-row">
         <img src="@/assets/images/logo.png" />
         <div class="company-name">嘉实智慧安装</div>
-      </div>
+      </router-link>
 
       <div class="right-menu flex-row">
         <div class="menu-list flex-row" v-if="userInfo">

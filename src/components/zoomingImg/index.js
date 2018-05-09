@@ -1,7 +1,7 @@
-import zoomingImg from './zoomingImg';
+import ZoomingImg from './ZoomingImg';
 
-zoomingImg.install = function install(Vue) {
-  Vue.component(zoomingImg.name, zoomingImg);
+ZoomingImg.install = function install(Vue) {
+  Vue.component(ZoomingImg.name, ZoomingImg);
 };
 
-export default zoomingImg;
+export default ZoomingImg;

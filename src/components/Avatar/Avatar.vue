@@ -1,5 +1,5 @@
 <template>
-  <div class="jaso-avatar">
+  <div :class="`jaso-avatar ${shape}`">
     <img class="avatar" :src="avatar" :style="avatarStyle" :alt="alt" />
   </div>
 </template>
@@ -15,6 +15,10 @@ export default {
     size: {
       type: Number,
       default: 40,
+    },
+    shape: {
+      type: String,
+      default: 'circle',
     },
     alt: {
       type: String,
@@ -36,7 +40,6 @@ export default {
   .jaso-avatar {
     display: inline-block;
     position: relative;
-    border-radius: 50%;
 
     .avatar {
       display: block;
@@ -44,7 +47,14 @@ export default {
       height: 40px;
       object-fit: cover;
       background: #E5E5E5;
+    }
+
+    &.circle {
       border-radius: 50%;
+
+      .avatar {
+        border-radius: 50%;
+      }
     }
   }
 </style>
