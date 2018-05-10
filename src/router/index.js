@@ -242,7 +242,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'quality_ticket',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Quality/QualityTicket'),
       name: 'quality_ticket',
       meta: {
         title: '质量罚款单',
@@ -256,15 +256,17 @@ export const asyncRouterMap = [
         title: '质量交底',
         roles: ['admin', 'user'],
       },
-    }, {
-      path: 'quality_feedback',
-      component: asyncImport('ProjectManage'),
-      name: 'quality_feedback',
-      meta: {
-        title: '质量整改反馈单',
-        roles: ['admin', 'user'],
-      },
-    }],
+    },
+      // {
+      //   path: 'quality_feedback',
+      //   component: asyncImport('ProjectManage'),
+      //   name: 'quality_feedback',
+      //   meta: {
+      //     title: '质量整改反馈单',
+      //     roles: ['admin', 'user'],
+      //   },
+      // }
+    ],
   },
   {
     path: '/security/:id',
@@ -278,7 +280,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'security_question',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Security/SecurityList'),
       name: 'security_question',
       meta: {
         title: '安全整改单',
@@ -300,15 +302,17 @@ export const asyncRouterMap = [
         title: '安全交底',
         roles: ['admin', 'user'],
       },
-    }, {
-      path: 'question_feedback',
-      component: asyncImport('ProjectManage'),
-      name: 'question_feedback',
-      meta: {
-        title: '安全整改反馈单',
-        roles: ['admin', 'user'],
-      },
-    }],
+    },
+      // {
+      //   path: 'question_feedback',
+      //   component: asyncImport('ProjectManage'),
+      //   name: 'question_feedback',
+      //   meta: {
+      //     title: '安全整改反馈单',
+      //     roles: ['admin', 'user'],
+      //   },
+      // }
+    ],
   },
   {
     path: '/datas/:id',

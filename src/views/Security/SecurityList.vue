@@ -20,7 +20,7 @@
           v-for="item in list"
           :key="item.id"
           :moment="item"
-          :type="0"
+          :type="1"
           @resetAudioList="handleResetAudioList"
         ></moment>
       </div>
@@ -46,7 +46,7 @@
         width="480px"
       >
         <div slot="title" style="font-weight: bolder">
-          新增质量整改单
+          新增安全整改单
         </div>
         <el-form :rules="rules" ref="dialogForm" :model="question" label-position="top">
           <el-form-item label="检查部位：" prop="name">
@@ -106,13 +106,13 @@
 </template>
 
 <script>
-import { getQualityHash, addQuality } from '@/api/quality';
+import { getQuestionHash, addQuestion } from '@/api/security';
 import { getUserList } from '@/api/user';
 import { questionOfPriorityList } from '@/filters';
-import Moment from './components/Moment';
+import Moment from '../Quality/components/Moment';
 
 export default {
-  name: 'QualityList',
+  name: 'SecurityList',
   components: {
     Moment,
   },
@@ -147,10 +147,10 @@ export default {
       dialogFormVisible: false,
       // rules
       rules: {
-        name: [{ required: true, message: `问题名称${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        intro: [{ required: true, message: `问题详情${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        name: [{ required: true, message: `检查部位${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        intro: [{ required: true, message: `存在隐患${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         trades: [{ required: true, message: `整改措施${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        priority: [{ required: true, message: `问题等级${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        priority: [{ required: true, message: `问题程度${this.$t('message.notEmpty')}`, trigger: 'change' }],
       },
     };
   },
@@ -168,7 +168,7 @@ export default {
   },
   methods: {
     getList() {
-      getQualityHash(this.listQuery).then((res) => {
+      getQuestionHash(this.listQuery).then((res) => {
         const { data, page } = res;
         this.list = data;
 
@@ -207,7 +207,7 @@ export default {
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
-          addQuality(this.question).then(() => {
+          addQuestion(this.question).then(() => {
             this.dialogFormVisible = false;
             this.getList();
           });

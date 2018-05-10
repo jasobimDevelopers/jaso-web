@@ -41,6 +41,10 @@
   padding: 0;
 }
 
+.input-with-select .el-input-group__prepend {
+  background-color: #ffffff;
+}
+
 // dialog
 .el-dialog__body {
   padding: 18px 20px;

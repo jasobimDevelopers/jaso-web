@@ -41,6 +41,12 @@ export function validateImageFile(url) {
   return reg.test(url);
 }
 
+// 音频
+export function validateAudioFile(url) {
+  const reg = /^(mp3|wma)$/;
+  return reg.test(url);
+}
+
 /**
  * validate email
  * @param email

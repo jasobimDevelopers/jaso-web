@@ -136,3 +136,6 @@ export const phoneSystemList = ['全部', '苹果系统', '安卓系统'];
 
 // weather
 export const weatherList = ['晴', '小雪', '小雨', '阴', '多云', '浮尘', '雷阵雨', '沙尘暴', '雾', '雾霾', '暴雪', '暴雨', '大雪', '大雨'];
+
+// question ticket
+export const questionTicketTypeList = ['轻度', '中度', '严重'];

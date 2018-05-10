@@ -1,6 +1,8 @@
 <template>
   <div>
-    <breadcrumb></breadcrumb>
+    <breadcrumb>
+      <el-button class="filter-item" type="text" @click="handleAdd">新增交底</el-button>
+    </breadcrumb>
 
      <div class="app-container">
       <!-- filter -->
@@ -46,7 +48,6 @@
       <el-table
         :data="list"
         v-loading="listLoading"
-        border
         fit
         highlight-current-row
         style="width: 100%"
@@ -77,18 +78,15 @@
 
       <!-- pagination -->
       <div class="pagination-container">
-        <div class="flex-sb">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="listQuery.pageIndex"
-            :page-sizes="[5, 10, 20, 40]"
-            :page-size="listQuery.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalNumber">
-          </el-pagination>
-          <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
-        </div>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="listQuery.pageIndex"
+          :page-sizes="[5, 10, 20, 40]"
+          :page-size="listQuery.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
       </div>
       <!-- /pagination -->
 

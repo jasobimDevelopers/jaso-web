@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container user-manage">
     <!-- filter -->
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('user.userName')" v-model="listQuery.userName">
@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('user.file')" width="100">
         <template slot-scope="scope">
-          <img :src="scope.row.userIconUrl | setFileRoot" width="80px" height="80px" />
+          <zooming-img :src="scope.row.userIconUrl | setFileRoot" width="80px" height="80px" />
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('user.userType')">
@@ -455,10 +455,22 @@ export default {
 };
 </script>
 
+<style lang="scss">
+  .user-manage {
+    .el-table .cell {
+      overflow: visible;
+
+      img {
+        object-fit: cover;
+      }
+    }
+  }
+</style>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .app-container {
-  margin-top: 24px;
+  margin: 24px 0;
   padding-top: 32px;
 }
 
