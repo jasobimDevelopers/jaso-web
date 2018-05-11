@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { getQualityFineList, addQualityFine } from '@/api/quality';
+import { getSafeFineList, addSafeFine } from '@/api/security';
 import { questionTicketTypeList } from '@/filters';
 
 export default {
@@ -140,7 +140,7 @@ export default {
     getList() {
       this.listLoading = true;
 
-      getQualityFineList(this.listQuery).then((res) => {
+      getSafeFineList(this.listQuery).then((res) => {
         const { data, totalNumber, totalPage } = res;
         this.list = data;
         this.totalNumber = totalNumber;
@@ -162,7 +162,7 @@ export default {
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
-          addQualityFine(this.question).then(() => {
+          addSafeFine(this.question).then(() => {
             this.dialogFormVisible = false;
             this.getList();
           });

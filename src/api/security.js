@@ -28,3 +28,37 @@ export function addQuestion(params) {
 
   return axios.post(`${apiRoot}/api/question/addQuestion`, formData, config);
 }
+
+export function getSafeFineList(params) {
+  return request.get('api/safeFine/getSafeFineList', {
+    params,
+  });
+}
+
+export function addSafeFine(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/safeFine/addSafeFine`, formData, config);
+}
+
+export function updateQuestionState(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/question/updateQuestionState`, formData, config);
+}

@@ -37,13 +37,13 @@ export function validateIDCard(phone) {
 
 // 图片
 export function validateImageFile(url) {
-  const reg = /^(gif|jpg|jpeg|png|gif|jpg|png)$/;
+  const reg = /^.*?(gif|jpg|jpeg|png|gif|jpg|png)$/;
   return reg.test(url);
 }
 
 // 音频
 export function validateAudioFile(url) {
-  const reg = /^(mp3|wma)$/;
+  const reg = /^.*?(mp3|wma)$/;
   return reg.test(url);
 }
 

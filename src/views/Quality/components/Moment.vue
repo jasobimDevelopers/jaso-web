@@ -9,18 +9,23 @@
         </div>
       </div>
 
-      <div>
+      <div v-if="userInfo.id === moment.userid && moment.state !== 1">
         <el-dropdown>
           <span class="el-dropdown-link">
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>完成</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>
+              <div @click="handleUpdateState">完成</div>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </header>
+
+    <div v-if="moment.state === 1" class="state-wrapper">
+      <svg-icon icon-class="已完成" size="120"></svg-icon>
+    </div>
 
     <div class="content">
       <div class="flex item">
@@ -58,7 +63,7 @@
           <sound-item
             v-for="(item, i) in soundList"
             :key="i"
-            :url="item"
+            :url="item | setFileRoot"
             @resetAudioList="handleResetAudioList"
           ></sound-item>
         </div>
@@ -67,7 +72,7 @@
 
     <div class="flex-end">
       <div :class="['expand-message hover-cursor', { expand }]" @click="handleExpand">
-        {{ expand ? '收起回复' : '展开回复' }}
+        {{ expand ? `收起回复(${moment.messageNum})` : `展开回复(${moment.messageNum})` }}
       </div>
     </div>
     <div v-if="expand" class="message-wrapper">
@@ -105,7 +110,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { addMessage, getMessageListByQualityId, getMessageListByQuestionId } from '@/api/message';
+import { updateQuestionState } from '@/api/security';
+import { updateQualityState } from '@/api/quality';
 import { validateImageFile, validateAudioFile } from '@/utils/validate';
 import { questionOfPriorityList } from '@/filters';
 import MessageTool from './MessageTool';
@@ -126,15 +134,15 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'userInfo',
+    ]),
     imgList() {
       const { fileList } = this.moment;
       let imgList = [];
 
       if (fileList) {
-        imgList = fileList.filter((file) => {
-          const tempArr = file.split('.');
-          return validateImageFile(tempArr[tempArr.length - 1]);
-        });
+        imgList = fileList.filter(file => validateImageFile(file));
       }
 
       return imgList;
@@ -144,10 +152,7 @@ export default {
       let soundList = [];
 
       if (fileList) {
-        soundList = fileList.filter((file) => {
-          const tempArr = file.split('.');
-          return validateAudioFile(tempArr[tempArr.length - 1]);
-        });
+        soundList = fileList.filter(file => validateAudioFile(file));
       }
 
       return soundList;
@@ -189,6 +194,29 @@ export default {
         this.getMessageList();
       }
     },
+    handleUpdateState() {
+      this.$confirm('确定更改整改单状态？', this.$t('message.prompt'), {
+        confirmButtonText: this.$t('btn.comfirm'),
+        cancelButtonText: this.$t('btn.cancel'),
+        type: 'warning',
+      }).then(() => {
+        if (this.type === 0) {
+          updateQualityState({
+            qualityId: this.moment.id,
+            state: 1,
+          }).then(() => {
+            this.$emit('refreshList');
+          });
+        } else {
+          updateQuestionState({
+            questionId: this.moment.id,
+            state: 1,
+          }).then(() => {
+            this.$emit('refreshList');
+          });
+        }
+      }).catch(() => {});
+    },
     handleSendMassage(payload) {
       const { params: { id } } = this.$route;
       const { fileArray, message } = payload;
@@ -200,6 +228,7 @@ export default {
         aboutId: this.moment.id,
         questionType: this.type,
       }).then(() => {
+        this.moment.messageNum += 1;
         this.$refs.messageTool.clearMessage();
         this.getMessageList();
       });
@@ -230,6 +259,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .moment {
+    position: relative;
     padding: 20px 0;
     border-bottom: 1px solid #f6f6f6;
 
@@ -247,6 +277,14 @@ export default {
           font-size: 12px;
         }
       }
+    }
+
+    .state-wrapper {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      transform: rotate(45deg);
+      opacity: 0.6;
     }
 
     .content {

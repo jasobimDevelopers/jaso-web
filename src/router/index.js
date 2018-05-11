@@ -125,7 +125,7 @@ export const asyncRouterMap = [
       component: asyncImport('ProjectManage'),
       name: 'item',
       meta: {
-        title: '构建信息',
+        title: '构件信息',
         roles: ['admin', 'user'],
       },
     }, {
@@ -288,7 +288,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'security_ticket',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Security/SecurityTicket'),
       name: 'security_ticket',
       meta: {
         title: '安全罚款单',

@@ -146,7 +146,7 @@
                 v-for="(item, i) in projectStateList"
                 :key="i"
                 :label="item"
-                :value="i">
+                :value="`${i}`">
               </el-option>
             </el-select>
           </el-form-item>

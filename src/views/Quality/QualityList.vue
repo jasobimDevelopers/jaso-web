@@ -22,6 +22,7 @@
           :moment="item"
           :type="0"
           @resetAudioList="handleResetAudioList"
+          @refreshList="getList"
         ></moment>
       </div>
 
@@ -107,7 +108,7 @@
 
 <script>
 import { getQualityHash, addQuality } from '@/api/quality';
-import { getUserList } from '@/api/user';
+import { getUserTeam } from '@/api/userManage';
 import { questionOfPriorityList } from '@/filters';
 import Moment from './components/Moment';
 
@@ -158,7 +159,7 @@ export default {
     const { params: { id } } = this.$route;
     this.getList();
 
-    getUserList({
+    getUserTeam({
       pageIndex: -1,
       projectId: id,
     }).then((res) => {

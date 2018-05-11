@@ -28,3 +28,37 @@ export function addQuality(params) {
 
   return axios.post(`${apiRoot}/api/quality/addQuality`, formData, config);
 }
+
+export function getQualityFineList(params) {
+  return request.get('api/qualityFine/getQualityFineList', {
+    params,
+  });
+}
+
+export function addQualityFine(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/qualityFine/addQualityFine`, formData, config);
+}
+
+export function updateQualityState(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/quality/updateQualityState`, formData, config);
+}
