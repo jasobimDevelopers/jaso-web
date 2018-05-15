@@ -47,6 +47,36 @@ export function validateAudioFile(url) {
   return reg.test(url);
 }
 
+export function validateExcel(url) {
+  const reg = /^.*?(xls|xlsx)$/;
+  return reg.test(url);
+}
+
+export function validateWord(url) {
+  const reg = /^.*?(doc|docx)$/;
+  return reg.test(url);
+}
+
+export function validatePpt(url) {
+  const reg = /^.*?(ppt|pptx)$/;
+  return reg.test(url);
+}
+
+export function validateVideo(url) {
+  const reg = /^.*?(avi|rmvb|rm|asf|divx|mpg|mpeg|mpe|wmv|mp4|mkv|vob)$/;
+  return reg.test(url);
+}
+
+export function validateCad(url) {
+  const reg = /^.*?(dwt|dwg|dws|dxf)$/;
+  return reg.test(url);
+}
+
+export function validateZip(url) {
+  const reg = /^.*?(rar|zip|arj|z|gz)$/;
+  return reg.test(url);
+}
+
 /**
  * validate email
  * @param email

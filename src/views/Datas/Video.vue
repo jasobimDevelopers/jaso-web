@@ -1,49 +1,21 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button class="filter-item" type="text" @click="handleAdd">新增交底</el-button>
+      <div>
+        <el-input placeholder="请输入内容" v-model="listQuery.originName" @keyup.enter.native="getList"  style="margin-right: 12px; width: 240px">
+          <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
+        </el-input>
+        <el-button class="filter-item" type="text" @click="handleAdd">上传交底</el-button>
+      </div>
     </breadcrumb>
 
     <div class="app-container">
-      <!-- filter -->
-      <div class="filter-container">
-        <div class="filter-wrapper">
-          <el-form ref="filterForm" label-position="right" label-width="100px">
-            <!-- <el-form-item :label="$t('video.professionType')">
-              <el-radio
-                v-model="listQuery.professionType"
-                v-for="(item, i) in teachTypeList"
-                :key="i"
-                :label="i === 0 ? null : (i - 1)"
-                @change="handleFilter"
-              >{{item}}</el-radio>
-            </el-form-item> -->
-            <el-form-item :label="$t('item.buildingNum')">
-              <el-radio
-                v-model="listQuery.buildingNum"
-                :label="null"
-                @change="handleFilter"
-              >{{$t('table.all')}}</el-radio>
-              <el-select
-                v-model="listQuery.buildingNum"
-                v-if="building"
-                :placeholder="$t('item.buildingNum')"
-                @change="handleFilter"
-                style="margin-left: 15px;"
-              >
-                <el-option
-                  v-for="(item, i) in building.buildingList"
-                  :key="i"
-                  :label="`#${item}`"
-                  :value="item">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-      <!-- /filter -->
-
+      <el-tabs v-model="activeGrade" type="card" @tab-click="handleTabClick">
+        <el-tab-pane label="公司级交底" name="0"></el-tab-pane>
+        <el-tab-pane label="项目交底" name="1"></el-tab-pane>
+        <el-tab-pane label="留底资料" name="2"></el-tab-pane>
+        <el-tab-pane label="通用交底" name="3"></el-tab-pane>
+      </el-tabs>
       <!-- table -->
       <el-table
         :data="list"
@@ -95,23 +67,9 @@
         :title="$t('btn.upload')"
         :visible.sync="dialogFormVisible"
         @close="resetForm"
-        width="640px"
+        width="320px"
       >
-        <el-form :rules="rules" ref="dialogForm" :model="video" label-position="right" label-width="120px" style='margin: 0 50px;'>
-          <el-form-item :label="$t('video.professionType')" prop="professionType">
-            <el-select
-              v-model="video.professionType"
-              :placeholder="$t('video.professionType')"
-            >
-              <el-option
-                v-for="(item, i) in teachTypeList"
-                v-if="i !== 0"
-                :key="i"
-                :label="item"
-                :value="i - 1">
-              </el-option>
-            </el-select>
-          </el-form-item>
+        <el-form :rules="rules" ref="dialogForm" :model="video" label-position="top">
           <el-form-item :label="$t('video.videoGrade')" prop="videoGrade">
             <el-select
               v-model="video.videoGrade"
@@ -119,20 +77,6 @@
             >
               <el-option
                 v-for="(item, i) in videoGradeList"
-                v-if="i !== 0"
-                :key="i"
-                :label="item"
-                :value="i">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('video.videoType')" prop="videoType">
-            <el-select
-              v-model="video.videoType"
-              :placeholder="$t('video.videoType')"
-            >
-              <el-option
-                v-for="(item, i) in videoTypes"
                 :key="i"
                 :label="item"
                 :value="i">
@@ -140,7 +84,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('btn.file')" prop="file">
-            <input type="file" @change="handleUpload" multiple :accept="video.videoType === 0 ? '.mp4,.avi' : (video.videoType === 1 ? '.pdf' : '.doc,.docx')" />
+            <input type="file" @change="handleUpload" multiple />
           </el-form-item>
         </el-form>
         <div slot="footer">
@@ -159,7 +103,7 @@ import { getVideoList, deleteVideo, addVideo } from '@/api/video';
 import { teachTypeList, videoTypes, videoGradeList } from '@/filters';
 
 export default {
-  name: 'QualityFiles',
+  name: 'Paper',
   data() {
     const { params: { id } } = this.$route;
     return {
@@ -167,15 +111,14 @@ export default {
         pageIndex: 1,
         pageSize: 10,
         projectId: id,
-        professionType: 0,
-        buildingNum: null,
+        videoGrade: 0,
+        originName: '',
       },
       video: {
         videoGrade: null,
-        professionType: null,
-        videoType: null,
         file: null,
       },
+      activeGrade: '0',
       listLoading: false,
       list: null,
       // page
@@ -191,9 +134,7 @@ export default {
       fileList: [],
       // rules
       rules: {
-        professionType: [{ required: true, message: `${this.$t('video.professionType')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         videoGrade: [{ required: true, message: `${this.$t('video.videoGrade')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        videoType: [{ required: true, message: `${this.$t('video.videoType')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         file: [{ required: true, message: `${this.$t('btn.file')}${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
     };
@@ -220,8 +161,9 @@ export default {
         this.listLoading = false;
       });
     },
-    handleFilter() {
-      this.listQuery.pageIndex = 1;
+    handleTabClick(tab) {
+      const { name } = tab;
+      this.listQuery.videoGrade = name;
       this.getList();
     },
     handleSizeChange(val) {
@@ -268,10 +210,11 @@ export default {
     },
     handleSave() {
       const { params: { id } } = this.$route;
+      const { videoGrade } = this.video;
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
           addVideo({
-            ...this.video,
+            videoGrade,
             fileList: this.fileList,
             projectId: id,
           }).then(() => {

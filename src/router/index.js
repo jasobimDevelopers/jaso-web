@@ -248,14 +248,6 @@ export const asyncRouterMap = [
         title: '质量罚款单',
         roles: ['admin', 'user'],
       },
-    }, {
-      path: 'quality_files',
-      component: asyncImport('Quality/QualityFiles'),
-      name: 'quality_files',
-      meta: {
-        title: '质量交底',
-        roles: ['admin', 'user'],
-      },
     },
       // {
       //   path: 'quality_feedback',
@@ -294,14 +286,6 @@ export const asyncRouterMap = [
         title: '安全罚款单',
         roles: ['admin', 'user'],
       },
-    }, {
-      path: 'security_files',
-      component: asyncImport('Security/SecurityFiles'),
-      name: 'security_files',
-      meta: {
-        title: '安全交底',
-        roles: ['admin', 'user'],
-      },
     },
       // {
       //   path: 'question_feedback',
@@ -330,6 +314,14 @@ export const asyncRouterMap = [
       name: 'file',
       meta: {
         title: '文件',
+        roles: ['admin', 'user'],
+      },
+    }, {
+      path: 'video',
+      component: asyncImport('Datas/Video'),
+      name: 'video',
+      meta: {
+        title: '交底',
         roles: ['admin', 'user'],
       },
     },

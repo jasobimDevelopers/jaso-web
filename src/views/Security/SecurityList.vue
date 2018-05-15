@@ -2,8 +2,8 @@
   <div>
     <breadcrumb>
       <div>
-        <el-input placeholder="请输入内容" v-model="listQuery.content" class="input-with-select" style="margin-right: 15px; width: 340px">
-          <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请选择" style="width: 108px">
+        <el-input placeholder="请输入内容" v-model="listQuery.content" @keyup.enter.native="getList" class="input-with-select" style="margin-right: 12px; width: 344px">
+          <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请选择" style="width: 104px">
             <el-option label="用户姓名" value="0"></el-option>
             <el-option label="问题名称" value="1"></el-option>
             <el-option label="问题详情" value="2"></el-option>
@@ -83,7 +83,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="现场图片：" prop="file">
+          <el-form-item label="现场图片：" prop="fileList">
             <div class="upload-file-wrapper flex-column">
               <div class="flex-row">
                 <el-button type="primary" style="margin-right: 15px;">
@@ -152,6 +152,7 @@ export default {
         intro: [{ required: true, message: `存在隐患${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         trades: [{ required: true, message: `整改措施${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         priority: [{ required: true, message: `问题程度${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        fileList: [{ required: true, message: `现场图片${this.$t('message.notEmpty')}`, trigger: 'change' }],
       },
     };
   },
