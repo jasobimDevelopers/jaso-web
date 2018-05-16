@@ -48,21 +48,13 @@ export function addFolder(params) {
   return axios.post(`${apiRoot}/api/folder/addFolder`, formData, config);
 }
 
-export function deleteFloder(params) {
-  const formData = new FormData();
-
-  for (const key in params) {
-    if (params[key] != null) {
-      formData.append(key, params[key]);
-    }
-  }
-
-  formData.append('token', getToken());
-
-  return axios.post(`${apiRoot}/api/floder/deleteFloder`, formData, config);
+export function deleteFolder(params) {
+  return request.get('api/folder/deleteFolder', {
+    params,
+  });
 }
 
-export function updateFloder(params) {
+export function updateFolder(params) {
   const formData = new FormData();
 
   for (const key in params) {
@@ -73,5 +65,5 @@ export function updateFloder(params) {
 
   formData.append('token', getToken());
 
-  return axios.post(`${apiRoot}/api/floder/updateFloder`, formData, config);
+  return axios.post(`${apiRoot}/api/folder/updateFolder`, formData, config);
 }

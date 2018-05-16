@@ -145,8 +145,6 @@ export default {
     ]),
   },
   created() {
-    const { params: { id } } = this.$route;
-    this.$store.dispatch('getBuildingInfo', { id });
     this.getList();
   },
   methods: {

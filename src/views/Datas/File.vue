@@ -71,7 +71,7 @@
           <template slot-scope="scope">
             <div class="flex-sb">
               <div class="file-info flex-row hover-cursor" @click="handleClickFile(scope.row)">
-                <svg-icon :icon-class="scope.row.fileType === '0' ? '文件夹' : scope.row.name | getFileType"></svg-icon>
+                <svg-icon :icon-class="scope.row.fileType === '0' ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
                 <div class="name">{{ scope.row.name }}</div>
               </div>
 
@@ -118,7 +118,7 @@
             :class="['file-card flex-column-center', { selected: multipleSelectIds.indexOf(item.id) >= 0 }]"
             @click="handleClickFile(item)"
           >
-            <svg-icon :icon-class="item.fileType === '0' ? '文件夹' : item.name | getFileType" size="40"></svg-icon>
+            <svg-icon :icon-class="item.fileType === '0' ? '文件夹' : getFileType(item.name)" size="40"></svg-icon>
             <div class="name">{{ item.name }}</div>
             <div class="select" @click.stop="handleSelectFile(item)">
               <svg-icon icon-class="选中" size="18"></svg-icon>
@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import { getFolderList, addFolder, uploadFolders, deleteFloder, updateFloder } from '@/api/file';
+import { getFolderList, addFolder, uploadFolders, deleteFolder, updateFolder } from '@/api/file';
 import {
   validateImageFile,
   validateVideo,
@@ -283,31 +283,6 @@ export default {
         name: [{ required: true, message: `文件名称${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
     };
-  },
-  filters: {
-    getFileType(name) {
-      const tempArr = name.split('.');
-      const suffix = tempArr[tempArr.length - 1];
-      let fileName = 'otherFile';
-
-      if (validateImageFile(suffix)) {
-        fileName = 'picture';
-      } else if (validateVideo(suffix)) {
-        fileName = 'video';
-      } else if (validateExcel(suffix)) {
-        fileName = 'excel';
-      } else if (validateWord(suffix)) {
-        fileName = 'word';
-      } else if (validatePpt(suffix)) {
-        fileName = 'zip';
-      } else if (validateCad(suffix)) {
-        fileName = 'cad';
-      } else if (validateZip(suffix)) {
-        fileName = 'zip';
-      }
-
-      return fileName;
-    },
   },
   created() {
     this.getList();
@@ -387,6 +362,29 @@ export default {
           });
         }
       });
+    },
+    getFileType(name) {
+      const tempArr = name.split('.');
+      const suffix = tempArr[tempArr.length - 1];
+      let fileName = 'otherFile';
+
+      if (validateImageFile(suffix)) {
+        fileName = 'picture';
+      } else if (validateVideo(suffix)) {
+        fileName = 'video';
+      } else if (validateExcel(suffix)) {
+        fileName = 'excel';
+      } else if (validateWord(suffix)) {
+        fileName = 'word';
+      } else if (validatePpt(suffix)) {
+        fileName = 'zip';
+      } else if (validateCad(suffix)) {
+        fileName = 'cad';
+      } else if (validateZip(suffix)) {
+        fileName = 'zip';
+      }
+
+      return fileName;
     },
     resetFolderForm() {
       this.$refs.dialogFolderForm.resetFields();
@@ -491,7 +489,7 @@ export default {
         cancelButtonText: this.$t('btn.cancel'),
         type: 'warning',
       }).then(() => {
-        deleteFloder({
+        deleteFolder({
           id,
           fileType,
         }).then(() => {
@@ -520,7 +518,7 @@ export default {
     handleSaveName() {
       this.$refs.dialogRenameFolderForm.validate((valid) => {
         if (valid) {
-          updateFloder(this.renameFolder).then(() => {
+          updateFolder(this.renameFolder).then(() => {
             this.getList();
             this.dialogRenameVisible = false;
           });
@@ -608,6 +606,7 @@ export default {
       height: 129px;
       padding-top: 30px;
       margin-right: 10px;
+      margin-bottom: 10px;
       border-radius: 5px;
       border: 1px solid transparent;
 

@@ -24,30 +24,42 @@ export function bytesToSize(bytes) {
 
 // build parse
 export function parseBuildingArr(buildingNum, buildingNumBase) {
-  const perArrCount = 10;
+  // const perArrCount = 10;
   buildingNum = Number(buildingNum);
   buildingNumBase = Number(buildingNumBase);
   const restBuilding = buildingNum - buildingNumBase;
 
   const floorNumArr = [];
+  // 这里是以前每隔perArrCount放一个select的排序
+  // if (buildingNum > 0) {
+  //   if (buildingNumBase > 0) {
+  //     const firstArr = [];
+  //     for (let i = 1; i <= buildingNumBase; i += 1) {
+  //       firstArr.push(-i);
+  //     }
+
+  //     floorNumArr.push(firstArr);
+  //   }
+
+  //   const len = floorNumArr.length;
+  //   for (let i = 0; i < restBuilding; i += 1) {
+  //     const index = len + parseInt(i / perArrCount, 10);
+
+  //     if (!floorNumArr[index]) {
+  //       floorNumArr[index] = [];
+  //     }
+  //     floorNumArr[index].push(i + 1);
+  //   }
+  // }
   if (buildingNum > 0) {
     if (buildingNumBase > 0) {
-      const firstArr = [];
       for (let i = 1; i <= buildingNumBase; i += 1) {
-        firstArr.push(-i);
+        floorNumArr.push(-i);
       }
-
-      floorNumArr.push(firstArr);
     }
 
-    const len = floorNumArr.length;
     for (let i = 0; i < restBuilding; i += 1) {
-      const index = len + parseInt(i / perArrCount, 10);
-
-      if (!floorNumArr[index]) {
-        floorNumArr[index] = [];
-      }
-      floorNumArr[index].push(i + 1);
+      floorNumArr.push(i + 1);
     }
   }
 

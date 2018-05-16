@@ -122,7 +122,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'item',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Project/Item'),
       name: 'item',
       meta: {
         title: '构件信息',
@@ -150,7 +150,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'budget',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Cost/Budget'),
       name: 'budget',
       meta: {
         title: '预算',
@@ -214,7 +214,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'material_plan',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Material/MaterialPlan'),
       name: 'material_plan',
       meta: {
         title: '材料计划',

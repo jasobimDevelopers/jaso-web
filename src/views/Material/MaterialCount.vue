@@ -314,7 +314,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item :label="`${logInfo.logType === 0 ? '入库' : '出库'}数量：`" prop="num">
-            <el-input v-model="logInfo.num" placeholder="请输入数量"></el-input>
+            <el-input-number v-model="logInfo.num" :min="1" label="请输入数量"></el-input-number>
           </el-form-item>
         </el-form>
         <div slot="footer">
