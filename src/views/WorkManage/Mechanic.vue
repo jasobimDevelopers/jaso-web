@@ -34,7 +34,7 @@
             <div class="work-days">
               <div class="work-wrapper" :style="`transform: translateX(-${selectDayIndex * 580}px)`">
                 <div class="edit-cell" v-for="(item, i) in scope.row.list" :key="i">
-                  <input :value="item && item.hour ? item.hour : ''" @blur="handleSaveWork(scope.row, item, i, $event)" />
+                  <input type="number" :value="item && item.hour ? item.hour : ''" @blur="handleSaveWork(scope.row, item, i, $event)" />
                   <span class="content">{{ item && item.hour ? item.hour : '-' }}</span>
                   <span class="tip">编辑</span>
                 </div>

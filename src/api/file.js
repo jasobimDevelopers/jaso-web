@@ -2,8 +2,20 @@ import axios from 'axios';
 import { getToken } from '@/utils/auth';
 import request, { apiRoot, config } from './request';
 
+export function getFolderIndexList(params) {
+  return request.get('api/folder/getFolderIndexList', {
+    params,
+  });
+}
+
 export function getFolderList(params) {
   return request.get('api/folder/getFolderList', {
+    params,
+  });
+}
+
+export function findFileLists(params) {
+  return request.get('api/folder/findFileLists', {
     params,
   });
 }

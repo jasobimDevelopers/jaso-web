@@ -33,8 +33,10 @@
         <div class="flex-row">
           <el-input
             placeholder="请输入内容"
-            @keyup.enter.native="getList"
-            v-model="listQuery.name">
+            v-model="listQuery.name"
+            @keyup.enter.native="getSearchList"
+            @clear="handleClearSearch"
+            clearable>
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <!-- <div class="btn-item">
@@ -61,7 +63,7 @@
         highlight-current-row
         style="margin-top: 18px;width: 100%"
         @selection-change="handleSelectionChange"
-        v-show="showType === 'list'"
+        v-show="actionStatus === 'list' && showType === 'list'"
       >
         <el-table-column
           type="selection"
@@ -71,7 +73,7 @@
           <template slot-scope="scope">
             <div class="flex-sb">
               <div class="file-info flex-row hover-cursor" @click="handleClickFile(scope.row)">
-                <svg-icon :icon-class="scope.row.fileType === '0' ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
+                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
                 <div class="name">{{ scope.row.name }}</div>
               </div>
 
@@ -104,21 +106,74 @@
       </el-table>
       <!-- /table -->
 
-      <div v-show="showType !== 'list'" class="file-list">
+      <!-- search list -->
+      <el-table
+        ref="multipleSearchTable"
+        :data="searchList"
+        v-loading="listLoading"
+        fit
+        highlight-current-row
+        style="margin-top: 18px;width: 100%"
+        @selection-change="handleSelectionChange"
+        v-show="actionStatus === 'search' && showType === 'list'"
+      >
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column align="left" label="文件名" prop="name" width="480">
+          <template slot-scope="scope">
+            <div class="flex-sb">
+              <div class="file-info flex-row hover-cursor" @click="handleClickFile(scope.row)">
+                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
+                <div class="name">{{ scope.row.name }}</div>
+              </div>
+
+              <div class="file-action">
+                <el-button type="text" @click="handleDownload(scope.row)">下载</el-button>
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    更多
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <div @click="handleRename(scope.row)">重命名</div>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <div @click="handleRemove(scope.row)">移动到</div>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <div @click="handleDelete(scope.row)">删除</div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="大小" prop="size">
+        </el-table-column>
+        <el-table-column align="center" label="修改日期" prop="uploadDate">
+        </el-table-column>
+      </el-table>
+      <!-- /search list -->
+
+      <div v-show=" showType !== 'list'" class="file-list">
         <header>
           <el-checkbox
             :indeterminate="isIndeterminate"
             v-model="checkAll"
             @change="handleCheckAllChange"
+            :disabled="actionStatus === 'list' ? list.length === 0 : searchList.length === 0"
           >全选</el-checkbox>
         </header>
         <div class="file-card-list">
           <div
-            v-for="(item, i) in list" :key="i"
+            v-for="(item, i) in (actionStatus === 'list' ? list : searchList)" :key="i"
             :class="['file-card flex-column-center', { selected: multipleSelectIds.indexOf(item.id) >= 0 }]"
             @click="handleClickFile(item)"
           >
-            <svg-icon :icon-class="item.fileType === '0' ? '文件夹' : getFileType(item.name)" size="40"></svg-icon>
+            <svg-icon :icon-class="item.fileType === 0 ? '文件夹' : getFileType(item.name)" size="40"></svg-icon>
             <div class="name">{{ item.name }}</div>
             <div class="select" @click.stop="handleSelectFile(item)">
               <svg-icon icon-class="选中" size="18"></svg-icon>
@@ -228,7 +283,15 @@
 </template>
 
 <script>
-import { getFolderList, addFolder, uploadFolders, deleteFolder, updateFolder } from '@/api/file';
+import {
+  getFolderIndexList,
+  // getFolderList,
+  findFileLists,
+  addFolder,
+  uploadFolders,
+  deleteFolder,
+  updateFolder,
+} from '@/api/file';
 import {
   validateImageFile,
   validateVideo,
@@ -247,6 +310,7 @@ export default {
     return {
       listQuery: {
         projectId: id,
+        name: '',
       },
       folder: {
         name: '',
@@ -254,11 +318,15 @@ export default {
       renameFolder: {
         name: '',
       },
+      // action status list or search
+      actionStatus: 'list',
       removeFolder: null,
       removeSelectNode: null,
       showType: 'list',
       listLoading: false,
-      list: null,
+      // list
+      searchList: [],
+      list: [],
       checkAll: false,
       isIndeterminate: false,
       // upload file list
@@ -291,11 +359,34 @@ export default {
     getList() {
       this.listLoading = true;
 
-      getFolderList(this.listQuery).then((res) => {
+      getFolderIndexList({
+        projectId: this.listQuery.projectId,
+        pid: this.currentPid,
+      }).then((res) => {
         const { data } = res;
         this.list = data;
         this.listLoading = false;
       });
+    },
+    getSearchList() {
+      const { name } = this.listQuery;
+
+      if (name.trim() === '') {
+        return;
+      }
+
+      this.listLoading = true;
+      this.actionStatus = 'search';
+
+      findFileLists(this.listQuery).then((res) => {
+        const { data } = res;
+        this.list = data;
+        this.listLoading = false;
+      });
+    },
+    handleClearSearch() {
+      this.searchList = [];
+      this.actionStatus = 'list';
     },
     handleSelectionChange(list) {
       const multipleSelectIds = [];
@@ -315,9 +406,11 @@ export default {
       if (val) {
         this.list.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row, true);
+          this.$refs.multipleSearchTable.toggleRowSelection(row, true);
         });
       } else {
         this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleSearchTable.clearSelection();
       }
     },
     toggleShowType() {
@@ -327,6 +420,7 @@ export default {
         if (this.showType === 'list') {
           // should refresh table layout here
           this.$refs.multipleTable.doLayout();
+          this.$refs.multipleSearchTable.doLayout();
         }
       });
     },
@@ -342,8 +436,10 @@ export default {
 
       // clear first
       this.$refs.multipleTable.clearSelection();
+      this.$refs.multipleSearchTable.clearSelection();
       multipleSelection.forEach((row) => {
         this.$refs.multipleTable.toggleRowSelection(row, true);
+        this.$refs.multipleSearchTable.toggleRowSelection(row, true);
       });
     },
     handleSaveFolder() {
@@ -474,7 +570,7 @@ export default {
       const { id, fileType } = file;
 
       // if it's folder type
-      if (fileType === '0') {
+      if (fileType === 0) {
         this.currentPid = id;
         this.getList();
       } else {
@@ -546,6 +642,11 @@ export default {
       }
 
       console.log('remove~');
+    },
+    handleSearch() {
+      findFileLists().then((res) => {
+        console.log('res', res);
+      });
     },
     handleDownloadSelects() {},
     handleDownload() {},
