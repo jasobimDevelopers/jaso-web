@@ -59,7 +59,7 @@
           从Excel文件导入
         </div>
         <div class="import-info">
-          <section>提示：从Excel文件导入必须按照标准格式，点击<a :href="downloadPath | setFileRoot" target="__blank">下载标准格式文档</a>下载。或者
+          <section>提示：从Excel文件导入必须按照标准格式，点击<a :href="downloadPath | setFileRoot" target="_blank">下载标准格式文档</a>下载。或者
             <a class="file-wrapper" @click="handleImport">
               <span>从本地导入</span>
               <input type="file" accept=".xls,.xlsx,.csv" ref="importInput" @change="handleImportFile($event)" />

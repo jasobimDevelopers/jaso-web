@@ -3,7 +3,7 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-breadcrumb-item v-if="downloadLink !== ''">
-          <a :href="downloadLink | setFileRoot" target="__blank" style="color: #606266; font-weight: normal">下载</a>
+          <a :href="downloadLink | setFileRoot" target="_blank" style="color: #606266; font-weight: normal">下载</a>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <el-button type="text" @click="handleAdd">新增产值</el-button>

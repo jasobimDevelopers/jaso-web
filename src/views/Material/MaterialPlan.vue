@@ -3,7 +3,7 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-date-picker
-          v-model="listQuery.date"
+          v-model="listQuery.dates"
           type="month"
           value-format="yyyy-MM"
           placeholder="选择月"
@@ -125,23 +125,25 @@
       <!-- import dialog -->
       <el-dialog
         :visible.sync="dialogFormVisible"
+        @close="resetForm"
         width="420px"
       >
         <div slot="title" style="font-weight: bolder">
           新增材料计划
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="model" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="plan" label-position="top">
           <el-form-item label="合约期限：" prop="date">
             <el-date-picker
-              v-model="model.date"
+              v-model="plan.date"
               type="daterange"
+              value-format="yyyy-MM-dd"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="分项名称：" prop="name">
-            <el-input v-model="model.name" placeholder="请输入分项名称"></el-input>
+            <el-input v-model="plan.name" placeholder="请输入分项名称"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer">
@@ -155,6 +157,7 @@
 </template>
 
 <script>
+import { getMaterialPlanList, addMaterialPlan } from '@/api/material';
 import { zeroFull } from '@/utils/utils';
 
 export default {
@@ -162,15 +165,15 @@ export default {
   data() {
     const { params: { id } } = this.$route;
     const now = new Date();
-    const date = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}`;
+    const dates = `${now.getFullYear()}-${zeroFull(now.getMonth() + 1)}`;
 
     return {
       listQuery: {
         pageIndex: -1,
         projectId: id,
-        date,
+        dates,
       },
-      model: {
+      plan: {
         date: '',
         name: '',
       },
@@ -196,6 +199,13 @@ export default {
     getList() {
       this.listLoading = true;
 
+      getMaterialPlanList({
+        ...this.listQuery,
+        dates: `${this.listQuery.dates}-01`,
+      }).then((res) => {
+        console.log('res', res);
+      });
+
       setTimeout(() => {
         this.list = [{
         }];
@@ -206,7 +216,27 @@ export default {
       this.selectDayIndex = 0;
       this.getList();
     },
-    handleSave() {},
+    handleSave() {
+      this.$refs.dialogForm.validate((valid) => {
+        if (valid) {
+          const { date, name } = this.plan;
+
+          addMaterialPlan({
+            projectId: this.listQuery.projectId,
+            name,
+            startTime: date[0],
+            endTime: date[1],
+          }).then(() => {
+            this.getList();
+
+            this.dialogFormVisible = false;
+          });
+        }
+      });
+    },
+    resetForm() {
+      this.$refs.dialogForm.resetFields();
+    },
   },
 };
 </script>

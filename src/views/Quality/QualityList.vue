@@ -57,7 +57,7 @@
             <el-input type="textarea" v-model="question.intro" placeholder="请输入存在的隐患"></el-input>
           </el-form-item>
           <el-form-item label="整改措施：" prop="trades">
-            <el-input type="textarea" v-model="question.intro" placeholder="请输入要求整改措施"></el-input>
+            <el-input type="textarea" v-model="question.trades" placeholder="请输入要求整改措施"></el-input>
           </el-form-item>
           <el-form-item label="问题程度：" prop="priority">
             <el-select

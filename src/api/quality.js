@@ -14,9 +14,9 @@ export function addQuality(params) {
   for (const key in params) {
     if (params[key] != null) {
       // file list
-      if (key === 'file') {
+      if (key === 'fileList') {
         Array.from(params[key]).forEach((file) => {
-          formData.append(key, file);
+          formData.append('file', file);
         });
       } else {
         formData.append(key, params[key]);
@@ -39,7 +39,12 @@ export function addQualityFine(params) {
   const formData = new FormData();
 
   for (const key in params) {
-    if (params[key] != null) {
+    // file list
+    if (key === 'fileList') {
+      Array.from(params[key]).forEach((file) => {
+        formData.append('files', file);
+      });
+    } else {
       formData.append(key, params[key]);
     }
   }

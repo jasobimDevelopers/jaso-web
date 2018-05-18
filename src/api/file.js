@@ -1,4 +1,5 @@
 import axios from 'axios';
+import querystring from 'querystring';
 import { getToken } from '@/utils/auth';
 import request, { apiRoot, config } from './request';
 
@@ -18,6 +19,15 @@ export function findFileLists(params) {
   return request.get('api/folder/findFileLists', {
     params,
   });
+}
+
+export function batchDownload(params) {
+  params.token = getToken();
+  const ps = querystring.stringify(params);
+  window.open(`${apiRoot}/api/folder/batchDownload?${ps}`, '_blank');
+  // request.get('api/folder/batchDownload', {
+  //   params,
+  // });
 }
 
 export function uploadFolders(params, cb) {
@@ -78,4 +88,18 @@ export function updateFolder(params) {
   formData.append('token', getToken());
 
   return axios.post(`${apiRoot}/api/folder/updateFolder`, formData, config);
+}
+
+export function takeFolderTo(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/folder/takeFolderTo`, formData, config);
 }

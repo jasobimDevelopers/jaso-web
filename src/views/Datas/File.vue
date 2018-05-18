@@ -53,6 +53,25 @@
         </div>
       </div>
 
+      <!-- file nav -->
+      <div class="file-nav">
+        <span v-if="navList.length === 0">全部文件</span>
+        <div v-else class="flex-row">
+          <div class="nav-back">
+            <el-button type="text" @click="handleBackNav">返回上一级</el-button>
+          </div>
+          <div class="nav-list">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item><el-button type="text" @click="handleBackToAll">全部文件</el-button></el-breadcrumb-item>
+              <el-breadcrumb-item v-for="(item, i) in navList" :key="i">
+                <span @click="handleNavFile(item, i)">{{ item.name }}</span>
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
+        </div>
+      </div>
+      <!-- /file nav -->
+
       <!-- file list -->
       <!-- table -->
       <el-table
@@ -61,7 +80,7 @@
         v-loading="listLoading"
         fit
         highlight-current-row
-        style="margin-top: 18px;width: 100%"
+        style="margin-top: 15px;width: 100%"
         @selection-change="handleSelectionChange"
         v-show="actionStatus === 'list' && showType === 'list'"
       >
@@ -78,7 +97,8 @@
               </div>
 
               <div class="file-action">
-                <el-button type="text" @click="handleDownload(scope.row)">下载</el-button>
+                <el-button v-if="scope.row.fileType === 0" type="text" @click="handleDownload(scope.row)">下载</el-button>
+                <a v-else :href="scope.row.url | setFileRoot" target="_blank" :download="`${scope.row.name}`">下载</a>
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     更多
@@ -100,8 +120,11 @@
           </template>
         </el-table-column>
         <el-table-column align="center" label="大小" prop="size">
+          <template v-if="scope.row.fileType === 1" slot-scope="scope">
+            {{ scope.row.size | bytesToSize }}
+          </template>
         </el-table-column>
-        <el-table-column align="center" label="修改日期" prop="uploadDate">
+        <el-table-column align="center" label="创建日期" prop="createDate">
         </el-table-column>
       </el-table>
       <!-- /table -->
@@ -130,7 +153,8 @@
               </div>
 
               <div class="file-action">
-                <el-button type="text" @click="handleDownload(scope.row)">下载</el-button>
+                <el-button v-if="scope.row.fileType === 0" type="text" @click="handleDownload(scope.row)">下载</el-button>
+                <a v-else :href="scope.row.url | setFileRoot" target="_blank" :download="`${scope.row.name}`">下载</a>
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     更多
@@ -152,8 +176,11 @@
           </template>
         </el-table-column>
         <el-table-column align="center" label="大小" prop="size">
+          <template v-if="scope.row.fileType === 1" slot-scope="scope">
+            {{ scope.row.size | bytesToSize }}
+          </template>
         </el-table-column>
-        <el-table-column align="center" label="修改日期" prop="uploadDate">
+        <el-table-column align="center" label="创建日期" prop="createDate">
         </el-table-column>
       </el-table>
       <!-- /search list -->
@@ -195,7 +222,7 @@
         </div>
         <el-form :rules="folderRules" ref="dialogFolderForm" :model="folder" label-position="top">
           <el-form-item label="文件夹名称" prop="name">
-            <el-input v-model="folder.name"></el-input>
+            <el-input @keyup.enter.native="handleSaveFolder" v-model="folder.name"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer">
@@ -246,7 +273,7 @@
         </div>
         <el-form :rules="folderRules" ref="dialogRenameFolderForm" :model="renameFolder" label-position="top">
           <el-form-item label="文件名称" prop="name">
-            <el-input v-model="renameFolder.name"></el-input>
+            <el-input @keyup.enter.native="handleSaveName" v-model="renameFolder.name"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer">
@@ -264,7 +291,7 @@
         <div slot="title" style="font-weight: bolder">
           移动到
         </div>
-        <el-tree :data="list" :props="treeProps" @node-click="handleNodeClick">
+        <el-tree :data="treeList" :props="treeProps" @node-click="handleNodeClick">
           <div class="custom-tree-node" slot-scope="{ node, data }">
             <div :class="{ selectedNode: (removeSelectNode && removeSelectNode.id === data.id) }">
               <svg-icon icon-class="文件夹"></svg-icon>
@@ -285,12 +312,14 @@
 <script>
 import {
   getFolderIndexList,
-  // getFolderList,
+  getFolderList,
   findFileLists,
   addFolder,
   uploadFolders,
   deleteFolder,
   updateFolder,
+  takeFolderTo,
+  batchDownload,
 } from '@/api/file';
 import {
   validateImageFile,
@@ -327,6 +356,8 @@ export default {
       // list
       searchList: [],
       list: [],
+      navList: [],
+      treeList: [],
       checkAll: false,
       isIndeterminate: false,
       // upload file list
@@ -364,7 +395,7 @@ export default {
         pid: this.currentPid,
       }).then((res) => {
         const { data } = res;
-        this.list = data;
+        this.list = data || [];
         this.listLoading = false;
       });
     },
@@ -380,13 +411,14 @@ export default {
 
       findFileLists(this.listQuery).then((res) => {
         const { data } = res;
-        this.list = data;
+        this.searchList = data || [];
         this.listLoading = false;
       });
     },
     handleClearSearch() {
       this.searchList = [];
       this.actionStatus = 'list';
+      this.getList();
     },
     handleSelectionChange(list) {
       const multipleSelectIds = [];
@@ -567,18 +599,24 @@ export default {
       this.dialogUploadVisible = true;
     },
     handleClickFile(file) {
-      const { id, fileType } = file;
+      const { id, name, fileType } = file;
 
       // if it's folder type
       if (fileType === 0) {
         this.currentPid = id;
+
+        // add the file info to nav list
+        this.navList.push({
+          id,
+          name,
+        });
         this.getList();
       } else {
         // TODO: this.handleDownload();
       }
     },
     handleDelete(file) {
-      const { id, fileType } = file;
+      const { id } = file;
 
       this.$confirm('确定删除该文件?', this.$t('message.prompt'), {
         confirmButtonText: this.$t('btn.comfirm'),
@@ -586,8 +624,7 @@ export default {
         type: 'warning',
       }).then(() => {
         deleteFolder({
-          id,
-          fileType,
+          ids: id,
         }).then(() => {
           this.getList();
         });
@@ -599,7 +636,22 @@ export default {
       });
     },
     handleDeleteSelects() {
-      console.log(this.multipleSelection);
+      this.$confirm('确定删除所选择文件?', this.$t('message.prompt'), {
+        confirmButtonText: this.$t('btn.comfirm'),
+        cancelButtonText: this.$t('btn.cancel'),
+        type: 'warning',
+      }).then(() => {
+        deleteFolder({
+          ids: this.multipleSelectIds.join(','),
+        }).then(() => {
+          this.getList();
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('message.deleteCancel'),
+        });
+      });
     },
     handleRename(file) {
       const { id, name } = file;
@@ -624,6 +676,17 @@ export default {
     handleRemove(file) {
       this.removeFolder = file;
       this.dialogFolderTreeVisible = true;
+
+      getFolderList({
+        projectId: this.listQuery.projectId,
+      }).then((res) => {
+        const { data } = res;
+        this.treeList = [{
+          id: 0,
+          name: '全部文件',
+          children: data,
+        }];
+      });
     },
     resetRenameFolder() {
       this.removeFolder = null;
@@ -641,15 +704,60 @@ export default {
         return;
       }
 
-      console.log('remove~');
-    },
-    handleSearch() {
-      findFileLists().then((res) => {
-        console.log('res', res);
+      const { id } = this.removeSelectNode;
+      takeFolderTo({
+        id: this.removeFolder.id,
+        pid: id,
+      }).then(() => {
+        this.dialogFolderTreeVisible = false;
+        this.getList();
       });
     },
-    handleDownloadSelects() {},
-    handleDownload() {},
+    handleDownloadSelects() {
+      batchDownload({
+        projectId: this.listQuery.projectId,
+        ids: this.multipleSelectIds.join(','),
+        pid: this.currentPid,
+      });
+    },
+    handleDownload(file) {
+      const { id } = file;
+      batchDownload({
+        projectId: this.listQuery.projectId,
+        ids: id,
+        pid: this.currentPid,
+      });
+    },
+    handleBackToAll() {
+      this.navList = [];
+      this.currentPid = 0;
+      this.getList();
+    },
+    handleNavFile(item, index) {
+      const length = this.navList.length;
+      if (index !== (length - 1)) {
+        this.navList.splice(-1, 1);
+        this.currentPid = item.id;
+        this.getList();
+      }
+    },
+    handleBackNav() {
+      const index = this.navList.findIndex(item => item.id === this.currentPid);
+
+      if (index >= 0) {
+        // remove it first
+        this.navList.splice(index, 1);
+
+        if (this.navList.length === 0) {
+          this.currentPid = 0;
+        } else {
+          const id = this.navList[this.navList.length - 1].id;
+          this.currentPid = id;
+        }
+
+        this.getList();
+      }
+    },
   },
 };
 </script>
@@ -667,6 +775,10 @@ export default {
 <style lang="scss" scoped>
   .app-container {
     padding-top: 15px;
+
+    a {
+      color: #409EFF;
+    }
   }
 
   .action-wrapper {
@@ -676,6 +788,19 @@ export default {
 
       &:hover {
         cursor: pointer;
+      }
+    }
+  }
+
+  .file-nav {
+    margin-top: 15px;
+    color: #909399;
+
+    .nav-back {
+      &:after {
+        margin-left: 7px;
+        margin-right: 7px;
+        content: "|";
       }
     }
   }

@@ -121,3 +121,43 @@ export function importMaterial(params) {
 
   return axios.post(`${apiRoot}/api/material/web/importMaterial`, formData, config);
 }
+
+export function getMaterialPlanList(params) {
+  return request.get('api/materialPlan/getMaterialPlanList', {
+    params,
+  });
+}
+
+export function deleteMaterialPlanById(params) {
+  return request.get('api/materialPlan/deleteMaterialPlanById', {
+    params,
+  });
+}
+
+export function addMaterialPlan(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/materialPlan/addMaterialPlan`, formData, config);
+}
+
+export function updateMaterialPlan(params) {
+  const formData = new FormData();
+
+  for (const key in params) {
+    if (params[key] != null) {
+      formData.append(key, params[key]);
+    }
+  }
+
+  formData.append('token', getToken());
+
+  return axios.post(`${apiRoot}/api/materialPlan/updateMaterialPlan`, formData, config);
+}

@@ -2,16 +2,19 @@
   <div id="app">
     <router-view/>
     <grid></grid>
+    <gallery></gallery>
   </div>
 </template>
 
 <script>
 import Grid from '@/components/Grid';
+import Gallery from '@/components/Gallery';
 
 export default {
   name: 'App',
   components: {
     Grid,
+    Gallery,
   },
 };
 </script>
