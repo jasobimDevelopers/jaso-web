@@ -15,6 +15,15 @@
       >
         <el-table-column align="center" label="序号" prop="id" width="100">
         </el-table-column>
+        <el-table-column align="center" label="图片" prop="level">
+          <template slot-scope="scope">
+            <img
+              class="question-img hover-cursor"
+              v-if="scope.row.fileUrls && scope.row.fileUrls.length > 0" :src="scope.row.fileUrls[0] | setFileRoot"
+              @click="handleView(scope.row.fileUrls, $event, 0)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="违章和隐患现象" prop="detail">
         </el-table-column>
         <el-table-column align="center" label="违章和隐患级别" prop="level">
@@ -82,6 +91,18 @@
           <el-form-item label="扣款金额：" prop="forfeit">
             <el-input-number v-model="question.forfeit" :min="1" label="请输入金额"></el-input-number>
           </el-form-item>
+          <el-form-item label="图片：" prop="fileList">
+            <div class="upload-file-wrapper flex-column">
+              <div class="flex-row">
+                <el-button type="primary" style="margin-right: 15px;">
+                <input type="file" ref="picInput" multiple accept="image/*" @change="handleFileChange" />
+                  <span>点击上传</span>
+                </el-button>
+                <span>{{ question.fileList.length > 0 ? `${question.fileList.length}个文件` : '' }}</span>
+              </div>
+              <div style="font-size: 12px;">只能上传jpg/png文件，且不超过500kb</div>
+            </div>
+          </el-form-item>
         </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
@@ -94,8 +115,10 @@
 </template>
 
 <script>
+import PhotoSwipe from 'photoswipe';
+import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 import { getSafeFineList, addSafeFine } from '@/api/security';
-import { questionTicketTypeList } from '@/filters';
+import { questionTicketTypeList, setFileRoot } from '@/filters';
 
 export default {
   name: 'QualityTicket',
@@ -114,6 +137,7 @@ export default {
         forfeit: 0,
         projectId: id,
         level: null,
+        fileList: [],
       },
       questionTicketTypeList,
       listLoading: false,
@@ -159,6 +183,10 @@ export default {
     handleAdd() {
       this.dialogFormVisible = true;
     },
+    handleFileChange(e) {
+      const files = e.target.files;
+      this.question.fileList = files;
+    },
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
@@ -171,6 +199,71 @@ export default {
     },
     resetForm() {
       this.$refs.dialogForm.resetFields();
+    },
+    handleView(pictures, e, i) {
+      e.preventDefault();
+      e.stopPropagation();
+      const pswpElement = document.querySelectorAll('.pswp')[0];
+      const length = document.body.clientWidth;
+
+      const items = pictures.map(p => ({
+        src: setFileRoot(p),
+        w: length,
+        h: length,
+        doGetSlideDimensions: true,
+      }));
+
+      const options = {
+        index: i,
+        shareEl: false,
+        bgOpacity: 0.5,
+      };
+
+      const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUIdefault, items, options);
+
+      function getSlideDimensions(slide) {
+        // make sure we don't keep requesting the image if it doesn't exist etc.
+        if (!slide.doGetSlideDimensions) {
+          return;
+        }
+
+        const img = new Image();
+
+        img.onerror = () => {
+          slide.doGetSlideDimensions = false;
+        };
+
+        img.onload = () => {
+          slide.doGetSlideDimensions = false;
+
+          slide.w = img.naturalWidth;
+          slide.h = img.naturalHeight;
+
+          gallery.invalidateCurrItems();
+          gallery.updateSize(true);
+        };
+
+        img.src = slide.src;
+      }
+
+      gallery.listen('gettingData', (index, slide) => {
+        if (slide.doGetSlideDimensions) {
+          setTimeout(
+            // use setTimeout so that it runs in the event loop
+            () => {
+              getSlideDimensions(slide);
+            }, 300,
+          );
+        }
+      });
+
+      gallery.listen('imageLoadComplete', (index, slide) => {
+        if (slide.doGetSlideDimensions) {
+          getSlideDimensions(slide);
+        }
+      });
+
+      gallery.init();
     },
   },
 };
@@ -190,5 +283,11 @@ export default {
     &-2 {
       color: #F56C6C;
     }
+  }
+
+  .question-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
   }
 </style>

@@ -39,7 +39,12 @@ export function addSafeFine(params) {
   const formData = new FormData();
 
   for (const key in params) {
-    if (params[key] != null) {
+    // file list
+    if (key === 'fileList') {
+      Array.from(params[key]).forEach((file) => {
+        formData.append('files', file);
+      });
+    } else {
       formData.append(key, params[key]);
     }
   }

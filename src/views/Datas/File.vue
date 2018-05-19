@@ -55,18 +55,21 @@
 
       <!-- file nav -->
       <div class="file-nav">
-        <span v-if="navList.length === 0">全部文件</span>
-        <div v-else class="flex-row">
-          <div class="nav-back">
-            <el-button type="text" @click="handleBackNav">返回上一级</el-button>
-          </div>
-          <div class="nav-list">
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item><el-button type="text" @click="handleBackToAll">全部文件</el-button></el-breadcrumb-item>
-              <el-breadcrumb-item v-for="(item, i) in navList" :key="i">
-                <span @click="handleNavFile(item, i)">{{ item.name }}</span>
-              </el-breadcrumb-item>
-            </el-breadcrumb>
+        <span v-if="actionStatus === 'search'">搜索文件</span>
+        <div v-else>
+          <span v-if="navList.length === 0">全部文件</span>
+          <div v-else class="flex-row">
+            <div class="nav-back">
+              <el-button type="text" @click="handleBackNav">返回上一级</el-button>
+            </div>
+            <div class="nav-list">
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item><el-button type="text" @click="handleBackToAll">全部文件</el-button></el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(item, i) in navList" :key="i">
+                  <span @click="handleNavFile(item, i)">{{ item.name }}</span>
+                </el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
           </div>
         </div>
       </div>
@@ -330,6 +333,7 @@ import {
   validateCad,
   validateZip,
 } from '@/utils/validate';
+import { setFileRoot } from '@/filters';
 
 export default {
   name: 'File',
@@ -626,7 +630,11 @@ export default {
         deleteFolder({
           ids: id,
         }).then(() => {
-          this.getList();
+          if (this.actionStatus === 'list') {
+            this.getList();
+          } else {
+            this.getSearchList();
+          }
         });
       }).catch(() => {
         this.$message({
@@ -674,11 +682,13 @@ export default {
       });
     },
     handleRemove(file) {
+      const { id } = file;
       this.removeFolder = file;
       this.dialogFolderTreeVisible = true;
 
       getFolderList({
         projectId: this.listQuery.projectId,
+        id,
       }).then((res) => {
         const { data } = res;
         this.treeList = [{
@@ -721,12 +731,17 @@ export default {
       });
     },
     handleDownload(file) {
-      const { id } = file;
-      batchDownload({
-        projectId: this.listQuery.projectId,
-        ids: id,
-        pid: this.currentPid,
-      });
+      const { id, fileType, url } = file;
+
+      if (fileType === 0) {
+        batchDownload({
+          projectId: this.listQuery.projectId,
+          ids: id,
+          pid: this.currentPid,
+        });
+      } else {
+        window.open(setFileRoot(url), '_blank');
+      }
     },
     handleBackToAll() {
       this.navList = [];

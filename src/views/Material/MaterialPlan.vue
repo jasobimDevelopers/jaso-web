@@ -31,94 +31,55 @@
       </div>
 
       <div class="table-body">
-        <section class="table-cell flex-sb">
-          <span><i class="el-icon-remove"></i>1 给排水材料及样板房用料</span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span>
-            <el-dropdown>
-              <span class="el-dropdown-link">
-                <i class="el-icon-more"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>插入子集栏目</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </span>
-        </section>
-
-        <div class="group-wrapper">
-          <section class="table-cell flex-sb">
-            <span><i class="el-icon-remove"></i>1.1 镀锌钢管</span>
-            <span>DN80</span>
-            <span>国标</span>
-            <span>米</span>
-            <span>120</span>
-            <span>5月15日前</span>
-            <span>工地仓库</span>
-            <span></span>
-            <span>
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  <i class="el-icon-more"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>新增一行</el-dropdown-item>
-                  <el-dropdown-item>删除</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </span>
-          </section>
-
-          <section class="table-cell flex-sb">
-            <span></span>
-            <span>DN80</span>
-            <span>国标</span>
-            <span>米</span>
-            <span>120</span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span>
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  <i class="el-icon-more"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>删除</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </span>
-          </section>
-        </div>
-
-        <div class="table-cell edit-wrapper flex-sb">
-          <span><el-input v-model="editInfo.name" placeholder="请输入材料名称" style="width: 150px"></el-input></span>
-          <span><el-input v-model="editInfo.name" placeholder="型号规格" style="width: 78px"></el-input></span>
-          <span><el-input v-model="editInfo.name" placeholder="质量标准" style="width: 78px"></el-input></span>
-          <span><el-input v-model="editInfo.name" placeholder="单位" style="width: 58px"></el-input></span>
-          <span><el-input v-model="editInfo.name" placeholder="数量" style="width: 58px"></el-input></span>
-          <span>
-            <el-date-picker
-              v-model="editInfo.name"
-              type="date"
-              placeholder="日期"
-              style="width: 78px"
+        <!-- 比较好的方式是把table-tree-node放到全局组建里面，自己调用自己来递归，这样来达到树状结构 -->
+        <!-- 第一级 -->
+        <table-tree-node
+          v-for="item in list"
+          :key="item.id"
+          :node="item"
+          :level="0"
+          @insert="handleInsert"
+          @delete="handleDelete"
+        >
+          <div v-if="item.children && item.children.length > 0" class="table-children">
+            <!-- 第二级 -->
+            <table-tree-node
+              v-for="item2 in item.children"
+              :key="item2.id"
+              :node="item2"
+              :level="1"
+              @insert="handleInsert"
+              @delete="handleDelete"
             >
-            </el-date-picker>
-          </span>
-          <span><el-input v-model="editInfo.name" placeholder="卸货地点" style="width: 78px"></el-input></span>
-          <span><el-input v-model="editInfo.name" placeholder="用料地点" style="width: 78px"></el-input></span>
-          <span style="font-size: 18px">
-            <i class="el-icon-check hover-cursor"></i>
-            <i class="el-icon-close hover-cursor"></i>
-          </span>
-        </div>
+              <div v-if="item2.children && item2.children.length > 0" class="table-children">
+                <!-- 第三级 -->
+                <table-tree-node
+                  v-for="item3 in item2.children"
+                  :key="item3.id"
+                  :node="item3"
+                  :level="2"
+                  @insert="handleInsert"
+                  @delete="handleDelete"
+                >
+                </table-tree-node>
+              </div>
+
+              <table-edit
+                v-if="addingPlan && currentPid === item2.id"
+                :data="editInfo"
+                @save="handleSaveEditPlan"
+                @clear="handleRemoveEdit"
+              ></table-edit>
+            </table-tree-node>
+          </div>
+
+          <table-edit
+            v-if="addingPlan && currentPid === item.id"
+            :data="editInfo"
+            @save="handleSaveEditPlan"
+            @clear="handleRemoveEdit"
+          ></table-edit>
+        </table-tree-node>
       </div>
       <!-- /table -->
 
@@ -157,11 +118,17 @@
 </template>
 
 <script>
-import { getMaterialPlanList, addMaterialPlan } from '@/api/material';
+import { getMaterialPlanList, addMaterialPlan, deleteMaterialPlanById } from '@/api/material';
 import { zeroFull } from '@/utils/utils';
+import TableTreeNode from './components/TableTreeNode';
+import TableEdit from './components/TableEdit';
 
 export default {
   name: 'MaterialPlan',
+  components: {
+    TableTreeNode,
+    TableEdit,
+  },
   data() {
     const { params: { id } } = this.$route;
     const now = new Date();
@@ -178,11 +145,23 @@ export default {
         name: '',
       },
       editInfo: {
+        pid: 0,
         name: '',
+        model: '',
+        unit: '',
+        standard: '',
+        num: '',
+        getTime: null,
+        outPlace: '',
+        usePlace: '',
       },
+      // pid
+      currentPid: 0,
       listLoading: false,
       list: null,
       dialogFormVisible: false,
+      // add status
+      addingPlan: false,
       // download path
       downloadPath: '',
       // rules
@@ -203,18 +182,51 @@ export default {
         ...this.listQuery,
         dates: `${this.listQuery.dates}-01`,
       }).then((res) => {
-        console.log('res', res);
-      });
+        const { data } = res;
+        this.list = data;
 
-      setTimeout(() => {
-        this.list = [{
-        }];
-      }, 2e3);
+        this.listLoading = false;
+      });
     },
     handleChangeDate() {
       // refresh days index
       this.selectDayIndex = 0;
       this.getList();
+    },
+    handleInsert(id) {
+      this.resetEditInfo();
+
+      this.editInfo.pid = id;
+      this.addingPlan = true;
+      this.currentPid = id;
+    },
+    handleDelete(id) {
+      this.$confirm('此操作将永久删除该计划, 是否继续?', this.$t('message.prompt'), {
+        confirmButtonText: this.$t('btn.comfirm'),
+        cancelButtonText: this.$t('btn.cancel'),
+        type: 'warning',
+      }).then(() => {
+        // delete user
+        deleteMaterialPlanById({
+          id,
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: this.$t('message.deleteOk'),
+          });
+
+          this.getList();
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('message.deleteCancel'),
+        });
+      });
+    },
+    handleRemoveEdit() {
+      this.currentPid = 0;
+      this.addingPlan = false;
     },
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
@@ -224,8 +236,8 @@ export default {
           addMaterialPlan({
             projectId: this.listQuery.projectId,
             name,
-            startTime: date[0],
-            endTime: date[1],
+            start: date[0],
+            end: date[1],
           }).then(() => {
             this.getList();
 
@@ -234,8 +246,42 @@ export default {
         }
       });
     },
+    handleSaveEditPlan() {
+      const { name } = this.editInfo;
+
+      if (name.trim() === '') {
+        this.$message({
+          type: 'info',
+          message: '材料名称不能为空',
+        });
+
+        return;
+      }
+
+      addMaterialPlan({
+        projectId: this.listQuery.projectId,
+        ...this.editInfo,
+      }).then(() => {
+        this.addingPlan = false;
+        this.resetEditInfo();
+        this.getList();
+      });
+    },
     resetForm() {
       this.$refs.dialogForm.resetFields();
+    },
+    resetEditInfo() {
+      this.editInfo = {
+        pid: 0,
+        name: '',
+        model: '',
+        unit: '',
+        standard: '',
+        num: '',
+        getTime: null,
+        outPlace: '',
+        usePlace: '',
+      };
     },
   },
 };
@@ -257,7 +303,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .table-header, .table-cell {
+  .table-header {
     height: 48px;
     color: #909399;
     text-align: center;
@@ -282,19 +328,6 @@ export default {
 
     span:last-child {
       width: 88px;
-    }
-  }
-
-  .table-header {
-    font-weight: bolder;
-  }
-
-  .table-cell {
-    color: #606266;
-
-    .el-icon-more {
-      transform: rotate(90deg);
-      font-size: 24px;
     }
   }
 </style>

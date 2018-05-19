@@ -13,25 +13,29 @@
         highlight-current-row
         :summary-method="getSummaries"
         show-summary
-        style="width: 100%"
+        style="margin-top: 15px; width: 100%"
       >
         <el-table-column align="center" label="序号" prop="id" width="100">
         </el-table-column>
-        <el-table-column align="center" label="项目编码" prop="p1">
+        <el-table-column align="center" label="项目编码" prop="projectCode">
         </el-table-column>
-        <el-table-column align="center" label="项目编码" prop="p2">
+        <el-table-column align="center" label="名称" prop="projectName">
         </el-table-column>
-        <el-table-column align="center" label="项目特征描述" prop="p3" width="200">
+        <el-table-column align="center" label="项目特征描述" prop="projectDescription" width="200">
         </el-table-column>
-        <el-table-column align="center" label="计量单位" prop="p4">
+        <el-table-column align="center" label="计量单位" prop="unit">
         </el-table-column>
-        <el-table-column align="center" label="工程量" prop="p5">
+        <el-table-column align="center" label="工程量" prop="quantity">
         </el-table-column>
-        <el-table-column align="center" label="综合单价" prop="p6">
-        </el-table-column>
-        <el-table-column align="center" label="合价" prop="p7">
-        </el-table-column>
-        <el-table-column align="center" label="暂估价" prop="p8">
+        <el-table-column label="金额（元）">
+          <el-table-column align="center" label="综合单价" prop="onePrice">
+          </el-table-column>
+          <el-table-column align="center" label="合价" prop="priceNum">
+          </el-table-column>
+          <el-table-column label="其中">
+            <el-table-column align="center" label="暂估价" prop="maybePrice">
+          </el-table-column>
+          </el-table-column>
         </el-table-column>
       </el-table>
       <!-- /table -->
@@ -73,6 +77,8 @@
 </template>
 
 <script>
+import { getBudgetList, importBudget } from '@/api/budget';
+
 export default {
   name: 'Budget',
   data() {
@@ -89,7 +95,7 @@ export default {
       list: null,
       dialogImportVisible: false,
       // download path
-      downloadPath: '',
+      downloadPath: 'files/budget/budget_model.xlsx',
     };
   },
   created() {
@@ -99,31 +105,13 @@ export default {
     getList() {
       this.listLoading = true;
 
-      setTimeout(() => {
-        this.list = [{
-          id: 1,
-          p1: '030404017001',
-          p2: '双电源动力配电柜',
-          p3: '1.名称：双电源动力配电柜2.规格：落地，电器配置详见设计系统图3.安装方式：落地安装，柜体垫高20cm4.报价不计端子接线，按实结算5.10#基础槽钢6.配电箱甲供',
-          p4: '台',
-          p5: 20,
-          p6: 388.17,
-          p7: 7763.4,
-          p8: 123.4,
-        }, {
-          id: 2,
-          p1: '030404017002',
-          p2: '双电源照明配电柜',
-          p3: '1.名称：双电源照明配电柜2.规格：落地，电器配置详见设计系统图3.安装方式：落地安装，柜体垫高20cm4.报价不计端子接线，按实结算5.10#基础槽钢6.配电箱甲供',
-          p4: '台',
-          p5: 10,
-          p6: 388.17,
-          p7: 3881.7,
-          p8: 321.4,
-        }];
-
+      getBudgetList(this.listQuery).then((res) => {
+        const { data, totalNumber, totalPage } = res;
+        this.list = data;
+        this.totalNumber = totalNumber;
+        this.totalPage = totalPage;
         this.listLoading = false;
-      }, 2e3);
+      });
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val;
@@ -142,7 +130,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[column.property]));
-        if (!values.every(value => isNaN(value)) && column.property === 'p7') {
+        if (!values.every(value => isNaN(value)) && column.property === 'priceNum') {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr);
             if (!isNaN(value)) {
@@ -162,9 +150,16 @@ export default {
     handleImport() {
       this.$refs.importInput.click();
     },
-    handleImportFile() {
-      // const files = e.target.files;
-      // const file = files[0];
+    handleImportFile(e) {
+      const files = e.target.files;
+      const file = files[0];
+
+      importBudget({
+        projectId: this.listQuery.projectId,
+        file,
+      }).then(() => {
+        this.getList();
+      });
     },
   },
 };
