@@ -500,20 +500,39 @@ export default {
       const suffix = tempArr[tempArr.length - 1];
       let fileName = 'otherFile';
 
-      if (validateImageFile(suffix)) {
-        fileName = 'picture';
-      } else if (validateVideo(suffix)) {
-        fileName = 'video';
-      } else if (validateExcel(suffix)) {
-        fileName = 'excel';
-      } else if (validateWord(suffix)) {
-        fileName = 'word';
-      } else if (validatePpt(suffix)) {
-        fileName = 'zip';
-      } else if (validateCad(suffix)) {
-        fileName = 'cad';
-      } else if (validateZip(suffix)) {
-        fileName = 'zip';
+      switch (true) {
+        case validateImageFile(suffix): {
+          fileName = 'picture';
+          break;
+        }
+        case validateVideo(suffix): {
+          fileName = 'video';
+          break;
+        }
+        case validateExcel(suffix): {
+          fileName = 'excel';
+          break;
+        }
+        case validateWord(suffix): {
+          fileName = 'word';
+          break;
+        }
+        case validatePpt(suffix): {
+          fileName = 'ppt';
+          break;
+        }
+        case validateCad(suffix): {
+          fileName = 'cad';
+          break;
+        }
+        case validateZip(suffix): {
+          fileName = 'zip';
+          break;
+        }
+        default: {
+          fileName = 'otherFile';
+          break;
+        }
       }
 
       return fileName;
