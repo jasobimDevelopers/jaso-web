@@ -54,6 +54,7 @@ module.exports = {
     'no-restricted-syntax': 0,
     // no-lonely-if
     'no-lonely-if': 0,
+    'func-names': 0,
     // allow not code default export
     "import/prefer-default-export": 0,
   }

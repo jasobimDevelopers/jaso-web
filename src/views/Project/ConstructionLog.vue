@@ -337,7 +337,6 @@ export default {
             });
           } else {
             const { id, projectId, content, constructionDate, weather, files } = this.log;
-            console.log('first', this.log, content);
             const params = {
               id,
               projectId,
@@ -358,7 +357,6 @@ export default {
     handleTable(item) {
       this.logTable = item;
       this.dialogTableVisible = true;
-      console.log('item', item);
     },
     resetForm() {
       const { params: { id } } = this.$route;

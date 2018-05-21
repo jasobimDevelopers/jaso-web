@@ -42,7 +42,6 @@ request.interceptors.request.use(
   },
   (error) => {
     // Do something with request error
-    console.log(error); // for debug
     Promise.reject(error);
   },
 );
@@ -60,10 +59,7 @@ request.interceptors.response.use(
 
     return response.data;
   },
-  (error) => {
-    console.log('err', error); // for debug
-    return Promise.reject(error);
-  },
+  error => Promise.reject(error),
 );
 
 request.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

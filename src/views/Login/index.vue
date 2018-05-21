@@ -240,8 +240,6 @@ export default {
           }).catch(() => {
             this.loading = false;
           });
-        } else {
-          console.log('login fail');
         }
       });
     },
@@ -281,8 +279,6 @@ export default {
           }).catch(() => {
             this.loadingRegister = false;
           });
-        } else {
-          console.log('register fail');
         }
       });
     },
