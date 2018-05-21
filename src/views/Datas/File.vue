@@ -95,8 +95,8 @@
           <template slot-scope="scope">
             <div class="flex-sb">
               <div class="file-info flex-row hover-cursor" @click="handleClickFile(scope.row)">
-                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
-                <div class="name">{{ scope.row.name }}</div>
+                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.remark)"></svg-icon>
+                <div class="name">{{ scope.row.remark ? `${scope.row.name}.${scope.row.remark}` : scope.row.name }}</div>
               </div>
 
               <div class="file-action">
@@ -151,7 +151,7 @@
           <template slot-scope="scope">
             <div class="flex-sb">
               <div class="file-info flex-row hover-cursor" @click="handleClickFile(scope.row)">
-                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.name)"></svg-icon>
+                <svg-icon :icon-class="scope.row.fileType === 0 ? '文件夹' : getFileType(scope.row.remark)"></svg-icon>
                 <div class="name">{{ scope.row.name }}</div>
               </div>
 
@@ -203,7 +203,7 @@
             :class="['file-card flex-column-center', { selected: multipleSelectIds.indexOf(item.id) >= 0 }]"
             @click="handleClickFile(item)"
           >
-            <svg-icon :icon-class="item.fileType === 0 ? '文件夹' : getFileType(item.name)" size="40"></svg-icon>
+            <svg-icon :icon-class="item.fileType === 0 ? '文件夹' : getFileType(item.remark)" size="40"></svg-icon>
             <div class="name">{{ item.name }}</div>
             <div class="select" @click.stop="handleSelectFile(item)">
               <svg-icon icon-class="选中" size="18"></svg-icon>
@@ -253,7 +253,7 @@
           </el-table-column>
           <el-table-column align="center" label="进度" prop="name" width="240">
             <template slot-scope="scope">
-              <el-progress :percentage="scope.row.progress" :status="scope.row.status"></el-progress>
+              <el-progress :percentage="parseInt(scope.row.progress)" :status="scope.row.status"></el-progress>
             </template>
           </el-table-column>
           <el-table-column align="center" label="大小" prop="size">
@@ -495,7 +495,7 @@ export default {
         }
       });
     },
-    getFileType(name) {
+    getFileType(name = '') {
       const tempArr = name.split('.');
       const suffix = tempArr[tempArr.length - 1];
       let fileName = 'otherFile';
@@ -551,9 +551,7 @@ export default {
     },
     handleFilesChange(e) {
       const { files } = e.target;
-      const { params: { id } } = this.$route;
       let index = this.fileList.length;
-      const defferList = [];
       const pid = this.currentPid;
 
       const newFiles = Array.from(files).map((file) => {
@@ -578,48 +576,55 @@ export default {
           status: '',
         };
 
-        // here we add the promise obj for deffer list
-        defferList.push(new Promise((resolve, reject) => {
-          uploadFolders({
-            projectId: id,
-            filePath,
-            pid,
-            file,
-          }, (progressEvent) => {
-            const { lengthComputable, loaded, total } = progressEvent;
-
-            if (lengthComputable) {
-              uploadFile.loaded = loaded;
-              uploadFile.progress = loaded / total;
-            }
-          }).then(() => {
-            uploadFile.status = 'success';
-            uploadFile.loaded = size;
-            uploadFile.progress = 100;
-
-            resolve();
-          }).catch(() => {
-            uploadFile.status = 'exception';
-            reject();
-          });
-        }));
-
         return uploadFile;
       });
 
       // refresh list when all changed files uploaded
-      Promise.all(defferList).then(() => {
-        if (pid === this.currentPid) {
-          this.getList();
-        }
-      });
+      // Promise.all(defferList).then(() => {
+      //   if (pid === this.currentPid) {
+      //     this.getList();
+      //   }
+      // });
 
       this.fileList = [
         ...this.fileList,
         ...newFiles,
       ];
 
+      this.runUpload();
       this.dialogUploadVisible = true;
+    },
+    runUpload() {
+      const index = this.fileList.findIndex(file => file.progress !== 100);
+      const { params: { id } } = this.$route;
+
+      if (index >= 0) {
+        const uploadFile = this.fileList[index];
+        const { filePath, pid, file, size } = uploadFile;
+        uploadFolders({
+          projectId: id,
+          filePath,
+          pid,
+          file,
+        }, (progressEvent) => {
+          const { lengthComputable, loaded, total } = progressEvent;
+
+          if (lengthComputable) {
+            uploadFile.loaded = loaded;
+            uploadFile.progress = Number((loaded / total) * 100).toFixed(2);
+          }
+        }).then(() => {
+          uploadFile.status = 'success';
+          uploadFile.loaded = size;
+          uploadFile.progress = 100;
+
+          this.runUpload();
+        }).catch(() => {
+          uploadFile.status = 'exception';
+        });
+      } else {
+        this.getList();
+      }
     },
     handleClickFile(file) {
       const { id, name, fileType } = file;
