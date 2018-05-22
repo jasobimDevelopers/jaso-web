@@ -78,7 +78,7 @@ export function setWeekInfo(week) {
 }
 
 // user role name map
-export const roleList = ['管理员', '普通用户', '投资方', '项目人员/项目负责人'];
+export const roleList = ['管理员', '普通用户', '投资方', '项目人员/项目负责人', '游客'];
 export function setUserRole(userType) {
   return roleList[userType];
 }

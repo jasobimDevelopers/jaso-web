@@ -114,40 +114,42 @@
         </el-form-item>
         <el-form-item :label="$t('user.userType')" prop="userType">
           <el-select v-model="user.userType" :placeholder="$t('user.userType')">
-            <el-option
-              v-for="(item, i) in roleList"
+             <el-option
+              v-for="(item, i) in userTypeList"
               :key="i"
               :label="item"
               :value="i">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('user.systemType')" prop="systemType">
-          <el-select v-model="user.systemType" :placeholder="$t('user.systemType')">
+             </el-option>
+           </el-select>
+         </el-form-item>
+        <el-form-item label="组织架构" prop="departmentId">
+          <el-select v-model="user.departmentId" placeholder="组织架构">
             <el-option
-              v-for="(item, i) in systemTypeList"
-              :key="i"
-              :label="item"
-              :value="i">
+              v-for="item in departmentList"
+              :key="item.id"
+              :label="item.name"
+              :value="`${item.id}`">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('user.teamInformation')" prop="teamInformation">
-          <el-input v-model="user.teamInformation"></el-input>
+        <el-form-item label="职务权限" prop="roleId">
+          <el-select v-model="user.roleId" placeholder="职务权限">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.name"
+              :value="`${item.id}`">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item :label="$t('user.workName')" prop="workName">
-          <el-select v-model="user.workName" :placeholder="$t('user.workName')">
-            <el-option-group
-              v-for="group in workNameList"
-              :key="group.name"
-              :label="group.name">
-              <el-option
-                v-for="item in group.list"
-                :key="item"
-                :label="item"
-                :value="item">
-              </el-option>
-            </el-option-group>
+        <el-form-item label="班组信息" prop="teamId">
+          <el-select v-model="user.teamId" placeholder="班组信息">
+            <el-option
+              v-for="item in teamList"
+              :key="item.id"
+              :label="item.name"
+              :value="`${item.id}`">
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('user.file')" prop="file">
@@ -172,6 +174,10 @@
 
 <script>
 import { getProjectList } from '@/api/projectManage';
+import { getDepartmentList } from '@/api/department';
+import { getRoleList } from '@/api/role';
+import { getUserTeamList } from '@/api/team';
+import { roleList as userTypeList } from '@/filters';
 import {
   getUserList,
   addUser,
@@ -179,8 +185,6 @@ import {
   deleteUser,
 } from '@/api/userManage';
 import { validateEmail, validatePhone } from '@/utils/validate';
-// user type lits
-import { roleList, systemTypeList, workNameList } from '@/filters';
 
 export default {
   name: 'UserManage',
@@ -241,21 +245,23 @@ export default {
         email: '',
         tel: '',
         projectList: [],
-        userType: '',
-        systemType: '',
-        teamInformation: '',
-        workName: '',
         userIconUrl: '',
+        departmentId: '',
+        roleId: '',
+        teamId: '',
         file: null,
+        userType: '',
       },
       // upload file
       uploadFileSrc: null,
+      // list
       list: null,
       listLoading: false,
       projectList: [],
-      roleList,
-      systemTypeList,
-      workNameList,
+      departmentList: [],
+      roleList: [],
+      teamList: [],
+      userTypeList,
       // page
       totalNumber: 0,
       totalPage: 1,
@@ -274,10 +280,11 @@ export default {
         email: [{ required: true, validator: checkEmail, trigger: 'blur' }],
         tel: [{ required: true, type: 'number', validator: checkPhone, trigger: 'blur' }],
         projectList: [{ required: true, message: `${this.$t('user.projectList')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
-        userType: [{ required: true, message: `${this.$t('user.userType')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
-        systemType: [{ required: true, message: `${this.$t('user.systemType')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
-        workName: [{ required: true, message: `${this.$t('user.workName')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        departmentId: [{ required: true, message: `组织架构${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        roleId: [{ required: true, message: `权限管理${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        teamId: [{ required: true, message: `班组信息${this.$t('message.notEmpty')}`, trigger: 'change' }],
         file: [{ required: true, message: `${this.$t('user.file')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
+        userType: [{ required: true, message: `${this.$t('user.userType')}${this.$t('message.notEmpty')}`, trigger: 'change' }],
       },
     };
   },
@@ -291,6 +298,21 @@ export default {
 
       // get user list
       this.getList();
+    });
+
+    getDepartmentList().then((res) => {
+      const { data } = res;
+      this.departmentList = data;
+    });
+
+    getRoleList().then((res) => {
+      const { data } = res;
+      this.roleList = data;
+    });
+
+    getUserTeamList().then((res) => {
+      const { data } = res;
+      this.teamList = data;
     });
   },
   methods: {
