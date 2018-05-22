@@ -11,7 +11,7 @@ import 'photoswipe/dist/photoswipe.css';
 import 'photoswipe/dist/default-skin/default-skin.css';
 
 import Element from 'element-ui';
-import '../theme/index.css';
+// import '../theme/index.css';
 // import 'element-ui/lib/theme-chalk/index.css';
 
 import './styles/index.scss';

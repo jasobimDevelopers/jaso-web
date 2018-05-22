@@ -226,7 +226,7 @@ export default {
 
       getMechanicPriceList(params).then((res) => {
         const { data } = res;
-        this.filterList(data);
+        this.filterList(data || []);
         this.listLoading = false;
       });
     },
