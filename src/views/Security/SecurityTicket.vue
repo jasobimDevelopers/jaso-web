@@ -1,7 +1,7 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button class="filter-item" type="text" icon="el-icon-plus" @click="handleAdd">新增罚款单</el-button>
+      <el-button class="filter-item" type="text" icon="el-icon-plus" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">新增罚款单</el-button>
     </breadcrumb>
 
     <div class="app-container">
@@ -63,7 +63,7 @@
         <div slot="title" style="font-weight: bolder">
           新增罚款单
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="question" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="question" :disabled="disableEdit" label-position="top">
           <el-form-item label="检查日期：" prop="checkDate">
             <el-date-picker
               placeholder="请选择日期"

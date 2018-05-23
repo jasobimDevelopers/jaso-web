@@ -3,9 +3,9 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-breadcrumb-item>
-          <el-button type="text" @click="dialogTypeManageVisible = true">分类管理</el-button>
+          <el-button type="text" v-if="!disableEdit" :disabled="disableEdit" @click="dialogTypeManageVisible = true">分类管理</el-button>
         </el-breadcrumb-item>
-        <el-breadcrumb-item>
+        <el-breadcrumb-item v-if="!disableEdit">
           <el-dropdown>
             <span class="el-dropdown-link">
               新建物资
@@ -61,7 +61,7 @@
               <template slot-scope="scope">
                 <div class="cell-action-wrapper">
                   <div class="num">{{ scope.row.inNum }}</div>
-                  <el-button type="text" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 0})">新增入库</el-button>
+                  <el-button type="text" :disabled="disableEdit" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 0})">新增入库</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -69,7 +69,7 @@
               <template slot-scope="scope">
                 <div class="cell-action-wrapper">
                   <div class="num">{{ scope.row.outNum }}</div>
-                  <el-button type="text" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 1})">新增出库</el-button>
+                  <el-button type="text" :disabled="disableEdit" @click="handleAddLog({materialId: scope.row.id, materialName: scope.row.materialName, logType: 1})">新增出库</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -79,7 +79,7 @@
               <template slot-scope="scope">
                 <div class="operation-btns">
                   <i class="el-icon-edit-outline" @click="handleEdit(scope.row)"></i>
-                  <i class="el-icon-delete" @click="handleDelete({ id: scope.row.id })"></i>
+                  <i class="el-icon-delete" v-if="!disableEdit" @click="handleDelete({ id: scope.row.id })"></i>
                 </div>
               </template>
             </el-table-column>
@@ -119,7 +119,7 @@
             </el-table-column>
             <el-table-column align="center" label="数量" prop="num">
             </el-table-column>
-            <el-table-column align="center" :label="$t('table.operation')">
+            <el-table-column align="center" v-if="!disableEdit" :label="$t('table.operation')">
               <template slot-scope="scope">
                 <div class="operation-btns">
                   <i class="el-icon-delete" @click="handleDeleteLog({ id: scope.row.id, type: 'in' })"></i>
@@ -162,7 +162,7 @@
             </el-table-column>
             <el-table-column align="center" label="数量" prop="num">
             </el-table-column>
-            <el-table-column align="center" :label="$t('table.operation')">
+            <el-table-column align="center" v-if="!disableEdit" :label="$t('table.operation')">
               <template slot-scope="scope">
                 <div class="operation-btns">
                   <i class="el-icon-delete" @click="handleDeleteLog({ id: scope.row.id, type: 'out' })"></i>
@@ -197,7 +197,7 @@
         <div slot="title" style="font-weight: bolder">
           {{ this.actionStatus === 'add' ? '新增物资' : '编辑物资' }}
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="material" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="material" :disabled="disableEdit" label-position="top">
           <el-form-item label="物资名称：" prop="materialName">
             <el-input v-model="material.materialName" placeholder="请输入名称"></el-input>
           </el-form-item>
@@ -226,7 +226,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogMaterialVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
       <!-- /material dialog -->
@@ -288,7 +288,7 @@
           <el-input v-model="editTypeInfo.name" placeholder="请输入物资分类名称"></el-input>
           <div class="flex-row btns-wrapper">
             <el-button type="text" icon="el-icon-close" @click="addingType = null">取消</el-button>
-            <el-button type="text" icon="el-icon-plus" @click="handleSaveType">确定</el-button>
+            <el-button type="text" icon="el-icon-plus" :disabled="disableEdit" @click="handleSaveType">确定</el-button>
           </div>
         </div>
       </el-dialog>
@@ -303,7 +303,7 @@
         <div slot="title" style="font-weight: bolder">
           {{ `新增${logInfo.materialName}${logInfo.logType === 0 ? '入库' : '出库'}` }}
         </div>
-        <el-form :rules="logRules" ref="logForm" :model="logInfo" label-position="top">
+        <el-form :rules="logRules" ref="logForm" :model="logInfo" :disabled="disableEdit" label-position="top">
           <el-form-item label="日期：" prop="date">
             <el-date-picker
               v-model="logInfo.date"
@@ -319,7 +319,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogLogVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSaveLog">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSaveLog">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
       <!-- /type dialog -->

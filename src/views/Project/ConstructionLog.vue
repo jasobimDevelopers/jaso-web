@@ -1,7 +1,7 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button type="text" @click="handleAdd">{{$t('btn.add')}}</el-button>
+      <el-button type="text" @click="handleAdd" v-if="!disableEdit" :disabled="disableEdit">{{$t('btn.add')}}</el-button>
     </breadcrumb>
     <div class="app-container">
 
@@ -76,7 +76,7 @@
         @close="resetForm"
         width="640px"
       >
-        <el-form :rules="rules" ref="dialogForm" :model="log" label-position="right" label-width="120px" style='margin: 0 50px;'>
+        <el-form :rules="rules" ref="dialogForm" :model="log" :disabled="disableEdit" label-position="right" label-width="120px" style='margin: 0 50px;'>
           <el-form-item label="施工日志内容" prop="content">
             <el-input type="textarea" v-model="log.content"></el-input>
           </el-form-item>
@@ -110,7 +110,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
 
@@ -150,7 +150,7 @@
             <template slot-scope="scope">
               <div class="operation-btns">
                 <i class="el-icon-edit-outline" @click="handleUpdate(scope.row)"></i>
-                <i class="el-icon-delete" @click="handleDelete({ id: scope.row.id })"></i>
+                <i class="el-icon-delete" v-if="!disableEdit" @click="handleDelete({ id: scope.row.id })"></i>
               </div>
             </template>
           </el-table-column>

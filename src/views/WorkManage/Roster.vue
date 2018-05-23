@@ -2,7 +2,7 @@
   <div>
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
-        <el-button type="text" @click="handleAdd">添加工人</el-button>
+        <el-button type="text" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">添加工人</el-button>
       </el-breadcrumb>
     </breadcrumb>
 
@@ -27,7 +27,7 @@
           <template slot-scope="scope">
             <div class="operation-btns">
               <i class="el-icon-edit-outline" @click="handleEdit(scope.row)"></i>
-              <i class="el-icon-delete" @click="handleDelete({ id: scope.row.id })"></i>
+              <i class="el-icon-delete" v-if="!disableEdit" @click="handleDelete({ id: scope.row.id })"></i>
             </div>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
         <div slot="title" style="font-weight: bolder">
           {{ this.actionStatus === 'add' ? '添加工人' : '编辑工人' }}
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="mechanic" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="mechanic" :disabled="disableEdit" label-position="top">
           <el-form-item label="姓名：" prop="realName">
             <el-input v-model="mechanic.realName" placeholder="请输入姓名"></el-input>
           </el-form-item>
@@ -79,7 +79,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
       <!-- /dialog -->

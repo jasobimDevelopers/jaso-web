@@ -5,7 +5,7 @@
         <el-input placeholder="请输入内容" v-model="listQuery.originName" @keyup.enter.native="getList"  style="margin-right: 12px; width: 240px">
           <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
         </el-input>
-        <el-button class="filter-item" type="text" @click="handleAdd">上传交底</el-button>
+        <el-button class="filter-item" type="text" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">上传交底</el-button>
       </div>
     </breadcrumb>
 
@@ -41,7 +41,7 @@
               <a :href="scope.row.url | setFileRoot" target="_blank" :download="scope.row.originName">
                 <i class="el-icon-download"></i>
               </a>
-              <i class="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.fileId)"></i>
+              <i class="el-icon-delete" v-if="!disableEdit" @click="handleDelete(scope.row.id, scope.row.fileId)"></i>
             </div>
           </template>
         </el-table-column>

@@ -7,8 +7,8 @@
       <div class="action-wrapper flex-sb">
         <div class="flex-row">
           <el-dropdown style="margin-right: 10px">
-            <el-button type="primary" @click="handleUploadFile">上传</el-button>
-            <el-dropdown-menu slot="dropdown">
+            <el-button type="primary" :disabled="disableEdit" @click="handleUploadFile">上传</el-button>
+            <el-dropdown-menu slot="dropdown" v-if="!disableEdit">
               <el-dropdown-item>
                 <div class="upload-wrapper" @click="handleUploadFile">
                   <div>文件</div>
@@ -23,11 +23,11 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button @click="dialogFolderVisible = true">新建文件夹</el-button>
+          <el-button :disabled="disableEdit" @click="dialogFolderVisible = true">新建文件夹</el-button>
           <el-button :disabled="multipleSelection.length === 0" @click="handleDownloadSelects">下载</el-button>
-          <el-button :disabled="multipleSelection.length === 0" @click="handleDeleteSelects">删除</el-button>
-          <el-button :disabled="multipleSelection.length != 1" @click="handleRename(multipleSelection[0])">重命名</el-button>
-          <el-button :disabled="multipleSelection.length != 1" @click="handleRemove(multipleSelection[0])">移动到</el-button>
+          <el-button :disabled="multipleSelection.length === 0 || disableEdit" @click="handleDeleteSelects">删除</el-button>
+          <el-button :disabled="multipleSelection.length != 1 || disableEdit" @click="handleRename(multipleSelection[0])">重命名</el-button>
+          <el-button :disabled="multipleSelection.length != 1 || disableEdit" @click="handleRemove(multipleSelection[0])">移动到</el-button>
         </div>
 
         <div class="flex-row">
@@ -102,7 +102,7 @@
               <div class="file-action">
                 <el-button v-if="scope.row.fileType === 0" type="text" @click="handleDownload(scope.row)">下载</el-button>
                 <a v-else :href="scope.row.url | setFileRoot" target="_blank" :download="`${scope.row.name}`">下载</a>
-                <el-dropdown>
+                <el-dropdown v-if="!disableEdit">
                   <span class="el-dropdown-link">
                     更多
                   </span>

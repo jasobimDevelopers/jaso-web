@@ -2,16 +2,17 @@
   <div>
     <breadcrumb>
       <el-button v-if="actionStatus === 'view'" type="text" @click="actionStatus = 'edit'">{{$t('btn.edit')}}</el-button>
-      <el-button v-else type="text" style="color: #f56c6c" @click="handleDelete">{{$t('btn.delete')}}</el-button>
+      <el-button v-else-if="!disableEdit" type="text" style="color: #f56c6c" @click="handleDelete" :disabled="disableEdit">{{$t('btn.delete')}}</el-button>
+      <el-button v-else type="text" @click="actionStatus = 'view'">返回</el-button>
     </breadcrumb>
 
     <div class="info-container">
       <div v-if="actionStatus === 'view'" class="view-info">
         <div class="header flex-sb-start">
-          <div class="info-wrapper">
+          <div class="image-wrapper">
             <zooming-img v-if="project.picUrl !== ''" :src="project.picUrl | setFileRoot" />
           </div>
-          <div class="info-wrapper basic-info">
+          <div class="basic-info">
             <!-- <div class="flex-end">
               <el-button type="primary" @click="actionStatus = 'edit'">{{$t('btn.edit')}}</el-button>
             </div> -->
@@ -88,7 +89,7 @@
       </div>
 
       <div v-else>
-        <el-form :rules="rules" ref="projectForm" :model="project" label-position="right" label-width="120px" style='width: 400px; margin-left:50px;'>
+        <el-form :rules="rules" ref="projectForm" :model="project" :disabled="disableEdit" label-position="right" label-width="120px" style='width: 400px; margin-left:50px;'>
           <el-form-item :label="$t('project.name')" prop="name">
             <el-input v-model="project.name"></el-input>
           </el-form-item>
@@ -345,14 +346,18 @@ export default {
 }
 
 .header {
-  img {
-    width: 400px;
-    height: 280px;
-    object-fit: cover;
+  .image-wrapper {
+    img {
+      width: 100%;
+      height: 280px;
+      max-width: 400px;
+      object-fit: cover;
+    }
   }
 
   .basic-info {
-    flex: 1;
+    margin-left: 24px;
+    width: 50%;
     font-size: 14px;
     color: #909399;
     line-height: 36px;

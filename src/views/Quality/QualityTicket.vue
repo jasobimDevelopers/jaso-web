@@ -1,7 +1,7 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button class="filter-item" type="text" icon="el-icon-plus" @click="handleAdd">新增罚款单</el-button>
+      <el-button class="filter-item" type="text" icon="el-icon-plus" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">新增罚款单</el-button>
     </breadcrumb>
 
     <div class="app-container">
@@ -63,7 +63,7 @@
         <div slot="title" style="font-weight: bolder">
           新增罚款单
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="question" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="question" :disabled="disableEdit" label-position="top">
           <el-form-item label="检查日期：" prop="checkDate">
             <el-date-picker
               placeholder="请选择日期"
@@ -115,10 +115,9 @@
 </template>
 
 <script>
-import PhotoSwipe from 'photoswipe';
-import PhotoSwipeUIdefault from 'photoswipe/dist/photoswipe-ui-default';
 import { getQualityFineList, addQualityFine } from '@/api/quality';
-import { questionTicketTypeList, setFileRoot } from '@/filters';
+import { questionTicketTypeList } from '@/filters';
+import { showGallery } from '@/utils/utils';
 
 export default {
   name: 'QualityTicket',
@@ -201,69 +200,7 @@ export default {
       this.$refs.dialogForm.resetFields();
     },
     handleView(pictures, e, i) {
-      e.preventDefault();
-      e.stopPropagation();
-      const pswpElement = document.querySelectorAll('.pswp')[0];
-      const length = document.body.clientWidth;
-
-      const items = pictures.map(p => ({
-        src: setFileRoot(p),
-        w: length,
-        h: length,
-        doGetSlideDimensions: true,
-      }));
-
-      const options = {
-        index: i,
-        shareEl: false,
-        bgOpacity: 0.5,
-      };
-
-      const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUIdefault, items, options);
-
-      function getSlideDimensions(slide) {
-        // make sure we don't keep requesting the image if it doesn't exist etc.
-        if (!slide.doGetSlideDimensions) {
-          return;
-        }
-
-        const img = new Image();
-
-        img.onerror = () => {
-          slide.doGetSlideDimensions = false;
-        };
-
-        img.onload = () => {
-          slide.doGetSlideDimensions = false;
-
-          slide.w = img.naturalWidth;
-          slide.h = img.naturalHeight;
-
-          gallery.invalidateCurrItems();
-          gallery.updateSize(true);
-        };
-
-        img.src = slide.src;
-      }
-
-      gallery.listen('gettingData', (index, slide) => {
-        if (slide.doGetSlideDimensions) {
-          setTimeout(
-            // use setTimeout so that it runs in the event loop
-            () => {
-              getSlideDimensions(slide);
-            }, 300,
-          );
-        }
-      });
-
-      gallery.listen('imageLoadComplete', (index, slide) => {
-        if (slide.doGetSlideDimensions) {
-          getSlideDimensions(slide);
-        }
-      });
-
-      gallery.init();
+      showGallery(pictures, e, i);
     },
   },
 };

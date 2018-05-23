@@ -37,7 +37,14 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('user.file')" width="100">
         <template slot-scope="scope">
-          <zooming-img :src="scope.row.userIconUrl | setFileRoot" width="80px" height="80px" />
+          <img
+            class="hover-cursor"
+            width="80px"
+            height="80px"
+            v-if="scope.row.userIconUrl !== ''"
+            :src="scope.row.userIconUrl | setFileRoot"
+            @click="handleView([scope.row.userIconUrl], $event, 0)"
+          />
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('user.userType')">
@@ -128,7 +135,7 @@
               v-for="item in departmentList"
               :key="item.id"
               :label="item.name"
-              :value="`${item.id}`">
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -138,7 +145,7 @@
               v-for="item in roleList"
               :key="item.id"
               :label="item.name"
-              :value="`${item.id}`">
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -148,7 +155,7 @@
               v-for="item in teamList"
               :key="item.id"
               :label="item.name"
-              :value="`${item.id}`">
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -185,6 +192,7 @@ import {
   deleteUser,
 } from '@/api/userManage';
 import { validateEmail, validatePhone } from '@/utils/validate';
+import { showGallery } from '@/utils/utils';
 
 export default {
   name: 'UserManage',
@@ -382,6 +390,9 @@ export default {
         teamInformation,
         workName,
         userIconUrl,
+        roleId,
+        teamId,
+        departmentId,
       } = user;
 
       this.user = {
@@ -399,6 +410,9 @@ export default {
         file: userIconUrl,
         comfirmPassword: user.password,
         projectList: projectList ? projectList.split(',') : [],
+        roleId,
+        teamId,
+        departmentId,
       };
       this.dialogStatus = 'edit';
       this.dialogFormVisible = true;
@@ -472,6 +486,9 @@ export default {
       this.$refs.fileInput.value = null;
 
       this.$refs.userForm.resetFields();
+    },
+    handleView(pictures, e, i) {
+      showGallery(pictures, e, i);
     },
   },
 };

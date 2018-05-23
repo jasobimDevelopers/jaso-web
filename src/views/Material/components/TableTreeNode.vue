@@ -12,7 +12,7 @@
       <span>{{ node.getTime }}</span>
       <span>{{ node.outPlace }}</span>
       <span>{{ node.usePlace }}</span>
-      <span>
+      <span v-if="!disableEdit">
         <el-dropdown>
           <span class="el-dropdown-link">
             <i class="el-icon-more"></i>

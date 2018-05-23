@@ -12,7 +12,7 @@
         >
         </el-date-picker>
 
-        <el-button type="text" style="margin-left: 32px;" @click="handleAdd">新建记工</el-button>
+        <el-button type="text" style="margin-left: 32px;" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">新建记工</el-button>
       </el-breadcrumb>
     </breadcrumb>
 
@@ -34,9 +34,12 @@
             <div class="work-days">
               <div class="work-wrapper" :style="`transform: translateX(-${selectDayIndex * 580}px)`">
                 <div class="edit-cell" v-for="(item, i) in scope.row.list" :key="i">
-                  <input type="number" :value="item && item.hour ? item.hour : ''" @blur="handleSaveWork(scope.row, item, i, $event)" />
-                  <span class="content">{{ item && item.hour ? item.hour : '-' }}</span>
-                  <span class="tip">编辑</span>
+                  <template v-if="!disableEdit">
+                    <input type="number" :value="item && item.hour ? item.hour : ''" @blur="handleSaveWork(scope.row, item, i, $event)" />
+                    <span class="content">{{ item && item.hour ? item.hour : '-' }}</span>
+                    <span class="tip">编辑</span>
+                  </template>
+                  <span v-else>{{ item && item.hour ? item.hour : '-' }}</span>
                 </div>
               </div>
             </div>

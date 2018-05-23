@@ -19,7 +19,7 @@
         <div class="name">{{ item.name }}</div>
         <div class="user-info">负责人：{{ item.leader }}</div>
       </router-link>
-      <div class="item add-item hover-cursor" @click="addProject">
+      <div class="item add-item hover-cursor" v-if="!disableEdit" @click="addProject">
         <svg-icon icon-class="eye"></svg-icon>
         <div class="action-name">创建新项目</div>
       </div>
@@ -32,7 +32,7 @@
       @close="resetForm"
       width="540px"
     >
-      <el-form :rules="rules" ref="dialogForm" label-position="right" :model="project" label-width="120px" style='width: 440px; margin-left:30px;'>
+      <el-form :rules="rules" ref="dialogForm" label-position="right" :model="project" :disabled="disableEdit" label-width="120px" style='width: 440px; margin-left:30px;'>
         <el-form-item :label="$t('project.name')" prop="name">
           <el-input v-model="project.name"></el-input>
         </el-form-item>
@@ -76,7 +76,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-        <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+        <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
       </div>
     </el-dialog>
     <!-- /dialog -->

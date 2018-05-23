@@ -3,10 +3,12 @@
     <breadcrumb>
       <el-breadcrumb separator-class="el-icon-minus">
         <el-breadcrumb-item v-if="downloadLink !== ''">
-          <a :href="downloadLink | setFileRoot" target="_blank" style="color: #606266; font-weight: normal">下载</a>
+          <a :href="downloadLink | setFileRoot" target="_blank">
+            <el-button type="text" style="color: #606266; font-weight: normal">下载</el-button>
+          </a>
         </el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <el-button type="text" @click="handleAdd">新增产值</el-button>
+        <el-breadcrumb-item v-if="!disableEdit">
+          <el-button type="text" :disabled="disableEdit" @click="handleAdd">新增产值</el-button>
         </el-breadcrumb-item>
       </el-breadcrumb>
     </breadcrumb>
@@ -34,7 +36,7 @@
           <template slot-scope="scope">
             <div class="operation-btns">
               <i class="el-icon-edit-outline" @click="handleEdit(scope.row)"></i>
-              <i class="el-icon-delete" @click="handleDelete({ idList: scope.row.id })"></i>
+              <i class="el-icon-delete" v-if="!disableEdit" @click="handleDelete({ idList: scope.row.id })"></i>
             </div>
           </template>
         </el-table-column>
@@ -50,7 +52,7 @@
         <div slot="title" style="font-weight: bolder">
           {{ this.actionStatus === 'add' ? '新增产值' : '编辑产值' }}
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="output" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="output" :disabled="disableEdit" label-position="top">
           <el-form-item v-if="this.actionStatus === 'add'" label="月份：" prop="month">
             <el-date-picker
               type="month"
@@ -66,7 +68,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
       <!-- /dialog -->

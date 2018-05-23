@@ -10,7 +10,7 @@
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
         </el-input>
-        <el-button class="filter-item" type="text" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button class="filter-item" type="text" icon="el-icon-plus" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">新增</el-button>
       </div>
     </breadcrumb>
 
@@ -98,7 +98,7 @@
         </el-form>
         <div slot="footer">
           <el-button @click="dialogFormVisible = false">{{$t('btn.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
+          <el-button type="primary" :disabled="disableEdit" @click="handleSave">{{$t('btn.comfirm')}}</el-button>
         </div>
       </el-dialog>
       <!-- /dialog -->

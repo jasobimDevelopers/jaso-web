@@ -1,7 +1,7 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button type="text" @click="dialogImportVisible = true">导入预算</el-button>
+      <el-button type="text" :disabled="disableEdit" @click="dialogImportVisible = true">导入预算</el-button>
     </breadcrumb>
 
     <div class="app-container">

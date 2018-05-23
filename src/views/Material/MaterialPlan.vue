@@ -12,7 +12,7 @@
         >
         </el-date-picker>
 
-        <el-button type="text" style="margin-left: 32px;" @click="dialogFormVisible = true">新建计划</el-button>
+        <el-button type="text" style="margin-left: 32px;" v-if="!disableEdit" :disabled="disableEdit" @click="dialogFormVisible = true">新建计划</el-button>
       </el-breadcrumb>
     </breadcrumb>
 
@@ -27,7 +27,7 @@
         <span>供货时间</span>
         <span>卸货地点</span>
         <span>用料地点</span>
-        <span></span>
+        <span v-if="!disableEdit"></span>
       </div>
 
       <div class="table-body">
@@ -92,7 +92,7 @@
         <div slot="title" style="font-weight: bolder">
           新增材料计划
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="plan" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="plan" :disabled="disableEdit" label-position="top">
           <el-form-item label="合约期限：" prop="date">
             <el-date-picker
               v-model="plan.date"

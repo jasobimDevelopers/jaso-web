@@ -10,7 +10,7 @@
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getList"></el-button>
         </el-input>
-        <el-button class="filter-item" type="text" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button class="filter-item" type="text" icon="el-icon-plus" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">新增</el-button>
       </div>
     </breadcrumb>
 
@@ -49,7 +49,7 @@
         <div slot="title" style="font-weight: bolder">
           新增安全整改单
         </div>
-        <el-form :rules="rules" ref="dialogForm" :model="question" label-position="top">
+        <el-form :rules="rules" ref="dialogForm" :model="question" :disabled="disableEdit" label-position="top">
           <el-form-item label="检查部位：" prop="name">
             <el-input v-model="question.name" placeholder="请输入检查部位"></el-input>
           </el-form-item>

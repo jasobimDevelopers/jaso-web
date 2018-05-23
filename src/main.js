@@ -25,6 +25,7 @@ import Icon from './components/Icon';
 import i18n from './lang'; // Internationalization
 import './permission'; // permission control
 import * as filters from './filters'; // global filters
+import readState from './utils/readState';
 
 Vue.config.productionTip = false;
 
@@ -34,6 +35,9 @@ Vue.use(Element, {
 });
 
 Vue.use(Progress);
+
+// read state mixin
+Vue.mixin(readState);
 
 // register components
 install(Vue);
