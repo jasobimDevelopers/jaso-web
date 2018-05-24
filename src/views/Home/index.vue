@@ -30,7 +30,7 @@
 
     <div class="bg-wrapper">
       <section class="section-wrapper data-info flex-sb">
-        <svg-icon icon-class="电脑" size="438"></svg-icon>
+        <svg-icon icon-class="电脑" size="438" class="big-icon"></svg-icon>
 
         <div class="info-wrapper">
           <header class="title">
@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <svg-icon icon-class="插图" size="386"></svg-icon>
+        <svg-icon icon-class="插图" size="386" class="big-icon"></svg-icon>
 
         <div class="flex-sb" style="width: 100%">
           <card iconClass="用户画像" iconSize="60" title="用户管理" content="可管理项目下的所有人员，对他们进行权限等设置。"></card>
@@ -83,7 +83,7 @@
           <div class="content">
             将项目施工过程中生成的所有资料上传于平台，通过信息化的模式永久存储于服务器，不用担心纸质文件的损坏，不再担心本地电脑故障导致文件无法取出。
           </div>
-          <svg-icon icon-class="文件上传" :width="427" :height="130"></svg-icon>
+          <svg-icon icon-class="文件上传" :width="427" :height="130" class="big-icon"></svg-icon>
         </div>
 
         <div class="cards">
@@ -106,7 +106,7 @@
             <div class="content">
               灵活扩展分析能力，开放平台接口，实时访问数据，无缝对接三方系统，实现企业端到端的深度分析需求。
             </div>
-            <svg-icon icon-class="文件上传" :width="559" :height="258"></svg-icon>
+            <svg-icon icon-class="文件上传" :width="559" :height="258" class="big-icon"></svg-icon>
           </div>
         </div>
 
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <svg-icon icon-class="安全" :width="392" :height="342"></svg-icon>
+        <svg-icon icon-class="安全" :width="392" :height="342" class="big-icon"></svg-icon>
       </section>
     </div>
 
@@ -136,9 +136,9 @@
           <div class="title">数据驱动，从现在开始！</div>
           <div class="content">立即注册，和神测数据分析师一起开启数据驱动之旅！</div>
 
-          <svg-icon icon-class="波浪" :width="1200" :height="240" class="mountain"></svg-icon>
+          <svg-icon icon-class="波浪" :width="1200" :height="240" class="mountain big-icon"></svg-icon>
 
-          <svg-icon icon-class="电脑" :width="694" :height="408" class="laptop"></svg-icon>
+          <svg-icon icon-class="电脑" :width="694" :height="408" class="laptop big-icon"></svg-icon>
         </div>
       </div>
 
@@ -372,6 +372,43 @@ export default {
         line-height: 20px;
         text-align: center;
         background: #2F3939;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .home-page {
+      .section-wrapper {
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+
+        .flex-sb {
+          flex-direction: column;
+        }
+
+        .info-wrapper {
+          width: 100% !important;
+        }
+
+        .big-icon {
+          display: none;
+        }
+      }
+
+      .manage-info, .data-info, .file-info, .api-info {
+        flex-direction: column;
+
+        .card {
+          width: 100%;
+          margin-top: 16px;
+        }
+      }
+
+      .header-wrapper {
+        .laboratory {
+          display: none;
+        }
       }
     }
   }
