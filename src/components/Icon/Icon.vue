@@ -1,5 +1,5 @@
 <template>
-  <svg :width="size" :height="size" :class="className">
+  <svg :width="width ? width : size" :height="height ? height : size" :class="className">
     <use :xlink:href="iconName" />
   </svg>
 </template>
@@ -20,6 +20,8 @@ export default {
       type: String,
       default: 'svg-icon',
     },
+    width: Number,
+    height: Number,
   },
   computed: {
     iconName() {

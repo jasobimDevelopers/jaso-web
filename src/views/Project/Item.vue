@@ -1,7 +1,7 @@
 <template>
   <div>
     <breadcrumb>
-      <el-button type="text" icon="el-icon-plus" :disabled="disableEdit" @click="handleAdd">{{$t('btn.add')}}</el-button>
+      <el-button type="text" icon="el-icon-plus" v-if="!disableEdit" :disabled="disableEdit" @click="handleAdd">{{$t('btn.add')}}</el-button>
     </breadcrumb>
     <div class="app-container">
       <!-- filter -->

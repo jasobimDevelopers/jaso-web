@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="61px" height="49px" viewBox="0 0 61 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>用户画像</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="官网首页" transform="translate(-470.000000, -1971.000000)">
+            <g id="3" transform="translate(0.000000, 1297.000000)">
+                <g id="四块" transform="translate(360.000000, 641.000000)">
+                    <g id="1">
+                        <g id="用户画像" transform="translate(110.000000, 33.000000)">
+                            <circle id="Oval-11" fill="#89E5B9" cx="42" cy="19" r="19"></circle>
+                            <path d="M30,33.7984862 C32.0063927,29.2079423 36.5873813,26 41.9176249,26 C47.2478685,26 51.8288571,29.2079423 53.8352498,33.7984862 C50.5759362,36.4266224 46.4305216,38 41.9176249,38 C37.4047282,38 33.2593136,36.4266224 30,33.7984862 Z" id="Combined-Shape" fill="#32C27D"></path>
+                            <circle id="Oval-13" fill="#FFFFFF" cx="42" cy="16" r="7"></circle>
+                            <circle id="Oval-11" fill="#FFFFFF" cx="19" cy="30" r="19"></circle>
+                            <path d="M7,44.7984862 C9.00639275,40.2079423 13.5873813,37 18.9176249,37 C24.2478685,37 28.8288571,40.2079423 30.8352498,44.7984862 C27.5759362,47.4266224 23.4305216,49 18.9176249,49 C14.4047282,49 10.2593136,47.4266224 7,44.7984862 Z" id="Combined-Shape" fill="#89E5B9"></path>
+                            <circle id="Oval-13" fill="#32C27D" cx="19" cy="27" r="7"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="427px" height="134px" viewBox="0 0 427 134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>文件上传</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="官网首页" transform="translate(-396.000000, -2628.000000)">
+            <g id="4" transform="translate(375.000000, 2386.000000)">
+                <g id="文件上传" transform="translate(21.000000, 242.000000)">
+                    <path d="M107.5,68.5 L130.5,68.5" id="Line-7" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M93.5,24.5 L106.5,24.5" id="Line-4" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M106.5,24.5 L106.5,112.505682" id="Line-5" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M106.5,112.5 L93.4615952,112.5" id="Line-6" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2,1,2"></path>
+                    <path d="M262.5,68.5 L280.5,68.5" id="Line-7" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M281.5,24.5 L294.5,24.5" id="Line-4" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M280.5,24.5 L280.5,112.505682" id="Line-5" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2"></path>
+                    <path d="M294.5,112.5 L281.461595,112.5" id="Line-6" stroke="#B9C5CA" stroke-linecap="square" stroke-dasharray="1,2,1,2"></path>
+                    <g id="3" transform="translate(300.000000, 7.000000)">
+                        <g id="3-1" transform="translate(0.000000, 37.000000)">
+                            <rect id="Rectangle-34" fill="#F1F1F2" x="4" y="3" width="95" height="84"></rect>
+                            <rect id="Rectangle-34" stroke="#F2F8F8" fill="#FFFFFF" x="0.5" y="0.5" width="94" height="83"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="57" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="15" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="21" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="26" width="32" height="2"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="13" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="37" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="43" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="48" width="32" height="2"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="35" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="59" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="65" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="70" width="32" height="2"></rect>
+                            <rect id="Rectangle-34" fill="#AAB2B8" x="0" y="0" width="95" height="7"></rect>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="4" cy="4" r="1"></circle>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="7" cy="4" r="1"></circle>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="10" cy="4" r="1"></circle>
+                        </g>
+                        <g id="3-2" transform="translate(28.000000, 0.000000)">
+                            <rect id="Rectangle-34" fill="#F1F1F2" x="4" y="3" width="95" height="84"></rect>
+                            <rect id="Rectangle-34" stroke="#F2F8F8" fill="#FFFFFF" x="0.5" y="0.5" width="94" height="83"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="57" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="15" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="21" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="26" width="32" height="2"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="13" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="37" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="43" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="48" width="32" height="2"></rect>
+                            <rect id="Rectangle-35" fill="#E8EEF0" x="8" y="35" width="18" height="18"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="59" width="20" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="65" width="48" height="2"></rect>
+                            <rect id="Rectangle-36" fill="#E8EEF0" x="32" y="70" width="32" height="2"></rect>
+                            <rect id="Rectangle-34" fill="#AAB2B8" x="0" y="0" width="95" height="7"></rect>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="4" cy="4" r="1"></circle>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="7" cy="4" r="1"></circle>
+                            <circle id="Oval-17" fill="#EFF9FF" cx="10" cy="4" r="1"></circle>
+                        </g>
+                    </g>
+                    <g id="2" transform="translate(145.000000, 6.000000)">
+                        <path d="M81,0 L81,12 L93,12 L93,74 L29,74 L29,0 L81,0 Z" id="Combined-Shape" fill="#14D06F"></path>
+                        <polygon id="Rectangle-33" fill="#11BA63" points="81 0 87 6 93 12 81 12"></polygon>
+                        <rect id="Rectangle-32" fill="#F9FDFB" x="38" y="24" width="45" height="6" rx="3"></rect>
+                        <rect id="Rectangle-32" fill="#F9FDFB" x="38" y="36" width="45" height="6" rx="3"></rect>
+                        <rect id="Rectangle-32" fill="#F9FDFB" x="38" y="48" width="45" height="6" rx="3"></rect>
+                        <path d="M65.6753162,59 L113,59 L113,127 L3,127 L3,59 L3,41 L51,41 L65.6753162,59 Z" id="Combined-Shape" fill="#F0F0F1"></path>
+                        <path d="M62.6753162,54 L110,54 L110,122 L0,122 L0,54 L0,36 L48,36 L62.6753162,54 Z" id="Combined-Shape" fill="#F0F5F8"></path>
+                    </g>
+                    <g id="1">
+                        <path d="M7,5 L79,5 C80.6568542,5 82,6.34314575 82,8 L82,134 L4,134 L4,8 C4,6.34314575 5.34314575,5 7,5 Z" id="Rectangle-24" fill="#F0F0F1"></path>
+                        <path d="M3,0 L75,0 C76.6568542,-3.04359188e-16 78,1.34314575 78,3 L78,129 L0,129 L0,3 C-2.02906125e-16,1.34314575 1.34314575,3.04359188e-16 3,0 Z" id="Rectangle-24" fill="#F1F5F7"></path>
+                        <rect id="Rectangle-27" fill="#DBE5E8" x="9" y="81" width="62" height="26"></rect>
+                        <circle id="Oval-16" fill="#FFFFFF" cx="16" cy="94" r="2"></circle>
+                        <circle id="Oval-16" fill="#FFFFFF" cx="22" cy="94" r="2"></circle>
+                        <rect id="Rectangle-28" fill="#FFFFFF" x="27" y="93" width="10" height="2"></rect>
+                        <rect id="Rectangle-29" fill="#FFFFFF" x="56" y="91" width="4" height="6"></rect>
+                        <rect id="Rectangle-29" fill="#FFFFFF" x="63" y="91" width="4" height="6"></rect>
+                        <rect id="Rectangle-25" fill="#DBE5E8" x="9" y="18" width="62" height="11"></rect>
+                        <rect id="Rectangle-26" fill="#FFBE58" x="51" y="22" width="7" height="3"></rect>
+                        <rect id="Rectangle-26" fill="#14D06F" x="60" y="22" width="7" height="3"></rect>
+                        <rect id="Rectangle-25" fill="#DBE5E8" x="9" y="34" width="62" height="11"></rect>
+                        <rect id="Rectangle-26" fill="#FFBE58" x="51" y="38" width="7" height="3"></rect>
+                        <rect id="Rectangle-26" fill="#14D06F" x="60" y="38" width="7" height="3"></rect>
+                        <rect id="Rectangle-25" fill="#DBE5E8" x="9" y="50" width="62" height="11"></rect>
+                        <rect id="Rectangle-26" fill="#FFBE58" x="51" y="54" width="7" height="3"></rect>
+                        <rect id="Rectangle-26" fill="#14D06F" x="60" y="54" width="7" height="3"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

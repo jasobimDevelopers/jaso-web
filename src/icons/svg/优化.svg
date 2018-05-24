@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="40px" viewBox="0 0 52 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>优化</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="官网首页" transform="translate(-1394.000000, -1978.000000)">
+            <g id="3" transform="translate(0.000000, 1297.000000)">
+                <g id="四块" transform="translate(360.000000, 641.000000)">
+                    <g id="4" transform="translate(920.000000, 0.000000)">
+                        <g id="优化" transform="translate(114.000000, 40.000000)">
+                            <rect id="Rectangle-22" fill="#797FF2" x="4" y="0" width="44" height="40" rx="2"></rect>
+                            <path d="M48,11 L48,37.8447059 C48,38.9492754 47.1045695,39.8447059 46,39.8447059 L6,39.8447059 C4.8954305,39.8447059 4,38.9492754 4,37.8447059 L4,31.3966032 L18.5994221,15.3459195 L33.6687741,25.1414705 L48,11 Z" id="Combined-Shape" fill="#CFD0FB"></path>
+                            <circle id="Oval-15" stroke="#797FF2" fill="#FFFFFF" cx="4" cy="29" r="3.5"></circle>
+                            <circle id="Oval-15" stroke="#797FF2" fill="#FFFFFF" cx="18" cy="17" r="3.5"></circle>
+                            <circle id="Oval-15" stroke="#797FF2" fill="#FFFFFF" cx="34" cy="25" r="3.5"></circle>
+                            <circle id="Oval-15" stroke="#797FF2" fill="#FFFFFF" cx="48" cy="13" r="3.5"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
