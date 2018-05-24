@@ -398,4 +398,15 @@ export default {
     }
   }
 }
+
+@media (max-width: 678px) {
+  .login-wrapper {
+    width: 100%;
+    justify-content: center;
+
+    .left-wrapper {
+      display: none;
+    }
+  }
+}
 </style>
