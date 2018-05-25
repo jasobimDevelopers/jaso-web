@@ -87,9 +87,9 @@
         </div>
 
         <div class="cards">
-          <card direction="line" :contentStyle="contentStyle" iconClass="营销" iconSize="60" title="文件上传" content="文件可一键上传单个或多个文件，支持文件夹上传。"></card>
-          <card direction="line" :contentStyle="contentStyle" iconClass="营销" iconSize="60" title="多埋点方式" content="支持代码埋点，和全（无）埋点，按需选择，灵活组合。"></card>
-          <card direction="line" :contentStyle="contentStyle" iconClass="营销" iconSize="60" title="历史数据导入" content="批量导入历史数据，让分析从有业务的第一天开始。"></card>
+          <card direction="line" :contentStyle="contentStyle" iconClass="上传icon" iconSize="60" title="文件上传" content="文件可一键上传单个或多个文件，支持文件夹上传。"></card>
+          <card direction="line" :contentStyle="contentStyle" iconClass="整理icon" iconSize="60" title="文件整理" content="支上传至平台的文件，还可以通过复制，移动，删除等功能进行整理"></card>
+          <card direction="line" :contentStyle="contentStyle" iconClass="下载icon" iconSize="60" title="文件下载" content="将储存于平台的文件，随时进行打包下载，方便提取。"></card>
         </div>
       </section>
     </div>
@@ -98,22 +98,22 @@
       <section class="section-wrapper api-info flex-column-center">
         <div class="info-wrapper flex-column-center">
           <header class="title">
-            <div>PaaS平台深度开发</div>
-            <div>打破数据孤岛，满足个性化分析诉求</div>
+            <div>将移动端和PC端联合</div>
+            <div>打造无界管理，无论在哪都可以进行项目管理</div>
           </header>
           <div class="line"></div>
           <div class="flex-sb" style="width: 100%">
             <div class="content">
-              灵活扩展分析能力，开放平台接口，实时访问数据，无缝对接三方系统，实现企业端到端的深度分析需求。
+              手机端和电脑端的功能相辅相成，手机端更加侧重日常施工管理，可通过手机进行审批类，资料类的提交与管理，提高日常项目管理效率。
             </div>
-            <svg-icon icon-class="文件上传" :width="559" :height="258" class="big-icon"></svg-icon>
+            <svg-icon icon-class="手机端管理" :width="559" :height="258" class="big-icon"></svg-icon>
           </div>
         </div>
 
         <div class="flex-sb" style="width: 100%">
-          <card direction="line" iconClass="用户画像" iconSize="72" title="扩展分析功能" content="利用SQL引擎，灵活扩展已有分析功能，满足个性化业务需求。"></card>
-          <card direction="line" iconClass="用户画像" iconSize="72" title="三方数据对接" content="全平台API接口开放，满足CRM、BI等三方系统的数据打通。"></card>
-          <card direction="line" iconClass="用户画像" iconSize="72" title="AI的基石" content="重构互联网数据根基，叠加AI算法驱动产品智能。"></card>
+          <card direction="line" iconClass="质量-index" iconSize="72" title="质量管理" content="手机端可以处理项目管理中提交质量、安全类问题，及时进行处理和反馈。"></card>
+          <card direction="line" iconClass="BIM-index" iconSize="72" title="BIM模型管理" content="手机端查看BIM模型，对现场施工提供了技术支持，将模型从办公室电脑搬到项目施工现场。"></card>
+          <card direction="line" iconClass="考勤" iconSize="72" title="考勤管理" content="手机端集成了考勤管理，方便项目人员通过手机考勤，及时记录考勤情况，进行汇总分析。"></card>
         </div>
       </section>
     </div>
@@ -122,7 +122,7 @@
       <section class="section-wrapper safe-info flex-column-center">
         <div class="info-wrapper">
           <div class="content">
-            大数据行业的部署方案领导者，支撑300家企业稳定、高效的系统运行，为你数据业务的长期发展保驾护航。神策分析同时支持SaaS部署模式。
+            加密服务基于国家密码局认证的硬件加密机，提供了云上数据加解密解决方案，用户能够对密钥进行安全可靠的管理，也能使用多种加密算法来对云上业务的数据进行可靠的加解密运算。
           </div>
         </div>
 
@@ -133,12 +133,12 @@
     <footer>
       <div class="desc-info">
         <div class="section-wrapper">
-          <div class="title">数据驱动，从现在开始！</div>
-          <div class="content">立即注册，和神测数据分析师一起开启数据驱动之旅！</div>
+          <div class="title">多项目同时管理，一切尽在掌握</div>
+          <div class="content">一个平台可同时管理多个项目，所有项目动态都可掌握，成为真正意义上的“线上指挥所”。</div>
 
           <svg-icon icon-class="波浪" :width="1200" :height="240" class="mountain big-icon"></svg-icon>
 
-          <svg-icon icon-class="电脑" :width="694" :height="408" class="laptop big-icon"></svg-icon>
+          <svg-icon icon-class="MacBookPro_dA" :width="694" :height="408" class="laptop big-icon"></svg-icon>
         </div>
       </div>
 

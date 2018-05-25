@@ -105,6 +105,9 @@
               <section>{{ `${$t('item.typeName')}: ${scope.row.typeName}` }}</section>
               <el-button type="text" slot="reference">更多</el-button>
             </el-popover>
+            <el-button type="text" @click="handleShowQrcode(scope.row.id)" style="margin-left: 4px">
+              <svg-icon icon-class="二维码" size="20" color="#409EFF"></svg-icon>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -193,6 +196,16 @@
         </div>
       </el-dialog>
       <!-- /dialog -->
+
+      <el-dialog
+        title="二维码"
+        :visible.sync="dialogQrcodeVisible"
+        :show-close="false"
+        width="320px"
+      >
+        <span>{{ `${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}` }}</span>
+        <qrcode :value="`${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}`" :options="{ size: 280 }"></qrcode>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -201,9 +214,13 @@
 import { mapGetters } from 'vuex';
 import { getItemList, addItem, getItemByBuidlingInfo } from '@/api/item';
 import { itemProfessionTypeList, householdNumList, parseBuildingArr } from '@/filters';
+import Qrcode from '@xkeshi/vue-qrcode';
 
 export default {
   name: 'Item',
+  components: {
+    Qrcode,
+  },
   data() {
     const { params: { id } } = this.$route;
     return {
@@ -227,6 +244,9 @@ export default {
       householdNumList,
       // dialog
       dialogFormVisible: false,
+      dialogQrcodeVisible: false,
+      qrcodeId: '',
+      qrcodeLinkOrigin: window.location.origin,
       // file list
       fileList: new Array(14),
       acceptFile: '.xls,.xlsx,.csv',
@@ -312,6 +332,10 @@ export default {
     },
     resetForm() {
       this.$refs.dialogForm.$el.reset();
+    },
+    handleShowQrcode(id) {
+      this.qrcodeId = id;
+      this.dialogQrcodeVisible = true;
     },
   },
 };

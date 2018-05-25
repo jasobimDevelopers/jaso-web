@@ -20,7 +20,7 @@
         <div class="user-info">负责人：{{ item.leader }}</div>
       </router-link>
       <div class="item add-item hover-cursor" v-if="!disableEdit" @click="addProject">
-        <svg-icon icon-class="eye"></svg-icon>
+        <i class="el-icon-plus" style="font-size: 24px"></i>
         <div class="action-name">创建新项目</div>
       </div>
     </div>
@@ -247,6 +247,13 @@ export default {
   @media (max-width: 768px) {
     .filter-wrapper {
       width: 100%;
+    }
+
+    .list-wrapper {
+      .item {
+        margin-right: 0;
+        width: 100%;
+      }
     }
   }
 </style>

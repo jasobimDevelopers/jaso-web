@@ -40,6 +40,12 @@ export const constantRouterMap = [
     component: asyncImport('Login'),
     hidden: true,
   },
+  {
+    path: '/qrcodeItem',
+    name: 'qrcodeItem',
+    component: asyncImport('Qrcode'),
+    hidden: true,
+  },
   { path: '/404', component: asyncImport('errorPage/404'), hidden: true },
   { path: '/401', component: asyncImport('errorPage/401'), hidden: true },
 ];
@@ -87,12 +93,32 @@ export const asyncRouterMap = [
   /* ******* /Common Layout ******* */
 
   {
+    path: '/mode_manager/:id',
+    component: Layout,
+    name: 'mode_manager',
+    meta: {
+      basePath: 'mode_manager',
+      icon: 'BIM',
+      title: '模型管理',
+      roles: ['admin', 'user'],
+    },
+    children: [{
+      path: 'bim_mode',
+      component: asyncImport('Model/Bim'),
+      name: 'bim_mode',
+      meta: {
+        title: '模型查看',
+        roles: ['admin', 'user'],
+      },
+    }],
+  },
+  {
     path: '/project/:id',
     component: Layout,
     name: 'project',
     meta: {
       basePath: 'project',
-      icon: 'project',
+      icon: '生产',
       title: '生产管理',
       roles: ['admin', 'user'],
     },
@@ -144,7 +170,7 @@ export const asyncRouterMap = [
     name: 'cost',
     meta: {
       basePath: 'cost',
-      icon: 'project',
+      icon: '成本额',
       title: '成本管理',
       roles: ['admin', 'user'],
     },
@@ -164,7 +190,7 @@ export const asyncRouterMap = [
     name: 'statistics',
     meta: {
       basePath: 'statistics',
-      icon: 'project',
+      icon: '统计',
       title: '统计管理',
       roles: ['admin', 'user'],
     },
@@ -200,7 +226,7 @@ export const asyncRouterMap = [
     name: 'material',
     meta: {
       basePath: 'material',
-      icon: 'project',
+      icon: '物资',
       title: '物资管理',
       roles: ['admin', 'user'],
     },
@@ -228,7 +254,7 @@ export const asyncRouterMap = [
     name: 'quality',
     meta: {
       basePath: 'quality',
-      icon: 'project',
+      icon: '质量',
       title: '质量管理',
       roles: ['admin', 'user'],
     },
@@ -266,7 +292,7 @@ export const asyncRouterMap = [
     name: 'security',
     meta: {
       basePath: 'security',
-      icon: 'project',
+      icon: '安全-menu',
       title: '安全管理',
       roles: ['admin', 'user'],
     },
@@ -304,7 +330,7 @@ export const asyncRouterMap = [
     name: 'datas',
     meta: {
       basePath: 'datas',
-      icon: 'project',
+      icon: '资料',
       title: '资料管理',
       roles: ['admin', 'user'],
     },
@@ -342,7 +368,7 @@ export const asyncRouterMap = [
     name: 'work_manage',
     meta: {
       basePath: 'work_manage',
-      icon: 'project',
+      icon: '劳务',
       title: '劳务管理',
       roles: ['admin', 'user'],
     },

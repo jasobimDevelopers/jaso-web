@@ -5,9 +5,9 @@
     <div class="app-container">
       <!-- filter -->
       <div class="filter-container">
-        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('btn.search')" v-model="listQuery.othersAttention">
+        <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('btn.search')" v-model="listQuery.othersAttention">
         </el-input>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button> -->
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
         <el-button class="filter-item" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length === 0" @click="handleDeleteSelects">{{$t('btn.delete')}}</el-button>
       </div>
@@ -127,7 +127,7 @@ export default {
         pageIndex: 1,
         pageSize: 10,
         projectId: id,
-        othersAttention: '',
+        // othersAttention: '',
       },
       task: {
         projectId: id,

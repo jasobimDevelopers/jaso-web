@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>安全</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="PC端页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="资料管理-文件-缩略" transform="translate(-376.000000, -667.000000)" fill="#409EFF">
+            <g id="侧边栏" transform="translate(360.000000, 97.000000)">
+                <g id="安全" transform="translate(16.000000, 570.000000)">
+                    <path d="M8.38545277,0.0125892299 L15.9529291,3.08695505 C16.1723478,9.78768293 13.6498557,13.8422594 8.38545277,15.2506845 C2.9451673,13.7593407 0.403696702,9.70476425 0.761040986,3.08695505 L8.38545277,0.0125892299 Z M8.35778989,1.56117298 L2.32641621,3.8519107 L2.32641621,7.61055256 L8.35778989,7.61055256 L8.35778989,1.56117298 Z M14.5033621,7.61913255 L8.39694366,7.61913255 L8.39694366,13.7929825 C11.1428642,12.9945193 13.178337,10.9365693 14.5033621,7.61913255 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

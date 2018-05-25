@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="37px" viewBox="0 0 48 37" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>整理icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="官网首页" transform="translate(-1148.000000, -2627.000000)">
+            <g id="4" transform="translate(375.000000, 2386.000000)">
+                <g id="三块" transform="translate(729.000000, 15.000000)">
+                    <g id="2" transform="translate(0.000000, 166.000000)">
+                        <g id="整理icon" transform="translate(44.000000, 60.000000)">
+                            <path d="M27.1713207,7.61764706 L48,7.61764706 L48,37 L0,37 L0,7.61764706 L0,0 L20.8585365,0 L27.1713207,7.61764706 Z" id="Combined-Shape" fill="#8DE3DB"></path>
+                            <path d="M15.0650186,25.0254816 L17.786532,25.0254816 C18.8594055,28.0609199 21.7542903,30.2356742 25.1571161,30.2356742 C28.559942,30.2356742 31.4548268,28.0609199 32.5277003,25.0254816 L35.2492137,25.0254816 C34.0924395,29.5198646 30.0125974,32.8407705 25.1571161,32.8407705 C20.3016349,32.8407705 16.2217928,29.5198646 15.0650186,25.0254816 Z M15.0650186,19.8152889 C16.2217928,15.3209059 20.3016349,12 25.1571161,12 C30.0125974,12 34.0924395,15.3209059 35.2492137,19.8152889 L32.5277003,19.8152889 C31.4548268,16.7798506 28.559942,14.6050963 25.1571161,14.6050963 C21.7542903,14.6050963 18.8594055,16.7798506 17.786532,19.8152889 L15.0650186,19.8152889 Z" id="Combined-Shape" fill="#1FD0C3"></path>
+                            <polygon id="Triangle-2" fill="#1FD0C3" transform="translate(16.500000, 21.000000) scale(1, -1) translate(-16.500000, -21.000000) " points="16.5 19 20 23 13 23"></polygon>
+                            <polygon id="Triangle-2" fill="#1FD0C3" points="33.5 22 37 26 30 26"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

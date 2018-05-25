@@ -2,7 +2,7 @@
   <div>
     <breadcrumb>
       <div>
-        <el-input placeholder="请输入内容" v-model="listQuery.content" @keyup.enter.native="getList" class="input-with-select" style="margin-right: 12px; width: 344px">
+        <el-input placeholder="请输入内容" v-model="listQuery.content" @keyup.enter.native="getList" class="input-with-select">
           <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请选择" style="width: 104px">
             <el-option label="用户姓名" value="0"></el-option>
             <el-option label="问题名称" value="1"></el-option>
@@ -226,4 +226,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+  .input-with-select {
+    margin-right: 12px;
+    width: 344px;
+  }
+
+  // media
+  @media (max-width: 768px) {
+    .input-with-select {
+      display: none;
+    }
+  }
 </style>

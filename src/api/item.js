@@ -52,3 +52,9 @@ export function exportDuct(params) {
     params,
   });
 }
+
+export function getItemBySelfId(params) {
+  return request.get('/api/item/admin/getItemBySelfId', {
+    params,
+  });
+}

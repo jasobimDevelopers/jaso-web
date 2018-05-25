@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="50px" viewBox="0 0 42 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>质量</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="官网首页" transform="translate(-409.000000, -3640.000000)" fill="#FFFFFF" stroke-width="3">
+            <g id="5" transform="translate(0.000000, 3051.000000)">
+                <g id="四块" transform="translate(360.000000, 539.000000)">
+                    <g id="1">
+                        <g id="质量" transform="translate(49.000000, 50.000000)">
+                            <path d="M13.7414111,44.0711593 L13.7414111,31.1924797 L4.74141108,31.1924797 L4.74141108,44.0711593 L9.24141108,39.5711593 L13.7414111,44.0711593 Z" id="Combined-Shape" stroke="#89E5B9" transform="translate(9.241411, 38.692480) rotate(25.000000) translate(-9.241411, -38.692480) "></path>
+                            <path d="M36.7414111,44.0711593 L36.7414111,31.1924797 L27.7414111,31.1924797 L27.7414111,44.0711593 L32.2414111,39.5711593 L36.7414111,44.0711593 Z" id="Combined-Shape" stroke="#89E5B9" transform="translate(32.241411, 38.692480) scale(-1, 1) rotate(25.000000) translate(-32.241411, -38.692480) "></path>
+                            <circle id="Oval-25" stroke="#89E5B9" cx="21" cy="18" r="16.5"></circle>
+                            <circle id="Oval-26" stroke="#32C27D" cx="21" cy="18" r="8.5"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

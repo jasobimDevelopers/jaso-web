@@ -350,7 +350,7 @@ export default {
     img {
       width: 100%;
       height: 280px;
-      max-width: 400px;
+      width: 400px;
       object-fit: cover;
     }
   }
@@ -375,4 +375,18 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+
+  // media
+  @media (max-width: 768px) {
+    .info-container {
+      .header {
+        flex-direction: column;
+
+        .basic-info {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
 </style>
