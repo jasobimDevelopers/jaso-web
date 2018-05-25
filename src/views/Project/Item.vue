@@ -203,7 +203,6 @@
         :show-close="false"
         width="320px"
       >
-        <span>{{ `${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}` }}</span>
         <qrcode :value="`${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}`" :options="{ size: 280 }"></qrcode>
       </el-dialog>
     </div>
