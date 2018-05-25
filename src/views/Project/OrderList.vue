@@ -5,9 +5,9 @@
     <div class="app-container">
       <!-- filter -->
       <div class="filter-container">
-        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('btn.search')" v-model="listQuery.othersAttention">
+        <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('btn.search')" v-model="listQuery.othersAttention">
         </el-input>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{$t('btn.search')}}</el-button> -->
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">{{$t('btn.add')}}</el-button>
         <el-button class="filter-item" type="danger" icon="el-icon-delete" :disabled="multipleSelection.length === 0" @click="handleDeleteSelects">{{$t('btn.delete')}}</el-button>
       </div>
@@ -29,16 +29,16 @@
         </el-table-column>
         <el-table-column align="center" :label="$t('table.id')" prop="id" width="55">
         </el-table-column>
-        <el-table-column align="center" label="签发人" prop="createUserName">
+        <el-table-column align="center" label="项目负责人" prop="leader">
         </el-table-column>
-        <el-table-column align="center" label="任务单状态" prop="nextApprovalPeopleType">
+        <el-table-column align="center" label="施工部位" prop="constructPart" :show-overflow-tooltip="true">
         </el-table-column>
-        <el-table-column align="center" label="当前进度">
+        <el-table-column align="center" label="下一审批人" prop="nextReceivePeopleId">
+        </el-table-column>
+        <el-table-column align="center" label="状态">
           <template slot-scope="scope">
-            <span>{{scope.row.taskFlag | setStatus}}</span>
+            <span>{{scope.row.status | setStatus}}</span>
           </template>
-        </el-table-column>
-        <el-table-column align="center" label="下一审批人" prop="nextReceivePeopleName">
         </el-table-column>
         <el-table-column align="center" label="创建时间" prop="createDate">
         </el-table-column>
@@ -72,35 +72,42 @@
         width="640px"
       >
         <el-form :rules="rules" ref="dialogForm" :model="task" label-position="right" label-width="120px" style='margin: 0 50px;'>
-          <el-form-item label="签收人" prop="receiveUserId">
+          <el-form-item label="下一审批人" prop="nextReceivePeopleId">
             <el-select
-              v-model="task.receiveUserId"
-              placeholder="签收人"
+              v-model="task.nextReceivePeopleId"
+              placeholder="下一审批人"
             >
               <el-option
                 v-for="item in userList"
                 :key="item.id"
                 :label="item.realName"
-                :value="item.id">
+                :value="item.realName">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="班组名称" prop="teamName">
-            <el-input v-model="task.teamName"></el-input>
+          <el-form-item label="月份" prop="month">
+            <el-select
+              v-model="task.month"
+              placeholder="月份"
+            >
+              <el-option
+                v-for="(item, i) in monthList"
+                :key="i"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="施工内容" prop="taskContent">
-            <el-input v-model="task.taskContent"></el-input>
+          <el-form-item label="项目负责人" prop="leader">
+            <el-input v-model="task.leader" placeholder="项目负责人"></el-input>
           </el-form-item>
-          <el-form-item label="完成期限" prop="finishedDate">
-            <el-input v-model="task.finishedDate"></el-input>
+          <el-form-item label="施工部位" prop="constructPart">
+            <el-input v-model="task.constructPart"  placeholder="施工部位"></el-input>
           </el-form-item>
-          <el-form-item label="奖惩内容" prop="rewards">
-            <el-input v-model="task.rewards"></el-input>
+          <el-form-item label="工程量" prop="quantityDes">
+            <el-input v-model="task.quantityDes"  placeholder="工程量"></el-input>
           </el-form-item>
-          <el-form-item label="交底内容" prop="detailContent">
-            <el-input v-model="task.detailContent"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('btn.file')" prop="files">
+          <el-form-item label="现场图片" prop="contentFiles">
             <input type="file" @change="handleUpload" multiple />
           </el-form-item>
         </el-form>
@@ -115,11 +122,11 @@
 </template>
 
 <script>
-import { getConstructionTaskList, addConstructionTask, deleteConstructionTask } from '@/api/task';
+import { getAdvancedOrderList, addAdvancedOrder, deleteAdvancedOrder } from '@/api/order';
 import { getUserList } from '@/api/user';
 
 export default {
-  name: 'TaskList',
+  name: 'OrderList',
   data() {
     const { params: { id } } = this.$route;
     return {
@@ -131,14 +138,14 @@ export default {
       },
       task: {
         projectId: id,
-        receiveUserId: null,
-        teamName: '',
-        taskContent: '',
-        finishedDate: '',
-        rewards: '',
-        detailContent: '',
-        files: null,
+        nextReceivePeopleId: null,
+        month: null,
+        leader: '',
+        constructPart: '',
+        quantityDes: '',
+        contentFiles: null,
       },
+      monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       listLoading: false,
       list: null,
       userList: [],
@@ -151,11 +158,11 @@ export default {
       multipleSelection: [],
       // rules
       rules: {
-        receiveUserId: [{ required: true, message: `签收人${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        teamName: [{ required: true, message: `班组名称${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        taskContent: [{ required: true, message: `施工内容${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        finishedDate: [{ required: true, message: `完成期限${this.$t('message.notEmpty')}`, trigger: 'blur' }],
-        rewards: [{ required: true, message: `奖惩内容${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        nextReceivePeopleId: [{ required: true, message: `下一审批人${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        month: [{ required: true, message: `月份${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        leader: [{ required: true, message: `负责人${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        constructPart: [{ required: true, message: `施工部位${this.$t('message.notEmpty')}`, trigger: 'blur' }],
+        quantityDes: [{ required: true, message: `工程量${this.$t('message.notEmpty')}`, trigger: 'blur' }],
         detailContent: [{ required: true, message: `交底内容${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
     };
@@ -174,7 +181,7 @@ export default {
     getList() {
       this.listLoading = true;
 
-      getConstructionTaskList(this.listQuery).then((res) => {
+      getAdvancedOrderList(this.listQuery).then((res) => {
         const { data, totalNumber, totalPage } = res;
         this.list = data;
         this.totalNumber = totalNumber;
@@ -217,7 +224,7 @@ export default {
         type: 'warning',
       }).then(() => {
         // delete user
-        deleteConstructionTask(params).then(() => {
+        deleteAdvancedOrder(params).then(() => {
           this.$message({
             type: 'success',
             message: this.$t('message.deleteOk'),
@@ -240,7 +247,7 @@ export default {
     handleSave() {
       this.$refs.dialogForm.validate((valid) => {
         if (valid) {
-          addConstructionTask(this.task).then(() => {
+          addAdvancedOrder(this.task).then(() => {
             this.dialogFormVisible = false;
             this.getList();
           });

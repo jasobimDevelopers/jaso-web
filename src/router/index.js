@@ -130,7 +130,7 @@ export const asyncRouterMap = [
       },
     }, {
       path: 'order',
-      component: asyncImport('ProjectManage'),
+      component: asyncImport('Project/OrderList'),
       name: 'order',
       meta: {
         title: '预付单',
