@@ -91,27 +91,6 @@ export const asyncRouterMap = [
     }],
   },
   /* ******* /Common Layout ******* */
-
-  {
-    path: '/mode_manager/:id',
-    component: Layout,
-    name: 'mode_manager',
-    meta: {
-      basePath: 'mode_manager',
-      icon: 'BIM',
-      title: '模型管理',
-      roles: ['admin', 'user'],
-    },
-    children: [{
-      path: 'bim_mode',
-      component: asyncImport('Model/Bim'),
-      name: 'bim_mode',
-      meta: {
-        title: '模型查看',
-        roles: ['admin', 'user'],
-      },
-    }],
-  },
   {
     path: '/project/:id',
     component: Layout,
@@ -160,6 +139,26 @@ export const asyncRouterMap = [
       name: 'order',
       meta: {
         title: '预付单',
+        roles: ['admin', 'user'],
+      },
+    }],
+  },
+  {
+    path: '/mode_manager/:id',
+    component: Layout,
+    name: 'mode_manager',
+    meta: {
+      basePath: 'mode_manager',
+      icon: 'BIM',
+      title: '模型管理',
+      roles: ['admin', 'user'],
+    },
+    children: [{
+      path: 'bim_mode',
+      component: asyncImport('Model/Bim'),
+      name: 'bim_mode',
+      meta: {
+        title: '模型查看',
         roles: ['admin', 'user'],
       },
     }],
