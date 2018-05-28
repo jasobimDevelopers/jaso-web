@@ -3,7 +3,7 @@
     <!-- <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger> -->
     <div class="nav-wrapper flex-sb">
       <router-link to="/projectList" class="logo-wrapper flex-row">
-        <img src="@/assets/images/logo.png" />
+        <img id="jaso-logo" src="@/assets/images/logo.png" />
         <div class="company-name">嘉实智慧安装</div>
       </router-link>
 

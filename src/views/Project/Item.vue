@@ -105,7 +105,7 @@
               <section>{{ `${$t('item.typeName')}: ${scope.row.typeName}` }}</section>
               <el-button type="text" slot="reference">更多</el-button>
             </el-popover>
-            <el-button type="text" @click="handleShowQrcode(scope.row.id)" style="margin-left: 4px">
+            <el-button type="text" @click="handleShowQrcode(scope.row.id, scope.row)" style="margin-left: 4px">
               <svg-icon icon-class="二维码" size="20" color="#409EFF"></svg-icon>
             </el-button>
           </template>
@@ -198,12 +198,12 @@
       <!-- /dialog -->
 
       <el-dialog
-        title="二维码"
         :visible.sync="dialogQrcodeVisible"
         :show-close="false"
-        width="320px"
+        width="640px"
       >
-        <qrcode :value="`${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}`" :options="{ size: 280 }"></qrcode>
+        <qrcode id="qrcode-id" v-show="false" ref="qrcode" :value="`${qrcodeLinkOrigin}/#/qrcodeItem?id=${qrcodeId}`" :options="{ size: drawInfo.qrcodeSize }"></qrcode>
+        <canvas id="item-canvas" ref="itemCanvas" :width="drawInfo.width" :height="drawInfo.height"></canvas>
       </el-dialog>
     </div>
   </div>
@@ -253,11 +253,18 @@ export default {
       rules: {
         fileList: [{ required: true, message: `${this.$t('message.notEmpty')}`, trigger: 'blur' }],
       },
+      drawInfo: {
+        width: 600,
+        height: 300,
+        qrcodeSize: 200,
+      },
+      drawItem: null,
     };
   },
   computed: {
     ...mapGetters([
       'building',
+      'project',
     ]),
   },
   created() {
@@ -332,9 +339,94 @@ export default {
     resetForm() {
       this.$refs.dialogForm.$el.reset();
     },
-    handleShowQrcode(id) {
+    handleShowQrcode(id, item) {
       this.qrcodeId = id;
       this.dialogQrcodeVisible = true;
+      this.drawItem = item;
+
+      this.$nextTick(() => {
+        this.drawItemInfo();
+      });
+    },
+    drawItemInfo() {
+      const $qrcode = document.getElementById('qrcode-id');
+      const canvas = document.getElementById('item-canvas');
+      const ctx = canvas.getContext('2d');
+      const { name } = this.project;
+      const { width, height, qrcodeSize } = this.drawInfo;
+      const midWidth = width / 2;
+      let topRecord = 0;
+
+      function drawLine() {
+        ctx.beginPath();
+        ctx.lineWidth = 0.4;
+        ctx.moveTo(0, topRecord);
+        ctx.lineTo(width, topRecord);
+        ctx.stroke();
+      }
+
+      // background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+      topRecord += 8;
+
+      // draw title
+      ctx.fillStyle = '#000000';
+      ctx.font = '20px 黑体';
+      ctx.textBaseline = 'top';
+      ctx.fillText(name, midWidth - ((name.length / 2) * 20), topRecord);
+      topRecord += 30;
+
+      // line
+      drawLine();
+      topRecord += 2;
+
+      // qrcode
+      ctx.drawImage($qrcode, 8, topRecord, qrcodeSize, qrcodeSize);
+      const lastLineHeight = topRecord + qrcodeSize;
+
+      // words
+      const wrodsWidth = qrcodeSize + 15;
+      const { id, name: itemName, bottomElevation, serviceType, size, familyAndType, length, material, typeName } = this.drawItem;
+
+      ctx.font = '16px 黑体';
+      topRecord += 8;
+      ctx.fillText(`${this.$t('table.id')}: ${id}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.name')}: ${itemName}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.bottomElevation')}: ${bottomElevation}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.serviceType')}: ${serviceType}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.size')}: ${size}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.length')}: ${length}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.familyAndType')}: ${familyAndType}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.material')}: ${material}`, wrodsWidth, topRecord);
+      topRecord += 20;
+      ctx.fillText(`${this.$t('item.typeName')}: ${typeName}`, wrodsWidth, topRecord);
+
+      // line
+      topRecord = lastLineHeight;
+      drawLine();
+      topRecord += 8;
+
+      // logo
+      const logoWidth = width - 220;
+      const $img = document.getElementById('jaso-logo');
+      ctx.drawImage($img, logoWidth, topRecord, 30, 40);
+
+      topRecord += 4;
+
+      ctx.font = '20px 黑体';
+      ctx.fillText('嘉实智慧安装', logoWidth + 40, topRecord);
+
+      topRecord += 22;
+      ctx.font = '12px 黑体';
+      ctx.fillText('JASOBIM', logoWidth + 40, topRecord);
     },
   },
 };

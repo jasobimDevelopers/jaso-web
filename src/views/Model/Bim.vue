@@ -26,12 +26,16 @@ export default {
   },
   methods: {
     getInfo() {
-      getModelViewToken({
-        fileId: this.fileId,
-      }).then((res) => {
-        this.viewToken = res;
+      const { params: { id } } = this.$route;
+      // this.$store.dispatch('getBuildingInfo', { id });
+      this.$store.dispatch('getProject', { id }).then(() => {
+        getModelViewToken({
+          fileId: this.fileId,
+        }).then((res) => {
+          this.viewToken = res;
 
-        this.initBimface();
+          this.initBimface();
+        });
       });
     },
     initBimface() {

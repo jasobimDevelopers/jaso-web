@@ -42,5 +42,5 @@ export function deleteConstructionTask(params) {
 }
 
 export function updateConstructionTask(params) {
-  return request.post('api/advancedOrder/updateConstructionTask', params);
+  return request.post('api/constructionTask/updateConstructionTask', params);
 }

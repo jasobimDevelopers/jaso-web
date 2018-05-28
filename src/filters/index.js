@@ -161,3 +161,6 @@ export const weatherList = ['晴', '小雪', '小雨', '阴', '多云', '浮尘'
 
 // question ticket
 export const questionTicketTypeList = ['轻度', '中度', '严重'];
+
+// task step people type
+export const stepTaskType = ['班组长', '质量员', '安全员或其他', '施工员', '预算员', '经理'];
