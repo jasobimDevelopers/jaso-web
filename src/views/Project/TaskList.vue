@@ -448,6 +448,7 @@ export default {
     handleSaveNote() {
       this.$refs.dialogNoteForm.validate((valid) => {
         if (valid) {
+          this.note.id = this.stepTask.id;
           updateConstructionTask(this.note).then(() => {
             this.handleView(this.stepTask, this.stepTask.id);
             this.getList();
