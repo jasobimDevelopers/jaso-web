@@ -7,13 +7,11 @@
 </template>
 
 <script>
-import Grid from '@/components/Grid';
 import Gallery from '@/components/Gallery';
 
 export default {
   name: 'App',
   components: {
-    Grid,
     Gallery,
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="order-page">
     <breadcrumb></breadcrumb>
 
     <div class="app-container">
@@ -454,6 +454,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .order-page {
+    .task-step {
+      .el-form-item {
+        margin-bottom: 0px;
+      }
+    }
+  }
+</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
