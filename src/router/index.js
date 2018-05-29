@@ -46,6 +46,12 @@ export const constantRouterMap = [
     component: asyncImport('Qrcode'),
     hidden: true,
   },
+  {
+    path: '/model',
+    name: 'model',
+    component: asyncImport('Model/mobileBim'),
+    hidden: true,
+  },
   { path: '/404', component: asyncImport('errorPage/404'), hidden: true },
   { path: '/401', component: asyncImport('errorPage/401'), hidden: true },
 ];
