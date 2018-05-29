@@ -4,22 +4,35 @@
     </breadcrumb>
 
     <div class="app-container">
-      <div id="model-id" style="width:100%; height:750px"></div>
+      <div v-show="project && project.fileId !== '' && viewToken !== ''" id="model-id" style="width:100%; height:750px"></div>
+      <empty-card v-show="project && project.fileId === '' && viewToken === ''" message="该项目暂无模型"></empty-card>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getModelViewToken } from '@/api/bim';
 
 export default {
   name: 'Bim',
   data() {
     return {
-      fileId: '1236661085692096',
-      viewToken: null,
+      viewToken: '',
       buildingData: {},
     };
+  },
+  computed: {
+    ...mapGetters([
+      'project',
+    ]),
+  },
+  watch: {
+    project(obj, oldObj) {
+      if (oldObj && (obj.fileId !== oldObj.fileId)) {
+        this.getBimInfo();
+      }
+    },
   },
   mounted() {
     this.getInfo();
@@ -29,14 +42,21 @@ export default {
       const { params: { id } } = this.$route;
       // this.$store.dispatch('getBuildingInfo', { id });
       this.$store.dispatch('getProject', { id }).then(() => {
+        this.getBimInfo();
+      });
+    },
+    getBimInfo() {
+      const { fileId } = this.project;
+
+      if (fileId && fileId !== '') {
         getModelViewToken({
-          fileId: this.fileId,
+          fileId,
         }).then((res) => {
           this.viewToken = res;
 
           this.initBimface();
         });
-      });
+      }
     },
     initBimface() {
       const options = new BimfaceSDKLoaderConfig();
@@ -65,12 +85,12 @@ export default {
       1 view
       2 view.getCameraStatus()
       3 JSON.stringify(view.getCameraStatus()) */
-      this.viewer.setCameraStatus({
-        position: { x: 5394.0851818932915, y: 612.4004009486468, z: 339.27006625707565 },
-        target: { x: 6598.082774755444, y: 25239.75159347191, z: 1128.6465131357606 },
-        up: { x: 0, y: -0.0000036732052144291623, z: 0.9999999999932538 },
-        version: 1,
-      });
+      // this.viewer.setCameraStatus({
+      //   position: { x: 5394.0851818932915, y: 612.4004009486468, z: 339.27006625707565 },
+      //   target: { x: 6598.082774755444, y: 25239.75159347191, z: 1128.6465131357606 },
+      //   up: { x: 0, y: -0.0000036732052144291623, z: 0.9999999999932538 },
+      //   version: 1,
+      // });
     },
   },
 };
